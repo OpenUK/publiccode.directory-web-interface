@@ -1,18 +1,13 @@
 <template>
-  <div class="home">
-    <Navigation msg="Welcome to Your Vue.js App"/>
-    <img src="../assets/logo.png">
-  </div>
+  <section class="columns is-centered is-multiline">
+    <div class="column is-8">
+          <p>this is home</p>
+    </div>
+  </section>
 </template>
 
 <script>
-// @ is an alias to /src
-import Navigation from "@/components/Navigation.vue";
-
 export default {
-  name: "home",
-  components: {
-    Navigation
-  }
+  name: "home"
 };
 </script>
