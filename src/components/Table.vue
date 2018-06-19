@@ -2,33 +2,20 @@
     <div class="table-container">
         <b-field grouped group-multiline>
             <b-select v-model='selectedoptioin' v-on:change='updateProd(selectedoptioin)'>
-                <option v-for='category in categories' :key="category.id"  :value="category" > {{ category | capitalize }}</option>
+                <option v-for='category in categories' :key="category.id" :value="category"> {{ category | capitalize }}</option>
             </b-select>
 
             <b-select v-model='licenceoption'>
-                <option v-for='licence in licences' :key="licence.id"  :value="licence" > {{ licence | capitalize }}</option>
+                <option v-for='licence in licences' :key="licence.id" :value="licence"> {{ licence | capitalize }}</option>
             </b-select>
-
             <b-select v-model='sectoroption'>
-                <option v-for='sector in sectors' :key="sector.id"  :value="sector" > {{ sector | capitalize }}</option>
+                <option v-for='sector in sectors' :key="sector.id" :value="sector"> {{ sector | capitalize }}</option>
+            </b-select>
+            <b-select v-model='countryoption'>
+                <option v-for='country in countries' :key="country.id" :value="country"> {{ country | capitalize }}</option>
             </b-select>
         </b-field>
-        <b-table
-            :data="data"
-            :paginated='isPaginated'
-            per-page="15"
-            :opened-detailed="defaultOpenedDetails"
-            detailed
-            :bordered="isBordered"
-            :striped="isStriped"
-            :narrowed="isNarrowed"
-            :hoverable="isHoverable"
-            :mobile-cards="hasMobileCards"
-            :loading="isLoading"
-            detail-key="id"
-            :selected.sync="selected"
-            @details-open="(row, index) => $toast.open(`Expanded ${row.product_name}`)"
-            >
+        <b-table :data="data" :paginated='isPaginated' per-page="15" :opened-detailed="defaultOpenedDetails" detailed :bordered="isBordered" :striped="isStriped" :narrowed="isNarrowed" :hoverable="isHoverable" :mobile-cards="hasMobileCards" :loading="isLoading" detail-key="id" :selected.sync="selected" @details-open="(row, index) => $toast.open(`Expanded ${row.product_name}`)">
             <template slot-scope="props">
                 <b-table-column field="product_name" label="Product Name" sortable>
                     {{ props.row.product_name | capitalize }}
@@ -51,7 +38,7 @@
                 <b-table-column field="product_type" label="Product Type" sortable>
                     {{ props.row.product_type | capitalize }}
                 </b-table-column>
-                            <b-table-column field="product_link" label="Product Link">
+                <b-table-column field="product_link" label="Product Link">
                     <a :href="props.row.product_link" target='_blank' rel='noopener'>{{ props.row.product_link }}</a>
                 </b-table-column>
             </template>
@@ -62,10 +49,7 @@
                             <p>
                                 <strong>{{ props.row.product_name }} </strong>
                                 <small>31m</small>
-                                <br>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                Proin ornare magna eros, eu pellentesque tortor vestibulum ut.
-                                Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                                <br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
                             </p>
                         </div>
                     </div>
@@ -77,61 +61,63 @@
 </template>
 
 <script>
-export default {
-  name: "TableComponent",
-  data() {
-    const data = [];
-    return {
-      data: [],
-      defaultOpenedDetails: [0],
-      isPaginated: true,
-      isLoading: true,
-      isBordered: false,
-      isStriped: true,
-      isNarrowed: true,
-      isHoverable: true,
-      hasMobileCards: true,
-      selected: data[0],
+    export default {
+      name: "TableComponent",
+      data() {
+        const data = [];
+        return {
+          data: [],
+          defaultOpenedDetails: [0],
+          isPaginated: true,
+          isLoading: true,
+          isBordered: false,
+          isStriped: true,
+          isNarrowed: true,
+          isHoverable: true,
+          hasMobileCards: true,
+          selected: data[0],
 
-      categories: this.$store.getters.categories,
-      licences: this.$store.getters.licences,
-      sectors: this.$store.getters.sectors,
+          categories: this.$store.getters.categories,
+          licences: this.$store.getters.licences,
+          sectors: this.$store.getters.sectors,
+          countries: this.$store.getters.countries,
 
-      selectedoptioin: "",
-      licenceoption: "",
-      sectoroption: ""
+          selectedoptioin: "",
+          licenceoption: "",
+          sectoroption: "",
+          countryoption: "",
+        };
+      },
+      mounted() {
+        this.isLoading = true;
+        setTimeout(() => {
+          this.selectedoptioin = this.$store.getters.categories[0];
+          this.licenceoption = this.$store.getters.licences[0];
+          this.sectoroption = this.$store.getters.sectors[0];
+          this.countryoption = this.$store.getters.countries[0];
+          this.data = this.$store.getters.filteredData;
+          this.isLoading = false;
+        }, 350);
+      },
+      methods: {
+        updateCategories(key) {
+          this.$store.commit("updateCat", key.target.value);
+        },
+        updateProd(prod) {
+          this.$store.commit("updateProd", prod);
+        },
+        updateSector(sector) {
+          this.$store.commit("updateSector", sector);
+        },
+        updateCountries(country) {
+          this.$store.commit("updateCountry", country);
+        },
+      },
     };
-  },
-  mounted() {
-    this.isLoading = true;
-    setTimeout(() => {
-      if (this.$store.getters.filteredData.length > 0) {
-        this.data = this.$store.getters.filteredData;
-      } else {
-        this.data = this.$store.getters.allProducts;
-      }
-      this.selectedoptioin = this.$store.getters.categories[0];
-      this.licenceoption = this.$store.getters.licences[0];
-      this.sectoroption = this.$store.getters.sectors[0];
-      this.isLoading = false;
-    }, 350);
-  },
-  methods: {
-    updateCategories(key) {
-      this.$store.commit("updateCat", key.target.value);
-    },
-    updateProd(prod) {
-      this.$store.commit("updateProd", prod);
-    },
-    updateSector(sector) {
-      this.$store.commit("updateSector", sector);
-    }
-  }
-};
 </script>
 
 <style lang="scss">
-.media-content {
-  width: 100%;
-}
+    .media-content {
+      width: 100%;
+    }
 </style>

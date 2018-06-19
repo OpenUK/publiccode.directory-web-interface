@@ -37,7 +37,9 @@ function generateProducts() {
                 lat: faker.address.latitude(),
                 long: faker.address.longitude()
             }),
-            published_date: faker.date.past(2)
+            published_date: faker.date.past(2),
+            country: faker.address.country(),
+            product_company: faker.company.companyName(0)
 
         });
     }
