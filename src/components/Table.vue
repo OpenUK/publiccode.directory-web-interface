@@ -1,7 +1,7 @@
 <template>
     <div class="table-container">
         <b-field grouped group-multiline>
-            <b-select v-model='selectedoptioin'>
+            <b-select v-model='selectedoptioin' v-on:change='updateProd(selectedoptioin)'>
                 <option v-for='category in categories' :key="category.id"  :value="category" > {{ category | capitalize }}</option>
             </b-select>
 
@@ -43,7 +43,7 @@
                     </span>
                 </b-table-column>
                 <b-table-column label="Public Sector" field="industry_sector" sortable>
-                    {{ props.row.industry_sector }}
+                    {{ props.row.industry_sector | capitalize }}
                 </b-table-column>
                 <b-table-column field="licence" label="Product Licence" sortable>
                     {{ props.row.licence | capitalize }}
@@ -82,7 +82,7 @@ export default {
   data() {
     const data = [];
     return {
-      data: (this.data = this.$store.getters.allProducts),
+      data: [],
       defaultOpenedDetails: [0],
       isPaginated: true,
       isLoading: true,
@@ -97,17 +97,35 @@ export default {
       licences: this.$store.getters.licences,
       sectors: this.$store.getters.sectors,
 
-      selectedoptioin: this.$store.getters.categories[0],
-      licenceoption: this.$store.getters.licences[0],
-      sectoroption: this.$store.getters.sectors[0]
+      selectedoptioin: "",
+      licenceoption: "",
+      sectoroption: ""
     };
   },
   mounted() {
     this.isLoading = true;
     setTimeout(() => {
+      if (this.$store.getters.filteredData.length > 0) {
+        this.data = this.$store.getters.filteredData;
+      } else {
+        this.data = this.$store.getters.allProducts;
+      }
+      this.selectedoptioin = this.$store.getters.categories[0];
+      this.licenceoption = this.$store.getters.licences[0];
+      this.sectoroption = this.$store.getters.sectors[0];
       this.isLoading = false;
     }, 350);
-    console.log(this.licenceoption);
+  },
+  methods: {
+    updateCategories(key) {
+      this.$store.commit("updateCat", key.target.value);
+    },
+    updateProd(prod) {
+      this.$store.commit("updateProd", prod);
+    },
+    updateSector(sector) {
+      this.$store.commit("updateSector", sector);
+    }
   }
 };
 </script>

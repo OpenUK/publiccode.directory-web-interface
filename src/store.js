@@ -7,7 +7,8 @@ export default new Vuex.Store({
     products: [],
     categories: [],
     licences: [],
-    public_sector: []
+    public_sector: [],
+    filteredProd: []
   },
   mutations: {
     fetchProducts(state, all) {
@@ -34,6 +35,11 @@ export default new Vuex.Store({
       });
       state.public_sector = Array.from(categoriesSet);
     },
+    updateCat(state, categ) {
+      let updateCat = new Set()
+      state.products.filter(el => updateCat.add(el.categ))
+      state.filteredProd = Array.from(updateCat)
+    }
   },
   actions: {
     fetchProducts({
@@ -70,5 +76,6 @@ export default new Vuex.Store({
     categories: state => state.categories,
     licences: state => state.licences,
     sectors: state => state.public_sector,
+    filteredData: state => state.filteredProd
   }
 })
