@@ -5,7 +5,6 @@ import store from './store'
 import './registerServiceWorker'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
-// import '@/assets/material-icons.css'
 
 Vue.use(Buefy)
 Vue.config.productionTip = false

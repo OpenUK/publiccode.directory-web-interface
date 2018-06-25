@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import JoinUs from './views/JoinUs.vue'
-import Data from './views/Data.vue'
+import Software from './views/Software.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -23,9 +23,9 @@ export default new Router({
       component: JoinUs
     },
     {
-      path: '/data',
-      name: 'data',
-      component: Data
+      path: '/software',
+      name: 'software',
+      component: Software
     }
   ],
   linkActiveClass: 'is-active',

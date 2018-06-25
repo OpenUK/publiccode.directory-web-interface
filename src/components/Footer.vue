@@ -1,8 +1,10 @@
 <template>
     <footer class="footer" id="footer">
-        <p>
-            this is a footer
-        </p>
+        <div class="content has-text-centered">
+            <p>
+                this is a footer
+            </p>
+        </div>
     </footer>
 </template>
 

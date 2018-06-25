@@ -1,25 +1,31 @@
 <template>
   <div id="app">
-    <Navigation></Navigation>
     <router-view/>
-    <Footer></Footer>
+    <app-footer></app-footer>
   </div>
 </template>
 <script>
-  import Navigation from "./components/Navigation.vue";
-  import Footer from "./components/Footer.vue";
+  import Footer from "@/components/Footer.vue";
   export default {
+    name: "Oss-Api",
     components: {
-      Navigation,
-      Footer,
+      "app-footer": Footer
+    },
+    created() {
+      this.$store.dispatch("fetchLinks");
+      this.$store.dispatch("getCategories");
+      this.$store.dispatch("getLicences");
+      this.$store.dispatch("getSector");
+      this.$store.dispatch("getCountries");
+      this.$store.dispatch("getCompanies");
     },
     mounted() {
-      this.$store.dispatch("fetchProducts");
-      this.$store.commit("getCategories");
-      this.$store.commit("getLicences");
-      this.$store.commit("getSector");
-      this.$store.commit("getCountries");
-    },
+      // this.$store.dispatch("getCategories");
+      // this.$store.dispatch("getLicences");
+      // this.$store.dispatch("getSector");
+      // this.$store.dispatch("getCountries");
+      // this.$store.dispatch("getCompanies");
+    }
   };
 </script>
 
@@ -30,6 +36,17 @@
   body {
     height: 100%;
   }
+
+  body {
+    display: flex;
+    flex-flow: column nowrap;
+  }
+  .wrapper {
+    flex-grow: 1;
+  }
+  footer {
+    flex-shrink: 0;
+  }
   object {
     pointer-events: none;
   }
@@ -37,7 +54,6 @@
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
     display: flex;
     flex-flow: column nowrap;
