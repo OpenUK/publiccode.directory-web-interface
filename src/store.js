@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 var base64 = require("js-base64").Base64
-let token = '66b4d05ece33447382e056eeee0e525b7418fc8f'
+var _ = require('lodash');
+let token = 'dc79ffa31605737117fb0b9bafa0251c9916541b'
 let YAML = require('js-yaml')
 Vue.use(Vuex)
-
+const allprods = []
 const state = {
   links: [],
   products: [],
@@ -20,8 +21,8 @@ const mutations = {
     state.links = all.directory_index
   },
   fetchProducts(state, data) {
-    state.products.push(data)
-    state.products = [...new Set(state.products)]
+    allprods.push(data)
+    state.products = [...new Set(allprods)]
   },
   filterData(state, item) {
     state.filteredProd = state.products.filter(el => el.m_organisation === item)
@@ -61,31 +62,6 @@ const mutations = {
     });
     state.companies = Array.from(companySet);
   },
-  updateCat(state, categ) {
-    state.filteredProd = state.products.filter(item => {
-      return item.category === categ;
-    });
-  },
-  updateLicence(state, licence) {
-    state.filteredProd = state.products.filter(item => {
-      return item.licence === licence;
-    });
-  },
-  updateSector(state, sector) {
-    state.filteredProd = state.products.filter(item => {
-      return item.public_sector === sector;
-    });
-  },
-  updateCountry(state, countries) {
-    state.filteredProd = state.products.filter(item => {
-      return item.countries === countries;
-    });
-  },
-  updateCompany(state, company) {
-    state.filteredProd = state.products.filter(item => {
-      return item.company === company;
-    });
-  },
 }
 const actions = {
   fetchLinks({
@@ -106,9 +82,11 @@ const actions = {
           data.json = prod
         })
         commit("fetchLinks", data.json);
-      }).then(function () {
+      })
+      .then(function () {
         state.links.forEach(item => {
           item = item.split('/').slice(-2).join('/')
+          console.log(item);
           let url = `https://api.github.com/repos/${item}/contents/entry.yaml`
           fetch(url, {
               headers: {
@@ -124,8 +102,15 @@ const actions = {
               })
               commit("fetchProducts", single.json);
             })
+            .then(() => {
+              commit("getCategories");
+              commit("getLicences");
+              commit("getSector");
+              commit("getCompanies");
+              commit("getCountries");
+            })
         })
-      }).then(function () {})
+      })
       .catch(error => {
         console.log(error);
       })
@@ -158,8 +143,13 @@ const actions = {
 
 }
 const getters = {
-  allProducts: state => state.products,
-  categories: state => state.categories,
+  allProducts: state => {
+    state.filter = [...new Set(state.products)]
+    return state.filter
+  },
+  categories: state => {
+    return _.flatten(state.categories)
+  },
   licences: state => state.licences,
   sectors: state => state.public_sector,
   countries: state => state.countries,

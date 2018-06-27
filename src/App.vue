@@ -13,19 +13,9 @@
     },
     created() {
       this.$store.dispatch("fetchLinks");
-      this.$store.dispatch("getCategories");
-      this.$store.dispatch("getLicences");
-      this.$store.dispatch("getSector");
-      this.$store.dispatch("getCountries");
-      this.$store.dispatch("getCompanies");
     },
-    mounted() {
-      // this.$store.dispatch("getCategories");
-      // this.$store.dispatch("getLicences");
-      // this.$store.dispatch("getSector");
-      // this.$store.dispatch("getCountries");
-      // this.$store.dispatch("getCompanies");
-    }
+    mounted() {},
+    methods: {}
   };
 </script>
 

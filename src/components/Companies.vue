@@ -1,10 +1,10 @@
 <template>
-    <div class="column is-8 companies">
+    <div class="section column is-8 companies">
         <div class="content">
             <h4 class='is-size-4'>Companies</h4>
             <p>
-                <span class='button' v-for="item in companies" :key="item.id" v-bind:click="filterLink(item)">
-                    <a :href="prods">
+                <span class='button' v-for="item in companies" :key="item.id">
+                    <a :href="item">
                         {{item}}
                     </a>
                 </span>
@@ -13,23 +13,21 @@
     </div>
 </template>
 
-<script >
+<script>
+    import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
     export default {
       name: "ProdCompanies",
       data() {
-        return {
-          companies: "",
-          prods: {}
-        };
+        return {};
       },
-      mounted() {
-        this.companies = this.$store.getters.companies;
+      created() {},
+      mounted() {},
+      computed: {
+        ...mapGetters({
+          companies: "companies"
+        })
       },
-      methods: {
-        filterLink(el) {
-          this.$store.commit("filterData", el);
-          this.prods = this.$store.getters.filteredData;
-        }
-      }
+      methods: {},
+      watch: {}
     };
 </script>

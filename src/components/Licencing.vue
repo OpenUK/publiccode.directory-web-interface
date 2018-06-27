@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-8 companies">
+  <div class="section column is-8 companies">
     <div class="content">
       <h4 class='is-size-4'>Licencing</h4>
       <p>
@@ -13,15 +13,17 @@
   </div>
 </template>
 <script>
+  import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
   export default {
     name: "ProdLicencing",
     data() {
-      return {
-        licences: ""
-      };
+      return {};
     },
-    mounted() {
-      this.licences = this.$store.getters.licences;
+    mounted() {},
+    computed: {
+      ...mapGetters({
+        licences: "licences"
+      })
     }
   };
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="column is-8 countries">
+    <div class="section column is-8 countries">
         <div class="content">
             <h4 class='is-size-4'>Countries</h4>
             <span class='button' v-for="item in countries" :key="item.id">
@@ -12,18 +12,17 @@
 </template>
 
 <script>
-    import { mapGetters } from "../store";
+    import { mapGetters } from "vuex";
     export default {
       name: "ProdCountries",
       data() {
-        return {
-          countries: ""
-        };
+        return {};
       },
-      mounted() {
-        setTimeout(() => {
-          this.countries = this.$store.getters.countries;
-        }, {});
+      mounted() {},
+      computed: {
+        ...mapGetters({
+          countries: "countries"
+        })
       }
     };
 </script>

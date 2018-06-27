@@ -1,10 +1,10 @@
 <template>
-    <div class="column is-8">
+    <div class="section column is-8">
         <div class="content">
             <h4 class='is-size-4'>Categories</h4>
             <span class='button' v-for="(item, index) in categories" :key="index">
-                <a :href="item" v-for="(categ,ind) in item" :key="ind">
-                    {{categ}}
+                <a>
+                    {{item}}
                 </a>
             </span>
         </div>
@@ -12,15 +12,17 @@
 </template>
 
 <script >
+    import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
     export default {
       name: "ProdCategories",
       data() {
-        return {
-          categories: ""
-        };
+        return {};
       },
-      mounted() {
-        this.categories = this.$store.getters.categories;
+      mounted() {},
+      computed: {
+        ...mapGetters({
+          categories: "categories"
+        })
       }
     };
 </script>
