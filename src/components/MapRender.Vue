@@ -1,6 +1,7 @@
 <template>
     <div class="column is-8">
         <p>Map rendered</p>
+
     </div>
 </template>
 
@@ -9,6 +10,9 @@
       name: "MapRendered",
       data() {
         return {};
-      }
+      },
+      computed: {},
+      components: {},
+      mounted() {}
     };
 </script>

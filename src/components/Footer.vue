@@ -4,6 +4,7 @@
             <p>
                 this is a footer
             </p>
+
         </div>
     </footer>
 </template>

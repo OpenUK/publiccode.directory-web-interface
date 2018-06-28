@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import About from './views/About.vue'
 import JoinUs from './views/JoinUs.vue'
 import Software from './views/Software.vue'
+import Licence from './views/Licence.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -26,6 +27,11 @@ export default new Router({
       path: '/software',
       name: 'software',
       component: Software
+    },
+    {
+      path: '/licence',
+      name: 'licence',
+      component: Licence
     }
   ],
   linkActiveClass: 'is-active',

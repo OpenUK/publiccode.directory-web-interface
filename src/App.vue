@@ -1,6 +1,8 @@
 <template>
-  <div id="app">
-    <router-view/>
+  <div id='app'>
+    <div class="wrapper">
+      <router-view/>
+    </div>
     <app-footer></app-footer>
   </div>
 </template>
@@ -48,7 +50,6 @@
     display: flex;
     flex-flow: column nowrap;
     height: 100%;
-
     div:first-child {
       flex-shrink: 0;
     }
@@ -61,5 +62,13 @@
   }
   .logo {
     height: 100px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: bold;
   }
 </style>

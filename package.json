@@ -16,6 +16,7 @@
     "vue-instantsearch": "^1.7.0",
     "vue-router": "^3.0.1",
     "vue-truncate-filter": "^1.1.7",
+    "vue2-leaflet": "^1.0.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
