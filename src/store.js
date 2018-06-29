@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 var base64 = require("js-base64").Base64;
 var _ = require("lodash");
-let token = "dc79ffa31605737117fb0b9bafa0251c9916541b";
+let token = "sdadasdasdasddasdasdsadasdas";
 let YAML = require("js-yaml");
 Vue.use(Vuex);
 const allprods = [];

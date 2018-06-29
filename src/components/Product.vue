@@ -320,7 +320,9 @@
       }
     }
   }
-
+  .map {
+    margin-top: 2rem;
+  }
   @media screen and (min-width: 768px) {
     .company {
       max-width: 260px;

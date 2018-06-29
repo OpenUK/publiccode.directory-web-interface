@@ -46,7 +46,7 @@
             Find ou more details on the
           </h4>
           <p>We provide various functionalities to make it as easy as humanly possible to find what you're looking for
-            <router-link to='/software' class='button is-primary is-outlined'>Software page
+            <router-link to='/software' class='button is-primary is-outlined inline'>Software page
               <object class='link-svg' data="./img/icons/forward.svg" type="image/svg+xml">Your browser doesnt support SVG's => Download and use a proper OSS browser like
                 <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank" rel='noopener'>Firefox</a>
               </object>
@@ -100,6 +100,9 @@
   }
   .bottom-link {
     padding-bottom: 3rem;
+  }
+  .inline {
+    vertical-align: middle;
   }
   @media screen and(min-width: 576px) {
     .features {
