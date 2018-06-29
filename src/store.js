@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 var base64 = require("js-base64").Base64;
 var _ = require("lodash");
-let token = "sdadasdasdasddasdasdsadasdas";
+let token = process.env.VUE_APP_GITHUB_TOKEN;
 let YAML = require("js-yaml");
 Vue.use(Vuex);
 const allprods = [];
