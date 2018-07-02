@@ -223,6 +223,7 @@
       display: flex;
       flex-flow: row wrap;
       justify-content: space-around;
+      margin: 2rem 0;
     }
 
     h4 {
@@ -234,7 +235,7 @@
     display: inline-flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: 1rem;
+    margin-top: 2rem;
     padding-top: 0.75rem;
     border-radius: 6px;
     background-color: white;

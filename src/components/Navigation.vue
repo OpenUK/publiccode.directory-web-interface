@@ -65,7 +65,7 @@
     color: #42b983;
   }
   .logo {
-    height: 75px;
+    height: 3.25rem;
   }
   .navbar-item {
     span {
