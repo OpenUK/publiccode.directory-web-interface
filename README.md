@@ -24,6 +24,7 @@ In order for this to magically work with this repo, the following steps ust appl
 
 - Make sure that you have **Node.js** and or **Yarn** installed on your computer
 - Clone / fork this repo locally
+- Create a Github Personal Token and use it instead of the `let token = process.env.VUE_APP_GITHUB_TOKEN;` inside `src/store.js` file or create a `.env` file and add the token to `VUE_APP_GITHUB_TOKEN= new magical token` variable that will be automagically picked up by the application.
 - `cd` into the newly downloaded folder
 - You have some mistycal commands that you can run to locally improve /develop the project
   - `npm run serve` or `yarn serve` to start a local live development session
