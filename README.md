@@ -36,3 +36,9 @@ In order for this to magically work with this repo, the following steps ust appl
         - [Public Code Europe](https://publiccode.eu/) for helping out with the discovery and localization of the secret ingredients
         - [Vue.js](https://vuejs.org/) and its creators for the simplicity and flexibility of their magic tools
         - [Vue.js CLI](https://cli.vuejs.org/) for adjusting the quantities needed in the creation of their tools
+
+## Licence and legal stuff
+
+Since this is a magical creation we can only allow it to exist under the MIT licencing agreement, otherwise known and the OSS licence.
+
+Feel free to play with this, improve and correct the definitions, quantities and secret ingredients at your will.
