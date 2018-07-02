@@ -22,20 +22,20 @@ The power of magic is at play here.
 
 In order for this to magically work with this repo, the following steps ust apply
 
-    - Make sure that you have **Node.js** and or **Yarn** installed on your computer
-    - Clone / fork this repo locally
-    - ```cd``` into the newly downloaded folder
-    - You have some mistycal commands that you can run to locally improve /develop the project
-        - ```npm run serve``` or ```yarn serve``` to start a local live development session
-        - ```npm run build``` or ```yarn build``` to build the final project
-    - Of course you are free to modify the magical powers of the projects and take it to the next step.
-    - All we ask is to give credit where credit is due, such as
-        - [OpenUK](https://openuk.uk) for supporting this project
-        - [OpusVL](https://opusvl.com)'s always junior [John Mica](https://johnmica.me) for allowing the intial development or the magical recipe
-        - [FSFE](https://fsfe.org) for creating the spell book and collecting the secret ingredients
-        - [Public Code Europe](https://publiccode.eu/) for helping out with the discovery and localization of the secret ingredients
-        - [Vue.js](https://vuejs.org/) and its creators for the simplicity and flexibility of their magic tools
-        - [Vue.js CLI](https://cli.vuejs.org/) for adjusting the quantities needed in the creation of their tools
+- Make sure that you have **Node.js** and or **Yarn** installed on your computer
+- Clone / fork this repo locally
+- `cd` into the newly downloaded folder
+- You have some mistycal commands that you can run to locally improve /develop the project
+  - `npm run serve` or `yarn serve` to start a local live development session
+  - `npm run build` or `yarn build` to build the final project
+- Of course you are free to modify the magical powers of the projects and take it to the next step.
+- All we ask is to give credit where credit is due, such as
+  - [OpenUK](https://openuk.uk) for supporting this project
+  - [OpusVL](https://opusvl.com)'s always junior [John Mica](https://johnmica.me) for allowing the intial development or the magical recipe
+  - [FSFE](https://fsfe.org) for creating the spell book and collecting the secret ingredients
+  - [Public Code Europe](https://publiccode.eu/) for helping out with the discovery and localization of the secret ingredients
+  - [Vue.js](https://vuejs.org/) and its creators for the simplicity and flexibility of their magic tools
+  - [Vue.js CLI](https://cli.vuejs.org/) for adjusting the quantities needed in the creation of their tools
 
 ## Licence and legal stuff
 
