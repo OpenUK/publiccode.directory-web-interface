@@ -1,40 +1,51 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import About from './views/About.vue'
-import JoinUs from './views/JoinUs.vue'
-import Software from './views/Software.vue'
-import Licence from './views/Licence.vue'
+const Home = () =>
+  import ('./views/Home.vue')
+const About = () =>
+  import ('./views/About.vue')
+const JoinUs = () =>
+  import ('./views/JoinUs.vue')
+const Software = () =>
+  import ('./views/Software.vue')
+const Licence = () =>
+  import ('./views/Licence.vue')
 Vue.use(Router)
 
 export default new Router({
   routes: [{
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+
     },
     {
       path: '/about',
       name: 'about',
-      component: About
+      component: About,
+
     },
     {
       path: '/join',
       name: 'join',
-      component: JoinUs
+      component: JoinUs,
+
     },
     {
       path: '/software',
       name: 'software',
-      component: Software
+      component: Software,
+
     },
     {
       path: '/licence',
       name: 'licence',
-      component: Licence
+      component: Licence,
+
     }
   ],
   linkActiveClass: 'is-active',
   linkExactActiveClass: 'is-active',
-  mode: 'history',
+  // mode: 'history',
+
 })

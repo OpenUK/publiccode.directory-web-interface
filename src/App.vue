@@ -1,7 +1,9 @@
 <template>
   <div id='app'>
     <div class="wrapper">
-      <router-view/>
+      <!-- <keep-alive> -->
+      <router-view />
+      <!-- </keep-alive> -->
     </div>
     <app-footer></app-footer>
   </div>
@@ -10,6 +12,9 @@
   import Footer from "@/components/Footer.vue";
   export default {
     name: "Oss-Api",
+    data() {
+      return {};
+    },
     components: {
       "app-footer": Footer
     },

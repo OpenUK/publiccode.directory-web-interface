@@ -14,10 +14,10 @@
       <div id="navbarMenuHeroA" class="navbar-menu" :class="{'is-active': showNav}">
         <div class="navbar-end">
           <router-link to='/about' class='navbar-item'>
-            <span @click="toggleNav()">About the Project</span>
+            <span @click="toggleNav() ; checked">About the Project</span>
           </router-link>
           <router-link to="/software" class='navbar-item'>
-            <span @click="toggleNav()">OSS Directory</span>
+            <span @click="toggleNav(); checked">OSS Directory</span>
           </router-link>
           <router-link to="/join" class='navbar-item'>
             <span @click="toggleNav()">How to join</span>
@@ -43,6 +43,9 @@
     methods: {
       toggleNav() {
         !this.showNav ? (this.showNav = true) : (this.showNav = false);
+      },
+      checked() {
+        this.$store.commit("updateChecked", !this.$store.state.checked);
       }
     }
   };

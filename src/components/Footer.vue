@@ -4,7 +4,7 @@
             <p>This project was possible due to the following partners</p>
             <div class="images">
                 <a class='footer-image' href="//openuk.uk/" target="_blank" rel='noopener'>
-                    <object class='partner-image' data="./img/logos/OpenUK-Logo.svg" type="image/svg+xml">OpenUK</object>
+                    <object class='partner-image' data="./img/logos/OpenUK-logo.svg" type="image/svg+xml">OpenUK</object>
                 </a>
                 <a class='footer-image' href="//publiccode.eu/" target="_blank" rel='noopener'>
                     <object class='partner-image' data="./img/logos/public-code-logo.svg" type="image/svg+xml">Public Code EU</object>
@@ -13,7 +13,7 @@
                     <object class='partner-image' data="./img/logos/fsfe-logo.svg" type="image/svg+xml">Free Software Foundation Europe</object>
                 </a>
             </div>
-            <p>&copy; 2018 - Copyright John Mica</p>
+            <p>&copy; 2018 - Copyright OpenUK</p>
         </div>
     </footer>
 </template>
@@ -29,6 +29,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-wrap: wrap;
 
       .footer-image {
         margin-right: 2.5rem;

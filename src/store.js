@@ -1,9 +1,20 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import VuexPersistence from 'vuex-persist'
+
 var base64 = require("js-base64").Base64;
 var _ = require("lodash");
 let token = process.env.VUE_APP_GITHUB_TOKEN;
 let YAML = require("js-yaml");
+
+Vue.use(Vuex)
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage,
+  reducer: state => ({
+    checked: state.checked
+  })
+})
 Vue.use(Vuex);
 const allprods = [];
 const state = {
@@ -14,7 +25,8 @@ const state = {
   public_sector: [],
   filteredProd: [],
   countries: [],
-  companies: []
+  companies: [],
+  checked: false
 };
 const mutations = {
   fetchLinks(state, all) {
@@ -63,6 +75,9 @@ const mutations = {
       companySet.add(el.m_organisation);
     });
     state.companies = Array.from(companySet);
+  },
+  updateChecked(state, payload) {
+    state.checked = payload;
   }
 };
 const actions = {
@@ -70,7 +85,7 @@ const actions = {
     commit
   }) {
     fetch(
-        `https://api.github.com/repos/JohnMica/publiccode.directory/contents/database/database.index.yaml`, {
+        `https://api.github.com/repos/OpenUK/publiccode.directory/contents/database/database.index.yaml`, {
           headers: {
             Authorization: "Bearer " + token,
             "Content-Type": "application/json",
@@ -161,10 +176,11 @@ const getters = {
   filteredData: state => state.filteredProd,
   companies: state => state.companies
 };
-
+const plugins = [vuexLocal.plugin]
 export default new Vuex.Store({
   state,
   actions,
   mutations,
+  plugins,
   getters
 });
