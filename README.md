@@ -1,45 +1,35 @@
-# This is a magical app desinged to unite the Open Source Software developed and used within any and all public govermental agencies
+# This is a small website desinged to unite the Open Source Software developed and used within any and all public and govermental agencies
 
 It works on a base that developers and mainteners will have an interest in getting their work out and about, thus improving the end line, streamlining the experiences among various public services and improve daily lives of millions around the world.
 
 ## How to become a part of this
 
-Like everything else in life, this project requires some TLC rom all you developers out there. It is nothing complicated but it will take a bit of time and the responsability for the informatio provided lyes only with yourselves.
+Like everything else in life it is not complicated but it will take a bit of time and the responsability for the information provided lies only with the maintainers of the respective software.
 
-Here is how to get the magical software entered into this project.
+Here is how to get your software entered into this project.
 
 - Get the [Entry-yaml file](https://github.com/OpenUK/publiccode.directory/blob/master/entry-files/entry.yaml)
-- Add this file to the repository you want to enter into the Public Directory
-- Fill in the file in a Yaml structure (most fields take strings as values)
-- On this magical repo, create a PR for the [Database Index](https://github.com/OpenUK/publiccode.directory/blob/master/database/database.index.yaml) with the Github link to your software
+- Add this file to the repository you want to enter into the Public Code Directory
+- Fill in the file in a Yaml structure (most fields take strings as values, some take arrays, the example covers all the possible fields)
+- On an issue on this repository or create a PR for the [Database Index](https://github.com/OpenUK/publiccode.directory/blob/master/database/database.index.yaml) with the Github link to your software repository
 - Done
 
 The website will automatically pick up all the changes and refresh the lists on each page reload.
 
-The power of magic is at play here.
-
 ## How to improve / develop this further
 
-In order for this to magically work with this repo, the following steps ust apply
+In order for this to improve / fix this project, the following steps must apply:
 
 - Make sure that you have **Node.js** and or **Yarn** installed on your computer
-- Clone / fork this repo locally
-- Create a Github Personal Token and use it instead of the `let token = process.env.VUE_APP_GITHUB_TOKEN;` inside `src/store.js` file or create a `.env` file and add the token to `VUE_APP_GITHUB_TOKEN= new magical token` variable that will be automagically picked up by the application.
+- Clone / fork this repository
+- Create a Github Personal Token and use it instead of the `let token = process.env.VUE_APP_GITHUB_TOKEN;` inside `src/store.js` file or create a `.env` file and add the token to `VUE_APP_GITHUB_TOKEN= your new token` variable that will be automagically picked up by the application.
 - `cd` into the newly downloaded folder
-- You have some mistycal commands that you can run to locally improve /develop the project
+- You ca run the following comamnds locally:
   - `npm run serve` or `yarn serve` to start a local live development session
   - `npm run build` or `yarn build` to build the final project
-- Of course you are free to modify the magical powers of the projects and take it to the next step.
-- All we ask is to give credit where credit is due, such as
+- Credits go to our partners:
   - [OpenUK](https://openuk.uk) for supporting this project
-  - [OpusVL](https://opusvl.com)'s always junior [John Mica](https://johnmica.me) for allowing the intial development or the magical recipe
-  - [FSFE](https://fsfe.org) for creating the spell book and collecting the secret ingredients
-  - [Public Code Europe](https://publiccode.eu/) for helping out with the discovery and localization of the secret ingredients
-  - [Vue.js](https://vuejs.org/) and its creators for the simplicity and flexibility of their magic tools
-  - [Vue.js CLI](https://cli.vuejs.org/) for adjusting the quantities needed in the creation of their tools
-
-## Licence and legal stuff
-
-Since this is a magical creation we can only allow it to exist under the MIT licencing agreement, otherwise known and the OSS licence.
-
-Feel free to play with this, improve and correct the definitions, quantities and secret ingredients at your will.
+  - [FSFE](https://fsfe.org) for supporting this project
+  - [Public Code Europe](https://publiccode.eu/) for helping out with the discovery and localization of the open source software
+  - [Vue.js](https://vuejs.org/) and its creators for the simplicity and flexibility of their tools
+  - [Vue.js CLI](https://cli.vuejs.org/) for simplifying the creation of such websites / SPA / PWA
