@@ -60,22 +60,12 @@
 
       </main>
     </div>
-
-    <div class="column is-8 map">
-      <l-map ref="map" :zoom="zoom" :center="center" style="height:500px;">
-        <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-        <l-marker v-for="marker in locations" :key="marker.id" :lat-lng="marker.position">
-          <l-popup :content="marker.attribution" :title='marker.url'>
-          </l-popup>
-        </l-marker>
-      </l-map>
-    </div>
   </div>
 </template>
 
 <script>
   import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
-  import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
+
   export default {
     name: "ProdAll",
     data() {
@@ -83,21 +73,10 @@
         companies: [],
         dropdown: { height: 0 },
         filters: { countries: {}, categories: {}, licences: {} },
-        menus: { countries: false, categories: false, licences: false },
-        zoom: 3,
-        center: [52.371183, -1.263988],
-        url: "",
-        attribution:
-          '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        locations: []
+        menus: { countries: false, categories: false, licences: false }
       };
     },
-    components: {
-      LMap,
-      LTileLayer,
-      LMarker,
-      LPopup
-    },
+
     computed: {
       ...mapGetters({
         products: "allProducts"
@@ -190,18 +169,6 @@
             this.$set(this.filters.categories, entry_category, false);
           }
         );
-
-        for (let index = 0; index < this.companies.length; index++) {
-          this.locations.push({
-            id: index,
-            position: {
-              lat: this.companies[index].m_geolocation.lat,
-              lng: this.companies[index].m_geolocation.long
-            },
-            url: this.companies[index].m_organisation_url,
-            attribution: this.companies[index].m_organisation
-          });
-        }
       }, 500);
     }
   };
@@ -321,9 +288,7 @@
       }
     }
   }
-  .map {
-    margin-top: 2rem;
-  }
+
   @media screen and (min-width: 768px) {
     .company {
       max-width: 260px;

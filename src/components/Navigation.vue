@@ -19,6 +19,9 @@
           <router-link to="/software" class='navbar-item'>
             <span @click="toggleNav(); checked">OSS Directory</span>
           </router-link>
+          <router-link to="/map" class='navbar-item'>
+            <span @click="toggleNav(); checked">Map view</span>
+          </router-link>
           <router-link to="/join" class='navbar-item'>
             <span @click="toggleNav()">How to join</span>
           </router-link>

@@ -10,6 +10,8 @@ const Software = () =>
   import ('./views/Software.vue')
 const Licence = () =>
   import ('./views/Licence.vue')
+const OSSMap = () =>
+  import ('./views/OSSMap.vue')
 Vue.use(Router)
 
 export default new Router({
@@ -41,6 +43,12 @@ export default new Router({
       path: '/licence',
       name: 'licence',
       component: Licence,
+
+    },
+    {
+      path: '/map',
+      name: 'map',
+      component: OSSMap,
 
     }
   ],
