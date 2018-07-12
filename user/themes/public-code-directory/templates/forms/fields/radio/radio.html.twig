@@ -1,0 +1,26 @@
+{% set value = (value is null ? field.default : value) %}
+
+<div class="field">
+    <div class="control {% if field.help %} tooltip is-tooltip-top {% endif %}"    data-tooltip=" {{ field.help|e }} ">
+        {% for key, text in field.options %}
+        {% set id = "radio_" ~ field.name ~ key %}
+            <label class='label'>
+                {% if field.label %}
+                 {{ field.label|default(field.name|capitalize)|t }}
+                {% endif %}
+                {{ field.validate.required in ['on', 'true', 1] ? '<span class="required">*</span>' }}
+                <input type="radio"
+                       value="{{ key }}"
+                       id="{{ id }}"
+                       name="{{ (scope ~ field.name)|fieldName }}"
+                       {% if key == value %}checked="checked" {% endif %}
+                       {% if field.validate.required in ['on', 'true', 1] %}required="required"{% endif %}
+                />
+                {{ text }}
+            </label>
+                {% if field.help %}
+                  <span class="help">{{ field.help|default(field.name|capitalize)|t }}</span>
+                  {% endif %}
+        {% endfor %}
+    </div>
+</div>
