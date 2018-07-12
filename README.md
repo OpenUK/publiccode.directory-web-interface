@@ -1,24 +1,12 @@
-# This is a small website desinged to unite the Open Source Software developed and used within any and all public and govermental agencies
+# PCD Web interface
 
-It works on a base that developers and mainteners will have an interest in getting their work out and about, thus improving the end line, streamlining the experiences among various public services and improve daily lives of millions around the world.
-
-## How to become a part of this
+This is the web interface to the [PublicCode.Directory (PCD) project](https://github.com/OpenUK/publiccode.directory).
 
 Like everything else in life it is not complicated but it will take a bit of time and the responsability for the information provided lies only with the maintainers of the respective software.
 
-Here is how to get your software entered into this project.
+## How to improve / develop the web interface
 
-- Get the [Entry-JSON file](https://github.com/OpenUK/publiccode.directory/blob/master/entry-files/entry.json)
-- Add this file to the repository you want to enter into the Public Code Directory
-- Fill in the file in a Yaml structure (most fields take strings as values, some take arrays, the example covers all the possible fields)
-- On an issue on this repository or create a PR for the [Database Index](https://github.com/OpenUK/publiccode.directory/blob/master/database/database.index.json) with the Github link to your software repository
-- Done
-
-The website will automatically pick up all the changes and refresh the lists on each page reload.
-
-## How to improve / develop this further
-
-In order for this to improve / fix this project, the following steps must apply:
+In order for this to improve / fix the web interface project, the following steps must apply:
 
 - Make sure that you have **Node.js** and or **Yarn** installed on your computer
 - Clone / fork this repository
