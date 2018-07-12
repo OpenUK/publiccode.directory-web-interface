@@ -1,0 +1,11 @@
+email: john.mica@opusvl.com
+fullname: 'Someone Else'
+title: Tester
+state: enabled
+access:
+  admin:
+    login: true
+    super: true
+  site:
+    login: true
+hashed_password: $2y$10$PaLb3h1HzOwCH/dISZgpQ.qyJZAWT3mYOUDm7CqySwGNG6Cnqyv8y

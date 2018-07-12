@@ -1,0 +1,27 @@
+{% set value = (value is null ? field.default : value) %}
+
+<div class="field">
+   
+    <div class="control {% if field.help %} tooltip is-tooltip-top {% endif %}"    data-tooltip=" {{ field.help|e }} ">
+        {% for key, text in field.options %}
+        {% set checked = (field.use == 'keys' ? value[key] : key in value) %}
+        {% set name = field.name|fieldName ~ '[' ~ (field.use == 'keys' ? key : '') ~ ']' %}
+        {% set key = (field.use == 'keys' ? '1' : key) %}
+        
+            <label class='checkbox'>
+                <input type="checkbox"
+                    value="{{ key|e }}"
+                    name="{{ (scope ~ name)|fieldName }}"
+                    {% if checked %}checked="checked"{% endif %}
+                    {% if field.validate.required %}required="required"{% endif %}
+                >
+                {{ text|e }}
+            </label>        
+
+            {% if field.help %}
+                <p class="help" title="{{ field.help|e }}">{{ field.help|e }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+</div>

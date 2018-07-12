@@ -1,0 +1,16 @@
+<div class="page-content">
+    {{page.content}}
+</div>
+
+<worldmap inline-template="inline-template">
+    <div class="map">
+        <l-map ref="map" :max-zoom='maxZoom' :min-zoom='minZoom' :zoom="zoom" :center="center" style="height:500px;">
+            <l-tile-layer :attribution="attribution" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></l-tile-layer>
+            <l-marker v-for="(marker,id) in locations" :key="id" :lat-lng="marker.position" :icon="marker.icon">
+                <l-popup :content="marker.attribution" :title='marker.url'>
+                    <a :href="marker.url" :title='marker.url'></a>
+                </l-popup>
+            </l-marker>
+        </l-map>
+    </div>
+</worldmap>

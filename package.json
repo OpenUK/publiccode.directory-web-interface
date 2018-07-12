@@ -1,40 +1,8 @@
 {
-  "name": "oss-api",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
-  },
   "dependencies": {
-    "ajv": "^6.5.1",
     "buefy": "^0.6.6",
-    "bulma": "^0.7.1",
-    "register-service-worker": "^1.0.0",
-    "tunnel-agent": "^0.6.0",
-    "vue": "^2.5.16",
-    "vue-instantsearch": "^1.7.0",
-    "vue-router": "^3.0.1",
-    "vue-truncate-filter": "^1.1.7",
     "vue2-leaflet": "^1.0.2",
     "vuex": "^3.0.1",
-    "vuex-localstorage": "^1.0.0",
-    "vuex-persist": "^1.4.3",
-    "vuex-persistedstate": "^2.5.4"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.15",
-    "@vue/cli-plugin-pwa": "^3.0.0-beta.15",
-    "@vue/cli-service": "^3.0.0-beta.15",
-    "faker": "^4.1.0",
-    "hoek": "^5.0.3",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.16"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+    "vuex-persist": "^1.4.3"
+  }
 }
