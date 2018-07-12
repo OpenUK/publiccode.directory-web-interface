@@ -8,10 +8,10 @@ Like everything else in life it is not complicated but it will take a bit of tim
 
 Here is how to get your software entered into this project.
 
-- Get the [Entry-yaml file](https://github.com/OpenUK/publiccode.directory/blob/master/entry-files/entry.yaml)
+- Get the [Entry-JSON file](https://github.com/OpenUK/publiccode.directory/blob/master/entry-files/entry.json)
 - Add this file to the repository you want to enter into the Public Code Directory
 - Fill in the file in a Yaml structure (most fields take strings as values, some take arrays, the example covers all the possible fields)
-- On an issue on this repository or create a PR for the [Database Index](https://github.com/OpenUK/publiccode.directory/blob/master/database/database.index.yaml) with the Github link to your software repository
+- On an issue on this repository or create a PR for the [Database Index](https://github.com/OpenUK/publiccode.directory/blob/master/database/database.index.json) with the Github link to your software repository
 - Done
 
 The website will automatically pick up all the changes and refresh the lists on each page reload.
