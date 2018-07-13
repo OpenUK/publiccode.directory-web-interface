@@ -1,11 +1,35 @@
 email: john.mica@opusvl.com
-fullname: 'Someone Else'
-title: Tester
+fullname: 'Public Code Directory'
+title: 'Testing PCD Docker'
 state: enabled
 access:
-  admin:
-    login: true
-    super: true
   site:
-    login: true
-hashed_password: $2y$10$v6Mc5o8VSvUH4Jh7Obje1On0ojyRt63Sz/Gc96Gsv5VPwRUzz9ci.
+    login: 'true'
+  admin:
+    super: 'true'
+    login: 'true'
+    cache: 'true'
+    configuration: 'true'
+    configuration_system: 'true'
+    configuration_site: 'true'
+    configuration_media: 'true'
+    configuration_info: 'true'
+    settings: 'true'
+    pages: 'true'
+    maintenance: 'true'
+    statistics: 'true'
+    plugins: 'true'
+    themes: 'true'
+    users: 'true'
+  admin-addon-user-manager:
+    users: 'true'
+    groups: 'true'
+    users_expert: 'true'
+hashed_password: $2y$10$JwP4JwH.yPJPEjDmpjN9bu/lJzr0srQcdCv/51JzKHiN5KXWqGMJK
+language: en
+twofa_enabled: false
+twofa_secret: DFQUA2M2LSY3TLOHMMHAGHVMXIF6QEBS
+_json:
+  avatar: 'null'
+  state: '"enabled"'
+  hashed_password: '"$2y$10$YkAyEaYwPUIsswmZcfXQ1.rnP0MoqDI4S6b3FrEeXZWwAFNh3dsP2"'

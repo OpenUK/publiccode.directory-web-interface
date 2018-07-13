@@ -1,5 +1,0 @@
-name: 'Someone Else'
-honeypot: null
-email: john.mica@opusvl.com
-message: 'wae qrg erg er . g '
-
