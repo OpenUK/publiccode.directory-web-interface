@@ -8,14 +8,20 @@ Like everything else in life it is not complicated but it will take a bit of tim
 
 In order for this to improve / fix the web interface project, the following steps must apply:
 
-- Make sure that you have **Node.js** and or **Yarn** installed on your computer
+- You will need to have **Docker**, **Noje.js** and a **Code editor** installed on your computer
+
 - Clone / fork this repository
-- Create a Github Personal Token and use it instead of the `let token = process.env.VUE_APP_GITHUB_TOKEN;` inside `src/store.js` file or create a `.env` file and add the token to `VUE_APP_GITHUB_TOKEN= your new token` variable that will be automagically picked up by the application.
 - `cd` into the newly downloaded folder
+- Run the `docker build . -t image-name` command to build the image locally
+- Modify the `docker-compose.yaml` file to modify the image to the newly locally build image `image-name`
+- Run `docker-compose up -d`
+- `cd` into the `themes/public-code-directory`
 - You ca run the following comamnds locally:
   - `npm run serve` or `yarn serve` to start a local live development session
   - `npm run build` or `yarn build` to build the final project
-- Credits go to our partners:
+- Once changes are done, you can push back to Github and create a Pull Request
+
+* Credits go to our partners:
   - [OpenUK](https://openuk.uk) for supporting this project
   - [FSFE](https://fsfe.org) for supporting this project
   - [Public Code Europe](https://publiccode.eu/) for helping out with the discovery and localization of the open source software
