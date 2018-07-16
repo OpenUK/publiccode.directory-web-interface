@@ -19,4 +19,4 @@ features:
 
 ## Welcome to the Public Code Directory
 
-This is where magic should happen but we'll just give it a little help.
+This is where magic should happen but we'll just give it a little help and time.
