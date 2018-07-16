@@ -1,0 +1,22 @@
+enabled: true
+text_var: 'Custom Text added by the **Git Sync** plugin (disable plugin to remove)'
+folders:
+  - pages
+  - plugins
+  - themes
+  - config
+  - data
+repository: 'https://github.com/JohnMica/publiccode.directory-web-interface.git'
+user: JohnMica
+webhook: /_git-sync_update_auto
+branch: master
+remote:
+  name: origin
+  branch: master
+git:
+  author: gituser
+  name: GitSync-PCD
+  email: john.mica@opusvl.com
+  bin: git
+logging: false
+password: gitsync-def50200c3ceaf52132367fdccff213d3564d93d40ea0e074a38ee0fca95938ac2a18e64e2e45fb8c393801cea638a0a2551da2f544b226f0b3c56286f26129220203bad9fe8837e972908b85820705b82d2883adbd128a682443977d5bccd9597c4a30e8bb117a3da1eead14f87a8fe3f2dc0386730e3b0ad8af509
