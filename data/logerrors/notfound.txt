@@ -1,4 +1,8 @@
 -
+    url: 'https://publiccode.directory:80/'
+    time: '2018-07-16 12:02:16pm'
+    referer: 'https://publiccode.directory/admin/plugins'
+-
     url: 'http://localhost:8888/PCD-CMS/user/themes/haywire/dist/js/vue2-leaflet.min.js.map'
     time: '2018-07-12 02:20:20pm'
     referer: ''

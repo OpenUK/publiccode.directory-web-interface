@@ -7,3 +7,6 @@
 -
     url: 'http://localhost:8888/PCD-CMS/wordlmap'
     count: 1
+-
+    url: 'https://publiccode.directory:80/'
+    count: 1

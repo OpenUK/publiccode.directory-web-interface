@@ -1,7 +1,19 @@
-title: Grav
+title: 'Public Code Directory'
+default_lang: en
 author:
-  name: Joe Bloggs
-  email: 'joe@example.com'
+  name: 'John Mica'
+  email: john.mica@opusvl.com
+taxonomies:
+  - category
+  - tag
 metadata:
-    description: 'Grav is an easy to use, yet powerful, open source flat-file CMS'
-
+  description: 'Public Code Directory is a federated Open Source Software database. '
+summary:
+  enabled: true
+  format: short
+  size: 300
+  delimiter: '==='
+redirects:
+  - '11, 11 example road'
+blog:
+  route: /blog
