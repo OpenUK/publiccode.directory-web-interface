@@ -1,6 +1,5 @@
 ---
-title: OSS Products
-visible: true
+title: Directory
 content:
     items: '@self.modular'
     order:
@@ -8,6 +7,7 @@ content:
         dir: asc
         custom:
             - _products
+visible: true
 template: modular
 ---
 
