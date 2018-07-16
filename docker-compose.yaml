@@ -4,6 +4,6 @@ services:
     restart: unless-stopped
     image: pcd-grav-image:latest
     ports:
-      - 12000:80
+      - 12100:80
     volumes:
       - .:/var/www/html
