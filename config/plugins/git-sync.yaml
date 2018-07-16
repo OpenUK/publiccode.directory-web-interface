@@ -5,7 +5,6 @@ folders:
   - plugins
   - themes
   - config
-  - data
 repository: 'https://github.com/OpenUK/publiccode.directory-web-interface.git'
 user: JohnMica
 webhook: /_git-sync_update_auto
