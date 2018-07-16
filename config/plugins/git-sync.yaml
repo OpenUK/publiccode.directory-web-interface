@@ -6,7 +6,7 @@ folders:
   - themes
   - config
   - data
-repository: 'https://github.com/JohnMica/publiccode.directory-web-interface.git'
+repository: 'https://github.com/OpenUK/publiccode.directory-web-interface.git'
 user: JohnMica
 webhook: /_git-sync_update_auto
 branch: master
@@ -19,4 +19,4 @@ git:
   email: john.mica@opusvl.com
   bin: git
 logging: false
-password: gitsync-def50200c3ceaf52132367fdccff213d3564d93d40ea0e074a38ee0fca95938ac2a18e64e2e45fb8c393801cea638a0a2551da2f544b226f0b3c56286f26129220203bad9fe8837e972908b85820705b82d2883adbd128a682443977d5bccd9597c4a30e8bb117a3da1eead14f87a8fe3f2dc0386730e3b0ad8af509
+password: gitsync-def50200c8c9dacaab5d912fe298d7c772092797b1baad76e8400dfcc618fde2d93fc3015a6a7b38e2b22e1c2d92d59e1373bf8f52bb19ad90a01b673ca4041fac83f99b8653cc4d5835003d23416e46fd659c91debf270ce5129ea4d8b215dbc193c7e504115e68c7c3aa8482625aa66f4e41b9eb3fd8b3f194149f
