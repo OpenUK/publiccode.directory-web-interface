@@ -11,4 +11,4 @@ visible: true
 template: modular
 ---
 
-# World locations for the OSS Comunity
+# Software by location
