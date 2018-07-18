@@ -35,7 +35,7 @@ form:
       size: medium
       label: Sync Folders
       classes: fancy
-      default: ['pages','themes']
+      default: ['pages','themes','plugins','config']
       options:
         pages: Pages
         themes: Themes
