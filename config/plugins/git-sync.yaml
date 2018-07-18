@@ -18,5 +18,5 @@ git:
   name: GitSync-PCD
   email: john.mica@opusvl.com
   bin: git
-logging: false
+logging: true
 password: gitsync-def50200c8c9dacaab5d912fe298d7c772092797b1baad76e8400dfcc618fde2d93fc3015a6a7b38e2b22e1c2d92d59e1373bf8f52bb19ad90a01b673ca4041fac83f99b8653cc4d5835003d23416e46fd659c91debf270ce5129ea4d8b215dbc193c7e504115e68c7c3aa8482625aa66f4e41b9eb3fd8b3f194149f
