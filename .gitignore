@@ -22,6 +22,6 @@ yarn-error.log*
 *.sln
 *.sw*
 
-core/
-data/
-accounts/
+/core/
+/data/
+/accounts/
