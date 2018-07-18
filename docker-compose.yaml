@@ -2,8 +2,8 @@ version: '2'
 services:
   grav:
     restart: unless-stopped
-    image: pcd-grav-image:latest
+    image: pcdimage:latest
     ports:
       - 12100:80
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html/user/
