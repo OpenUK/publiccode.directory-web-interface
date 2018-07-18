@@ -1,21 +1,25 @@
 absolute_urls: false
+timezone: ''
+default_locale: null
 param_sep: ':'
 wrapped_site: false
 reverse_proxy_setup: false
 force_ssl: false
 force_lowercase_urls: true
+custom_base_url: ''
 username_regex: '^[a-z0-9_-]{3,16}$'
 pwd_regex: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
 intl_enabled: true
 languages:
-  include_default_lang: false
+  supported: {  }
+  include_default_lang: true
   translations: true
   translations_fallback: true
   session_store_active: false
   http_accept_language: false
   override_locale: false
 home:
-  alias: /welcome
+  alias: /home
   hide_in_urls: false
 pages:
   theme: public-code-directory
@@ -25,19 +29,20 @@ pages:
   list:
     count: 20
   dateformat:
+    default: null
     short: 'jS M Y'
     long: 'F jS \a\t g:ia'
   publish_dates: true
   process:
     markdown: true
-    twig: true
+    twig: false
   twig_first: false
   never_cache_twig: false
   events:
     page: true
     twig: true
   markdown:
-    extra: true
+    extra: false
     auto_line_breaks: false
     auto_url_links: false
     escape_markup: false
@@ -52,13 +57,14 @@ pages:
     - json
     - rss
     - atom
+  append_url_extension: ''
   expires: 604800
-  cache_control: 'public, max-age=31536000'
-  last_modified: true
-  etag: true
-  vary_accept_encoding: true
+  cache_control: null
+  last_modified: false
+  etag: false
+  vary_accept_encoding: false
   redirect_default_route: false
-  redirect_default_code: '302'
+  redirect_default_code: 302
   redirect_trailing_slash: true
   ignore_files:
     - .DS_Store
@@ -83,9 +89,11 @@ cache:
   lifetime: 604800
   gzip: false
   allow_webserver_gzip: false
+  redis:
+    socket: false
 twig:
   cache: true
-  debug: false
+  debug: true
   auto_reload: true
   autoescape: false
   undefined_functions: true
@@ -104,9 +112,9 @@ assets:
   js_minify: true
   enable_asset_timestamp: false
   collections:
-    jquery: 'system://assets/jquery/jquery-3.x.min.js'
+    jquery: 'system://assets/jquery/jquery-2.x.min.js'
 errors:
-  display: 1
+  display: true
   log: true
 debugger:
   enabled: false
@@ -115,12 +123,14 @@ debugger:
   twig: true
 images:
   default_image_quality: 85
-  cache_all: true
+  cache_all: false
   cache_perms: '0755'
   debug: false
   auto_fix_orientation: false
 media:
   enable_media_timestamp: false
+  unsupported_inline_types: {  }
+  allowed_fallback_types: {  }
   auto_metadata_exif: false
   upload_limit: 134217728
 session:
@@ -131,8 +141,10 @@ session:
   secure: false
   httponly: true
   split: true
+  path: null
 gpm:
   releases: stable
+  proxy_url: null
   method: auto
   verify_peer: true
   official_gpm_only: true

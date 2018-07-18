@@ -13,7 +13,5 @@ summary:
   format: short
   size: 300
   delimiter: '==='
-redirects:
-  - '11, 11 example road'
 blog:
   route: /blog
