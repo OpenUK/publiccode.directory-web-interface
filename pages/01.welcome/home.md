@@ -1,5 +1,6 @@
 ---
 title: 'Public Code Directory'
+menu: 'Public Code Directory'
 media_order: '3d.svg,api.svg,back.svg,coding.svg,color-balance.svg,creative-process.svg,sketching.svg'
 features:
     -
