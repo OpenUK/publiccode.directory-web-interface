@@ -1,6 +1,7 @@
 ---
 title: Blog
-published: true
+published: false
+visible: true
 template: blog
 ---
 

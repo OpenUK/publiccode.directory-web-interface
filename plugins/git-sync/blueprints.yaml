@@ -30,15 +30,17 @@ form:
       validate:
         type: bool
     folders:
-      type: hidden
+      type: selectize
       multiple: true
       size: medium
       label: Sync Folders
       classes: fancy
-      default: ['pages']
+      default: ['pages','themes','plugins','config']
       options:
         pages: Pages
         themes: Themes
+        plugins: Plugins
+        config: Config
       validate:
         type: commalist
     repository:
