@@ -12,7 +12,8 @@
         dropdown: { height: 0 },
         filters: { countries: {}, categories: {}, licences: {} },
         menus: { countries: false, categories: false, licences: false },
-        visible: false
+        isCardModalActive: false,
+        modalCompany: {}
       };
     },
 
@@ -105,7 +106,11 @@
         );
       },
       cancel() {
-        this.visible = false;
+        this.isCardModalActive = false;
+      },
+      modalComp(element) {
+        Object.assign(this.modalCompany, element);
+        this.isCardModalActive = true;
       }
     },
     mounted() {

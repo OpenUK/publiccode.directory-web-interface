@@ -5,6 +5,9 @@
     url: 'http://localhost:8888/PCD-CMS/user/themes/haywire/dist/js/vue2-leaflet.min.js.map'
     count: 92
 -
+    url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/index.js.map'
+    count: 65
+-
     url: 'https://publiccode.directory:80/precache-manifest.f043cb32b53ad8a18702ac105d954f5d.js'
     count: 51
 -
@@ -13,6 +16,9 @@
 -
     url: 'https://publiccode.directory:80/img/logo.svg'
     count: 35
+-
+    url: 'http://localhost:12100/static/img/placeholder-1280x960.png'
+    count: 29
 -
     url: 'https://publiccode.directory:80/img/logos/OpenUK-logo.svg'
     count: 27
@@ -38,9 +44,6 @@
     url: 'https://publiccode.directory:80/index'
     count: 8
 -
-    url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/index.js.map'
-    count: 4
--
     url: 'https://publiccode.directory:80/img/icons/favicon-16x16.png'
     count: 4
 -
@@ -58,6 +61,9 @@
 -
     url: 'https://publiccode.directory:80/js/chunk-vendors.cf9de06f.js.map'
     count: 2
+-
+    url: 'http://localhost:12100/user/plugins/git-sync/js/app.js.map'
+    count: 1
 -
     url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/vue2-leaflet.min.js.map'
     count: 1

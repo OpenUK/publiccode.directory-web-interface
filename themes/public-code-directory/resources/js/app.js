@@ -1,5 +1,7 @@
 import "babel-polyfill";
 import store from "./store";
+import Buefy from 'buefy'
+
 window.Vue = require('vue');
 
 Vue.filter("capitalize", function (value) {
@@ -11,6 +13,7 @@ Vue.filter("truncate", function (text, stop, clamp) {
     return text.slice(0, stop) + (stop < text.length ? clamp || "..." : "");
 });
 
+Vue.use(Buefy)
 Vue.component('navbar', require('./components/Navbar.vue'));
 Vue.component('products', require('./components/Products.vue'));
 Vue.component('worldmap', require('./components/Worldmap.vue'));

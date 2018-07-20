@@ -53,10 +53,9 @@ pages:
     - rss
     - atom
   expires: 604800
-  cache_control: 'public, max-age=31536000'
-  last_modified: true
-  etag: true
-  vary_accept_encoding: true
+  last_modified: false
+  etag: false
+  vary_accept_encoding: false
   redirect_default_route: false
   redirect_default_code: '302'
   redirect_trailing_slash: true
@@ -73,7 +72,7 @@ pages:
       - form
       - forms
 cache:
-  enabled: true
+  enabled: false
   check:
     method: file
   driver: auto
@@ -84,8 +83,8 @@ cache:
   gzip: false
   allow_webserver_gzip: false
 twig:
-  cache: true
-  debug: true
+  cache: false
+  debug: false
   auto_reload: true
   autoescape: false
   undefined_functions: true
