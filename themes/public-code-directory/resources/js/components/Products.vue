@@ -1,14 +1,10 @@
 <script>
   import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
-  import { Modal, ImageModal, CardModal } from "vue-bulma-modal";
+
   export default {
     name: "Products",
     delimiters: ["${", "}"],
-    components: {
-      Modal,
-      ImageModal,
-      CardModal
-    },
+    components: {},
     data() {
       return {
         loading: true,
@@ -107,6 +103,9 @@
             this.$set(this.filters.categories, entry_category, false);
           }
         );
+      },
+      cancel() {
+        this.visible = false;
       }
     },
     mounted() {

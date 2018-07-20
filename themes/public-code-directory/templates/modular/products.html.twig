@@ -62,20 +62,19 @@
                                 </p>
                             </div>
                             <div class="card-footer-item">
-                                <span @click.prevent='visible = true'>More Info</span>
+                                <button class='button is-outlined' @click='visible=true'>More Info</button>
                             </div>
                         </footer>
                     </div>
                 </transition-group>
                 <transition-group name='modal' tag='section' class='modal_wrapper'>
-                    <card-modal v-for='(company, index) in list' :key='index' :visible="true" :title="title" transition="zoom">
+                    <div v-for='(company, index) in list' :key='index' :visible="true" transition="zoom">
                         <div class="content has-text-centered">
                             <img :src="company.logo_usl" height="120" alt="company.entry_name">
                             ${company.entry_name}
-                            <button @click='visible = false'>
-                                Close me</button>
+                            <button class='button is-outlined is-warning' @click='cancel'>Close me</button>
                         </div>
-                    </card-modal>
+                    </div>
                 </transition-group>
             </main>
         </div>
