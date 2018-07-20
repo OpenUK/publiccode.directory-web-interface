@@ -11,7 +11,7 @@ webhook: /_git-sync_update_auto
 branch: master
 remote:
   name: origin
-  branch: dev
+  branch: master
 git:
   author: gituser
   name: GitSync-PCD
