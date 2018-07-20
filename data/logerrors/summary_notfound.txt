@@ -38,6 +38,9 @@
     url: 'https://publiccode.directory:80/index'
     count: 8
 -
+    url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/index.js.map'
+    count: 4
+-
     url: 'https://publiccode.directory:80/img/icons/favicon-16x16.png'
     count: 4
 -
@@ -55,6 +58,9 @@
 -
     url: 'https://publiccode.directory:80/js/chunk-vendors.cf9de06f.js.map'
     count: 2
+-
+    url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/vue2-leaflet.min.js.map'
+    count: 1
 -
     url: 'http://localhost:8888/PCD-CMS/wordlmap'
     count: 1
