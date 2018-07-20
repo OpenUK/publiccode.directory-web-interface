@@ -26,3 +26,4 @@ yarn-error.log*
 /data/
 /accounts/
 /themes/quark/
+themes/public-code-directory/package-lock.json
