@@ -27,7 +27,7 @@ yarn-error.log*
 /data/logerrors/*
 /accounts/
 /themes/quark/
-
 **package-lock.json
 /data/logerrors/notfound.txt
 /data/logerrors/summary_notfound.txt
+themes/public-code-directory/package-lock.json
