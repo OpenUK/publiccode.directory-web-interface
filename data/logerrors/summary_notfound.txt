@@ -5,6 +5,9 @@
     url: 'http://localhost:8888/PCD-CMS/user/themes/haywire/dist/js/vue2-leaflet.min.js.map'
     count: 92
 -
+    url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/vue2-leaflet.min.js.map'
+    count: 54
+-
     url: 'https://publiccode.directory:80/precache-manifest.f043cb32b53ad8a18702ac105d954f5d.js'
     count: 51
 -
@@ -22,6 +25,9 @@
 -
     url: 'https://publiccode.directory:80/img/logos/public-code-logo.svg'
     count: 26
+-
+    url: 'http://localhost:12100/user/plugins/form/assets/form.min.js.map'
+    count: 25
 -
     url: 'https://publiccode.directory:80/img/icons/api.svg'
     count: 21
@@ -55,6 +61,24 @@
 -
     url: 'https://publiccode.directory:80/js/chunk-vendors.cf9de06f.js.map'
     count: 2
+-
+    url: 'http://10.10.4.184:12100/apple-touch-icon-precomposed.png'
+    count: 1
+-
+    url: 'http://10.10.4.184:12100/apple-touch-icon.png'
+    count: 1
+-
+    url: 'http://localhost:12100/apple-touch-icon-precomposed.png'
+    count: 1
+-
+    url: 'http://localhost:12100/apple-touch-icon.png'
+    count: 1
+-
+    url: 'http://localhost:12100/favicon.ico'
+    count: 1
+-
+    url: 'http://localhost:12100/join-us/upload/thankyou'
+    count: 1
 -
     url: 'http://localhost:8888/PCD-CMS/wordlmap'
     count: 1
