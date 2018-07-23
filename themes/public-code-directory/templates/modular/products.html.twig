@@ -35,12 +35,9 @@
                             <div class="content ">
                                 <p class="content-text">${company.entry_descripton | truncate(50)}</p>
                                 <p>Category:
-                                    <a class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', company.entry_category)">
+                                    <button class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', company.entry_category)">
                                         ${company.entry_category}
-                                    </a>
-                                </p>
-                                <p>
-                                    <button class='button is-outlined is-info' @click='modalComp(company)'>More Info</button>
+                                    </button>
                                 </p>
                             </div>
                         </div>
@@ -49,9 +46,11 @@
                                 <p class="company__country">
                                     <span>From:
                                     </span>
-                                    <a href="" class='button is-primary is-outlined' @click.prevent="clearFilter('countries', company.entry_country)">
+                                    <button class='button is-outlined is-info' @click.prevent='modalComp(company)'>More Info</button>
+                              
+                                    {# <button class='button is-primary is-outlined' @click.prevent="clearFilter('countries', company.entry_country)">
                                         ${company.entry_origin_country}
-                                    </a>
+                                    </button> #}
                                 </p>
                             </div>
                             <div class="card-footer-item">

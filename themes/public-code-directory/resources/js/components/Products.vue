@@ -86,6 +86,7 @@
         Object.keys(this.filters[filter]).forEach(option => {
           this.filters[filter][option] = except === option && !active;
         });
+        
       },
       clearAllFilters() {
         Object.keys(this.filters).forEach(this.clearFilter);
