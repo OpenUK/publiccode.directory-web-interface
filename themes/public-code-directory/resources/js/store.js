@@ -90,8 +90,7 @@ const actions = {
                     fetch(item)
                         .then(res => res.json())
                         .then(single => {
-                            single.json = single;
-                            commit("fetchProducts", single.json);
+                            commit("fetchProducts", single);
                         })
                         .then(() => {
                             commit("getCategories");

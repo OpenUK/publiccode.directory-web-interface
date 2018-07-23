@@ -35,9 +35,12 @@
                             <div class="content ">
                                 <p class="content-text">${company.entry_descripton | truncate(50)}</p>
                                 <p>Category:
-                                    <a class='button is-outlined tagg' @click.prevent="clearFilter('categories', company.entry_category)">
+                                    <a class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', company.entry_category)">
                                         ${company.entry_category}
                                     </a>
+                                </p>
+                                <p>
+                                    <button class='button is-outlined is-info' @click='modalComp(company)'>More Info</button>
                                 </p>
                             </div>
                         </div>
@@ -61,9 +64,33 @@
                                     </span>
                                 </p>
                             </div>
+
                         </footer>
                     </div>
                 </transition-group>
+                <b-modal :active.sync="isCardModalActive" :width="640" scroll="keep">
+                    <div class="card">
+
+                        <div v-if='modalCompany.entry_logoURL' class="card-image">
+                            <figure class="image is-4by3">
+                                <img :src="modalCompany.entry_logoURL" alt="Image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="content">
+                                <p class="title is-4">
+                                    Name: ${ modalCompany.entry_name }</p>
+                                <p class="subtitle is-6">
+                                    Category: ${ modalCompany.entry_category }
+                                </p>
+                                <p class="description">
+                                    ${ modalCompany.entry_descripton }
+                                </p>
+                                <p>Product sector: ${ modalCompany.entry_sector }</p>
+                            </div>
+                        </div>
+                    </div>
+                </b-modal>
 
             </main>
         </div>
