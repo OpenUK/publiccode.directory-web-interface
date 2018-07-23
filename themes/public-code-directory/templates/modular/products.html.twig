@@ -47,7 +47,7 @@
                                     <span>From:
                                     </span>
                                     <button class='button is-outlined is-info' @click.prevent='modalComp(company)'>More Info</button>
-                              
+
                                     {# <button class='button is-primary is-outlined' @click.prevent="clearFilter('countries', company.entry_country)">
                                         ${company.entry_origin_country}
                                     </button> #}
@@ -82,10 +82,19 @@
                                 <p class="subtitle is-6">
                                     Category: ${ modalCompany.entry_category }
                                 </p>
+                                <p class="subtitle is-6">
+                                    Sector: ${ modalCompany.entry_sector }
+                                </p>
                                 <p class="description">
                                     ${ modalCompany.entry_descripton }
                                 </p>
                                 <p>Product sector: ${ modalCompany.entry_sector }</p>
+                                <p>Product sector: ${ modalCompany.entry_type }</p>
+                                <p>Product link:
+                                    <a :href="modalCompany.entry_url" rel='noopener nofollow'>${ modalCompany.entry_sector }</a>
+                                </p>
+                                <span v-for='maintainer in modalCompany.entry_maintainers' :key='maintainer.id'>Product curently maintained by: ${maintainer}</span>
+
                             </div>
                         </div>
                     </div>
