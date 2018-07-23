@@ -47,10 +47,6 @@
                                     <span>From:
                                     </span>
                                     <button class='button is-outlined is-info' @click.prevent='modalComp(company)'>More Info</button>
-
-                                    {# <button class='button is-primary is-outlined' @click.prevent="clearFilter('countries', company.entry_country)">
-                                        ${company.entry_origin_country}
-                                    </button> #}
                                 </p>
                             </div>
                             <div class="card-footer-item">
@@ -69,7 +65,6 @@
                 </transition-group>
                 <b-modal :active.sync="isCardModalActive" :width="640" scroll="keep">
                     <div class="card">
-
                         <div v-if='modalCompany.entry_logoURL' class="card-image">
                             <figure class="image is-4by3">
                                 <img :src="modalCompany.entry_logoURL" alt="Image">
@@ -93,10 +88,26 @@
                                 <p>Product link:
                                     <a :href="modalCompany.entry_url" rel='noopener nofollow'>${ modalCompany.entry_sector }</a>
                                 </p>
-                                <span v-for='maintainer in modalCompany.entry_maintainers' :key='maintainer.id'>Product curently maintained by: ${maintainer}</span>
+                                <p v-if="modalCompany.entry_maintainers">Product curently maintained by:
+                                    <ul>
+                                        <li v-for='maintainer in modalCompany.entry_maintainers' :key='maintainer.id'>
+                                            <span>
+                                                <a :href="maintainer.link">
+                                                    ${maintainer.name}
+                                                </a>
+                                            </span>
+                                            <span>
+                                                Repository:
+                                                <a :href="maintainer.repo">
+                                                    ${maintainer.repo}</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </p>
 
                             </div>
                         </div>
+
                     </div>
                 </b-modal>
 
