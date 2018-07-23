@@ -11,6 +11,9 @@
     url: 'https://publiccode.directory:80/favicon.ico'
     count: 48
 -
+    url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/vue2-leaflet.min.js.map'
+    count: 36
+-
     url: 'https://publiccode.directory:80/img/logo.svg'
     count: 35
 -
@@ -35,6 +38,9 @@
     url: 'https://publiccode.directory:80/img/icons/color-balance.svg'
     count: 19
 -
+    url: 'http://localhost:12100/user/plugins/form/assets/form.min.js.map'
+    count: 9
+-
     url: 'https://publiccode.directory:80/index'
     count: 8
 -
@@ -55,6 +61,12 @@
 -
     url: 'https://publiccode.directory:80/js/chunk-vendors.cf9de06f.js.map'
     count: 2
+-
+    url: 'http://localhost:12100/favicon.ico'
+    count: 1
+-
+    url: 'http://localhost:12100/join-us/upload/thankyou'
+    count: 1
 -
     url: 'http://localhost:8888/PCD-CMS/wordlmap'
     count: 1
