@@ -1,13 +1,13 @@
 enabled: true
-from: john.mica@opusvl.com
-from_name: john.mica@opusvl.com
-to: john.mica@opusvl.com
+from: info@publiccode.directory
+from_name: 'Public Code Directory Team'
+to: info@publiccode.directory
 to_name: 'Public Code Directory Team'
 mailer:
   engine: smtp
   smtp:
-    server: localhost
-    port: 25
+    server: msa.mail.opusvl.net
+    port: 587
     encryption: none
   sendmail:
     bin: '/usr/sbin/sendmail -bs'
