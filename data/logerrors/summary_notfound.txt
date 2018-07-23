@@ -6,7 +6,7 @@
     count: 92
 -
     url: 'http://localhost:12100/user/themes/public-code-directory/dist/js/index.js.map'
-    count: 66
+    count: 67
 -
     url: 'https://publiccode.directory:80/precache-manifest.f043cb32b53ad8a18702ac105d954f5d.js'
     count: 51
