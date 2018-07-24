@@ -4,6 +4,6 @@ services:
     restart: unless-stopped
     image: pcd-image:latest
     ports:
-      - 12100:80
+      - 12200:80
     volumes:
       - .:/var/www/html/user/
