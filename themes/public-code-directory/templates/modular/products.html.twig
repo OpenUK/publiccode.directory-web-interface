@@ -35,9 +35,9 @@
                             <div class="content ">
                                 <p class="content-text">${company.entry_descripton | truncate(50)}</p>
                                 <p>Category:
-                                    <a class='button is-outlined tagg' @click.prevent="clearFilter('categories', company.entry_category)">
+                                    <button class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', company.entry_category)">
                                         ${company.entry_category}
-                                    </a>
+                                    </button>
                                 </p>
                             </div>
                         </div>
@@ -46,9 +46,7 @@
                                 <p class="company__country">
                                     <span>From:
                                     </span>
-                                    <a href="" class='button is-primary is-outlined' @click.prevent="clearFilter('countries', company.entry_country)">
-                                        ${company.entry_origin_country}
-                                    </a>
+                                    <button class='button is-outlined is-info' @click.prevent='modalComp(company)'>More Info</button>
                                 </p>
                             </div>
                             <div class="card-footer-item">
@@ -61,9 +59,57 @@
                                     </span>
                                 </p>
                             </div>
+
                         </footer>
                     </div>
                 </transition-group>
+                <b-modal :active.sync="isCardModalActive" :width="640" scroll="keep">
+                    <div class="card">
+                        <div v-if='modalCompany.entry_logoURL' class="card-image">
+                            <figure class="image is-4by3">
+                                <img :src="modalCompany.entry_logoURL" alt="Image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="content">
+                                <p class="title is-4">
+                                    Name: ${ modalCompany.entry_name }</p>
+                                <p class="subtitle is-6">
+                                    Category: ${ modalCompany.entry_category }
+                                </p>
+                                <p class="subtitle is-6">
+                                    Sector: ${ modalCompany.entry_sector }
+                                </p>
+                                <p class="description">
+                                    ${ modalCompany.entry_descripton }
+                                </p>
+                                <p>Product sector: ${ modalCompany.entry_sector }</p>
+                                <p>Product sector: ${ modalCompany.entry_type }</p>
+                                <p>Product link:
+                                    <a :href="modalCompany.entry_url" rel='noopener nofollow'>${ modalCompany.entry_sector }</a>
+                                </p>
+                                <p v-if="modalCompany.entry_maintainers">Product curently maintained by:
+                                    <ul>
+                                        <li v-for='maintainer in modalCompany.entry_maintainers' :key='maintainer.id'>
+                                            <span>
+                                                <a :href="maintainer.link">
+                                                    ${maintainer.name}
+                                                </a>
+                                            </span>
+                                            <span>
+                                                Repository:
+                                                <a :href="maintainer.repo">
+                                                    ${maintainer.repo}</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </b-modal>
 
             </main>
         </div>
