@@ -2,7 +2,7 @@ version: '2'
 services:
   grav:
     restart: unless-stopped
-    image: pcd-image:latest
+    image: pcd:latest
     ports:
       - 12100:80
     volumes:

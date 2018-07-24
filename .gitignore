@@ -23,12 +23,8 @@ yarn-error.log*
 *.sw*
 
 core/
-data/
-data/logerrors
+data/*
 accounts/
 themes/quark/
 **package-lock.json
 themes/public-code-directory/package-lock.json
-data/logerrors/notfound.txt
-data/logerrors/summary_notfound.txt
-data/logerrors/notfound.txt

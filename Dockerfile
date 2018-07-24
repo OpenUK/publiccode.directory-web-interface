@@ -57,8 +57,7 @@ COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh && \
     chown root:root /docker-entrypoint.sh
 EXPOSE 80
+COPY ./ /var/www/html/user
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
-
-COPY ./ /var/www/html/user
