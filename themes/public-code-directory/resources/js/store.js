@@ -87,8 +87,16 @@ const actions = {
             })
             .then(function () {
                 state.links.forEach(item => {
-                    fetch(item)
-                        .then(res => res.json())
+                    fetch(item, {
+                            'Access-Control-Allow-Origin': '*',
+                            "Access-Control-Allow-Headers": "content-type,sdk-version",
+                            "Access-Control-Allow-Methods": "POST, GET",
+                            "Content-Type": "text/plain; charset=utf-8",
+                            "mode": "no-cors"
+                        })
+                        .then(res => {
+                            res.json()
+                        })
                         .then(single => {
                             commit("fetchProducts", single);
                         })
