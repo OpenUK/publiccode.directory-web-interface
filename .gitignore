@@ -23,7 +23,9 @@ yarn-error.log*
 *.sw*
 
 core/
-data/*
+data/contact-form
+data/files
+data/licences.yaml
 accounts/
 themes/quark/
 **package-lock.json
