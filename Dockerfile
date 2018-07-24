@@ -52,6 +52,7 @@ RUN set -ex; \
     rm -rf grav-admin latest && \
     chown -R www-data:www-data "$SOURCE"
 
+COPY ./ /var/www/html/user
 COPY docker-entrypoint.sh /
 
 RUN chmod +x /docker-entrypoint.sh && \
@@ -60,5 +61,3 @@ EXPOSE 80
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
-
-COPY ./ /var/www/html/user

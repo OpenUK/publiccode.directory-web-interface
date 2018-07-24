@@ -215,8 +215,4 @@ Please raise an issue on the main [repository](https://github.com/OpenUK/publicc
 Upload your entry file here
 {% include "forms/form.html.twig" with {form: forms( 'custom_form' ) } %}
 
-<!-- Create your own file entry by filling the form beelow:
-
-{% include "forms/form.html.twig" with {form: forms( 'create_form' ) } %} -->
-
 or simply get in touch with [OpenUK](https://openuk.uk) and share your thoughts
