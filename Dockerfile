@@ -40,8 +40,6 @@ RUN { \
 
 RUN a2enmod rewrite expires
 
-VOLUME /var/www/html
-
 ENV SOURCE="/usr/src/grav"
 
 RUN set -ex; \
@@ -50,6 +48,7 @@ RUN set -ex; \
     mkdir -p "$SOURCE" && \
     cp -r grav-admin/. "$SOURCE" && \
     rm -rf grav-admin latest && \
+    rm -rf "$SOURCE"/user && \
     chown -R www-data:www-data "$SOURCE"
 
 COPY ./ /var/www/html/user
