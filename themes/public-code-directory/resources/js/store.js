@@ -13,7 +13,7 @@ const schemaType = {
     "title": "The Root Schema",
     "required": [
         "name",
-        "soft_type",
+        "entry_type",
         "description",
         "official_url",
         "repository",
@@ -38,10 +38,10 @@ const schemaType = {
             ],
             "pattern": "^(.*)$"
         },
-        "soft_type": {
-            "$id": "#/properties/soft_type",
+        "entry_type": {
+            "$id": "#/properties/entry_type",
             "type": "string",
-            "title": "The Soft_type Schema",
+            "title": "The entry_type Schema",
             "default": "",
             "examples": [
                 "software"
