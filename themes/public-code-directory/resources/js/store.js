@@ -13,7 +13,7 @@ const schemaType = {
     "title": "The Root Schema",
     "required": [
         "name",
-        "soft_type",
+        "entry_type",
         "description",
         "official_url",
         "repository",
@@ -34,19 +34,27 @@ const schemaType = {
             "title": "The Name Schema",
             "default": "",
             "examples": [
-                "Govstrap.io"
+                "Project name"
             ],
             "pattern": "^(.*)$"
         },
-        "soft_type": {
-            "$id": "#/properties/soft_type",
-            "type": "string",
-            "title": "The Soft_type Schema",
-            "default": "",
-            "examples": [
-                "software"
-            ],
-            "pattern": "^(.*)$"
+        "entry_type": {
+            "$id": "#/properties/entry_type",
+            "type": "array",
+            "title": "The Entry_type Schema",
+            "items": {
+                "$id": "#/properties/entry_type/items",
+                "type": "string",
+                "title": "The Items Schema",
+                "default": "",
+                "examples": [
+                    "software",
+                    "resource",
+                    "case study",
+                    "some other type"
+                ],
+                "pattern": "^(.*)$"
+            }
         },
         "description": {
             "$id": "#/properties/description",
@@ -54,7 +62,7 @@ const schemaType = {
             "title": "The Description Schema",
             "default": "",
             "examples": [
-                "This Boilerplate Starter Kit is a Front-end web kit and boilerplate for building web apps or small sites reflecting the GOV.UK designs patterns using Pug(Jade) and Sass / Scss. Govstrap.io is a port of the GOV.UK standard web theme to the Bootstrap framework which allows developers with working knowledge of Bootstrap to build GOV.UK related sites without learning the details of the GDS methods. This software enables the developer to take advantage of the significant investments made by GDS in accessibility and device compatibility by re-using the GDS theme."
+                "description of the project - please mind the double quotes inside the description and make sure you escape them like this - \" ; also do not use the 'Enter' key as the description has to be one paragraph. "
             ],
             "pattern": "^(.*)$"
         },
@@ -64,7 +72,7 @@ const schemaType = {
             "title": "The Official_url Schema",
             "default": "",
             "examples": [
-                "https://govstrap.io"
+                "https://project.website.if.it.has.any"
             ],
             "pattern": "^(.*)$"
         },
@@ -74,7 +82,7 @@ const schemaType = {
             "title": "The Repository Schema",
             "default": "",
             "examples": [
-                "https://github.com/OpusVL/govstrap.io/"
+                "https://project.repository"
             ],
             "pattern": "^(.*)$"
         },
@@ -84,7 +92,7 @@ const schemaType = {
             "title": "The Logo_url Schema",
             "default": "",
             "examples": [
-                "http://s2.googleusercontent.com/s2/favicons?domain_url=http://govstrap.io"
+                "https://project.logo - if it exists"
             ],
             "pattern": "^(.*)$"
         },
@@ -98,7 +106,8 @@ const schemaType = {
                 "title": "The Items Schema",
                 "default": "",
                 "examples": [
-                    "EN"
+                    "EN",
+                    "DE"
                 ],
                 "pattern": "^(.*)$"
             }
@@ -123,7 +132,11 @@ const schemaType = {
                 "title": "The Items Schema",
                 "default": "",
                 "examples": [
-                    "localgov"
+                    "localgov",
+                    "council",
+                    "education",
+                    "medicine",
+                    "etc ..."
                 ],
                 "pattern": "^(.*)$"
             }
@@ -138,7 +151,12 @@ const schemaType = {
                 "title": "The Items Schema",
                 "default": "",
                 "examples": [
-                    "website"
+                    "website",
+                    "software product",
+                    "election software",
+                    "education platform",
+                    "specific type of category ",
+                    "etc ..."
                 ],
                 "pattern": "^(.*)$"
             }
@@ -153,7 +171,9 @@ const schemaType = {
                 "title": "The Items Schema",
                 "default": "",
                 "examples": [
-                    "Open Government Licence v3.0"
+                    "MIT",
+                    "GNU-3",
+                    "any-type-of-licence"
                 ],
                 "pattern": "^(.*)$"
             }
@@ -179,7 +199,7 @@ const schemaType = {
                         "title": "The Developer_name Schema",
                         "default": "",
                         "examples": [
-                            "OpusVL"
+                            "developer name"
                         ],
                         "pattern": "^(.*)$"
                     },
@@ -189,7 +209,7 @@ const schemaType = {
                         "title": "The Developer_logo_url Schema",
                         "default": "",
                         "examples": [
-                            "https://opusvl.com/_asset/logo.svg/logo.svg"
+                            "https://developer.logo"
                         ],
                         "pattern": "^(.*)$"
                     },
@@ -199,7 +219,7 @@ const schemaType = {
                         "title": "The Developer_url Schema",
                         "default": "",
                         "examples": [
-                            "https://opusvl.com"
+                            "https://developer.domain"
                         ],
                         "pattern": "^(.*)$"
                     },
@@ -209,7 +229,7 @@ const schemaType = {
                         "title": "The Developer_category Schema",
                         "default": "",
                         "examples": [
-                            "Commercial"
+                            "Public"
                         ],
                         "pattern": "^(.*)$"
                     }
@@ -237,7 +257,7 @@ const schemaType = {
                         "title": "The Maintainer_name Schema",
                         "default": "",
                         "examples": [
-                            "OpusVL"
+                            "maintainer 1"
                         ],
                         "pattern": "^(.*)$"
                     },
@@ -247,7 +267,7 @@ const schemaType = {
                         "title": "The Maintainer_url Schema",
                         "default": "",
                         "examples": [
-                            "https://opusvl.com"
+                            "https://maintainer1.url"
                         ],
                         "pattern": "^(.*)$"
                     },
@@ -257,7 +277,7 @@ const schemaType = {
                         "title": "The Maintainer_logo_url Schema",
                         "default": "",
                         "examples": [
-                            "https://opusvl.com/_asset/logo.svg/logo.svg"
+                            "https://maintainer1.logo.url"
                         ],
                         "pattern": "^(.*)$"
                     },
@@ -267,7 +287,7 @@ const schemaType = {
                         "title": "The Maintainer_repository Schema",
                         "default": "",
                         "examples": [
-                            "https://github.com/OpusVL/govstrap.io"
+                            "https://git.repository if it exists"
                         ],
                         "pattern": "^(.*)$"
                     }
