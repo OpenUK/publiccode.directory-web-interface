@@ -39,7 +39,8 @@ class Template {
     }
 
     getNewRow() {
-        let tpl = '';const value = this.isTextArea()
+        let tpl = '';
+        const value = this.isTextArea()
             ? `<textarea ${this.shouldBeDisabled() ? 'disabled="disabled"' : ''} data-grav-array-type="value" name="" placeholder="${this.getValuePlaceholder()}"></textarea>`
             : `<input ${this.shouldBeDisabled() ? 'disabled="disabled"' : ''} data-grav-array-type="value" type="text" name="" value=""  placeholder="${this.getValuePlaceholder()}" />`;
 

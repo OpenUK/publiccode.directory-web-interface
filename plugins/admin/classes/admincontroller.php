@@ -19,12 +19,12 @@ use Grav\Common\Utils;
 use Grav\Common\Backup\ZipBackup;
 use Grav\Plugin\Admin\Twig\AdminTwigExtension;
 use Grav\Plugin\Login\TwoFactorAuth\TwoFactorAuth;
+use Grav\Common\Yaml;
 use RocketTheme\Toolbox\Event\Event;
 use RocketTheme\Toolbox\File\File;
 use RocketTheme\Toolbox\File\JsonFile;
 use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
+
 
 /**
  * Class AdminController
@@ -760,16 +760,8 @@ class AdminController extends AdminBaseController
     public function checkValidFrontmatter($frontmatter)
     {
         try {
-            // Try native PECL YAML PHP extension first if available.
-            if (function_exists('yaml_parse')) {
-                $saved = @ini_get('yaml.decode_php');
-                @ini_set('yaml.decode_php', 0);
-                @yaml_parse("---\n" . $frontmatter . "\n...");
-                @ini_set('yaml.decode_php', $saved);
-            } else {
-                Yaml::parse($frontmatter);
-            }
-        } catch (ParseException $e) {
+            Yaml::parse($frontmatter);
+        } catch (\RuntimeException $e) {
             return false;
         }
 
@@ -1826,7 +1818,13 @@ class AdminController extends AdminBaseController
         // Remove Extra Files
         foreach (scandir($media->path(), SCANDIR_SORT_NONE) as $file) {
             if (preg_match("/{$fileParts['filename']}@\d+x\.{$fileParts['extension']}(?:\.meta\.yaml)?$|{$filename}\.meta\.yaml$/", $file)) {
-                $result = unlink($media->path() . '/' . $file);
+
+                $targetPath = $media->path() . '/' . $file;
+                if ($locator->isStream($targetPath)) {
+                    $targetPath = $locator->findResource($targetPath, true, true);
+                }
+
+                $result = unlink($targetPath);
 
                 if (!$result) {
                     $this->admin->json_response = [
