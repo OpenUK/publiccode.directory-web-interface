@@ -33,9 +33,9 @@ const schemaType = {
             "type": "string",
             "title": "The Name Schema",
             "default": "",
-            "examples": [
-                "Project name"
-            ],
+            // "examples": [
+            //     "Project name"
+            // ],
             "pattern": "^(.*)$"
         },
         "entry_type": {
@@ -47,12 +47,12 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                "examples": [
-                    "software",
-                    "resource",
-                    "case study",
-                    "some other type"
-                ],
+                // "examples": [
+                //     "software",
+                //     "resource",
+                //     "case study",
+                //     "some other type"
+                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -61,9 +61,9 @@ const schemaType = {
             "type": "string",
             "title": "The Description Schema",
             "default": "",
-            "examples": [
-                "description of the project - please mind the double quotes inside the description and make sure you escape them like this - \" ; also do not use the 'Enter' key as the description has to be one paragraph. "
-            ],
+            // "examples": [
+            //     "description of the project - please mind the double quotes inside the description and make sure you escape them like this - \" ; also do not use the 'Enter' key as the description has to be one paragraph. "
+            // ],
             "pattern": "^(.*)$"
         },
         "official_url": {
@@ -71,9 +71,9 @@ const schemaType = {
             "type": "string",
             "title": "The Official_url Schema",
             "default": "",
-            "examples": [
-                "https://project.website.if.it.has.any"
-            ],
+            // "examples": [
+            //     "https://project.website.if.it.has.any"
+            // ],
             "pattern": "^(.*)$"
         },
         "repository": {
@@ -81,9 +81,9 @@ const schemaType = {
             "type": "string",
             "title": "The Repository Schema",
             "default": "",
-            "examples": [
-                "https://project.repository"
-            ],
+            // "examples": [
+            //     "https://project.repository"
+            // ],
             "pattern": "^(.*)$"
         },
         "logo_url": {
@@ -91,9 +91,9 @@ const schemaType = {
             "type": "string",
             "title": "The Logo_url Schema",
             "default": "",
-            "examples": [
-                "https://project.logo - if it exists"
-            ],
+            // "examples": [
+            //     "https://project.logo - if it exists"
+            // ],
             "pattern": "^(.*)$"
         },
         "language": {
@@ -105,10 +105,10 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                "examples": [
-                    "EN",
-                    "DE"
-                ],
+                // "examples": [
+                //     "EN",
+                //     "DE"
+                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -117,9 +117,9 @@ const schemaType = {
             "type": "string",
             "title": "The Origin_country Schema",
             "default": "",
-            "examples": [
-                "UK"
-            ],
+            // "examples": [
+            //     "UK"
+            // ],
             "pattern": "^(.*)$"
         },
         "sector": {
@@ -131,13 +131,13 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                "examples": [
-                    "localgov",
-                    "council",
-                    "education",
-                    "medicine",
-                    "etc ..."
-                ],
+                // "examples": [
+                //     "localgov",
+                //     "council",
+                //     "education",
+                //     "medicine",
+                //     "etc ..."
+                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -150,14 +150,14 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                "examples": [
-                    "website",
-                    "software product",
-                    "election software",
-                    "education platform",
-                    "specific type of category ",
-                    "etc ..."
-                ],
+                // "examples": [
+                //     "website",
+                //     "software product",
+                //     "election software",
+                //     "education platform",
+                //     "specific type of category ",
+                //     "etc ..."
+                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -170,11 +170,11 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                "examples": [
-                    "MIT",
-                    "GNU-3",
-                    "any-type-of-licence"
-                ],
+                // "examples": [
+                //     "MIT",
+                //     "GNU-3",
+                //     "any-type-of-licence"
+                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -198,9 +198,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_name Schema",
                         "default": "",
-                        "examples": [
-                            "developer name"
-                        ],
+                        // "examples": [
+                        //     "developer name"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "developer_logo_url": {
@@ -208,9 +208,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_logo_url Schema",
                         "default": "",
-                        "examples": [
-                            "https://developer.logo"
-                        ],
+                        // "examples": [
+                        //     "https://developer.logo"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "developer_url": {
@@ -218,9 +218,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_url Schema",
                         "default": "",
-                        "examples": [
-                            "https://developer.domain"
-                        ],
+                        // "examples": [
+                        //     "https://developer.domain"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "developer_category": {
@@ -228,9 +228,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_category Schema",
                         "default": "",
-                        "examples": [
-                            "Public"
-                        ],
+                        // "examples": [
+                        //     "Public"
+                        // ],
                         "pattern": "^(.*)$"
                     }
                 }
@@ -256,9 +256,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_name Schema",
                         "default": "",
-                        "examples": [
-                            "maintainer 1"
-                        ],
+                        // "examples": [
+                        //     "maintainer 1"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "maintainer_url": {
@@ -266,9 +266,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_url Schema",
                         "default": "",
-                        "examples": [
-                            "https://maintainer1.url"
-                        ],
+                        // "examples": [
+                        //     "https://maintainer1.url"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "maintainer_logo_url": {
@@ -276,9 +276,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_logo_url Schema",
                         "default": "",
-                        "examples": [
-                            "https://maintainer1.logo.url"
-                        ],
+                        // "examples": [
+                        //     "https://maintainer1.logo.url"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "maintainer_repository": {
@@ -286,9 +286,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_repository Schema",
                         "default": "",
-                        "examples": [
-                            "https://git.repository if it exists"
-                        ],
+                        // "examples": [
+                        //     "https://git.repository if it exists"
+                        // ],
                         "pattern": "^(.*)$"
                     }
                 }
@@ -315,9 +315,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_name Schema",
                         "default": "",
-                        "examples": [
-                            "City council"
-                        ],
+                        // "examples": [
+                        //     "City council"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_location": {
@@ -325,9 +325,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_location Schema",
                         "default": "",
-                        "examples": [
-                            "London, UK"
-                        ],
+                        // "examples": [
+                        //     "London, UK"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_logo_url": {
@@ -335,9 +335,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_logo_url Schema",
                         "default": "",
-                        "examples": [
-                            "https://link.to.logo.if.it.exists"
-                        ],
+                        // "examples": [
+                        //     "https://link.to.logo.if.it.exists"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_url": {
@@ -345,9 +345,9 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_url Schema",
                         "default": "",
-                        "examples": [
-                            "https://link.to.curent.public.website"
-                        ],
+                        // "examples": [
+                        //     "https://link.to.curent.public.website"
+                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_geolocation": {
@@ -364,18 +364,18 @@ const schemaType = {
                                 "type": "number",
                                 "title": "The Lat Schema",
                                 "default": 0.0,
-                                "examples": [
-                                    53.371376
-                                ]
+                                // "examples": [
+                                //     53.371376
+                                // ]
                             },
                             "long": {
                                 "$id": "#/properties/users/items/properties/user_geolocation/properties/long",
                                 "type": "number",
                                 "title": "The Long Schema",
                                 "default": 0.0,
-                                "examples": [
-                                    -1.23398
-                                ]
+                                // "examples": [
+                                //     -1.23398
+                                // ]
                             }
                         }
                     }
@@ -496,12 +496,7 @@ const actions = {
         commit
     }) {
         fetch(
-                "https://raw.githubusercontent.com/OpenUK/publiccode.directory/master/database/database.index.json", {
-                    headers: {
-                        "Access-Control-Allow-Origin": "*"
-                    }
-                }
-            )
+                "https://raw.githubusercontent.com/OpenUK/publiccode.directory/master/database/database.index.json")
             .then(res => res.json())
             .then(data => {
                 commit("fetchLinks", data);
@@ -515,6 +510,8 @@ const actions = {
                             const valid = avj
                                 .addSchema(schemaType, "projSchema")
                                 .validate("projSchema", data);
+                            console.log(valid, data, schemaType);
+
                             if (!valid) {
                                 return;
                             } else {

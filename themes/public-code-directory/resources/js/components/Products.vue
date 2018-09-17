@@ -116,7 +116,7 @@
         this.$set(this.filters.categories, this.$store.getters.categories, false);
         this.$set(this.filters.licences, this.$store.getters.licences, false);
         this.loading = false;
-      }, 450);
+      }, 150);
     }
   };
 </script>
