@@ -8,10 +8,10 @@ folders:
 repository: 'https://github.com/OpenUK/publiccode.directory-web-interface.git'
 user: JohnMica
 webhook: /_git-sync_update_auto
-branch: master
+branch: dev
 remote:
   name: origin
-  branch: master
+  branch: dev
 git:
   author: gituser
   name: GitSync-PCD

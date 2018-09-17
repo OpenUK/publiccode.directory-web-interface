@@ -26,7 +26,7 @@ core/
 data/contact-form
 data/files
 data/logerrors
-data/licences.yaml
+data/licenses.yaml
 accounts/
 themes/quark/
 **package-lock.json

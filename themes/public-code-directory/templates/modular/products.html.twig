@@ -29,14 +29,14 @@
                 <transition-group name="company" tag="section" class="content__list">
                     <div class="card company" v-for="(company,index) in list" :key="index">
                         <header class="card-header company__info">
-                            <h2 class="is-centered">${company.entry_name}</h2>
+                            <h2 class="is-centered">${company.name}</h2>
                         </header>
                         <div class="card-content ">
                             <div class="content ">
-                                <p class="content-text">${company.entry_descripton | truncate(50)}</p>
+                                <p class="content-text">${company.description | truncate(50)}</p>
                                 <p>Category:
-                                    <button class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', company.entry_category)">
-                                        ${company.entry_category}
+                                    <button v-for='(comp_categ, index) in company.category' id="index" class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', comp_categ)">
+                                        ${comp_categ}
                                     </button>
                                 </p>
                             </div>
@@ -53,8 +53,8 @@
                                 <p class="company__rating">
                                     <span>Licence:</span>
                                     <span>
-                                        <strong>
-                                            ${company.entry_license}
+                                        <strong v-for="(comp_licence, index) in company.license" id="index">
+                                            ${comp_licence}
                                         </strong>
                                     </span>
                                 </p>
@@ -65,41 +65,45 @@
                 </transition-group>
                 <b-modal :active.sync="isCardModalActive" :width="640" scroll="keep">
                     <div class="card">
-                        <div v-if='modalCompany.entry_logoURL' class="card-image">
+                        <div v-if='modalCompany.official_url' class="card-image">
                             <figure class="image is-4by3">
-                                <img :src="modalCompany.entry_logoURL" alt="Image">
+                                <img :src="modalCompany.logo_url" alt="Image">
                             </figure>
                         </div>
                         <div class="card-content">
                             <div class="content">
                                 <p class="title is-4">
-                                    Name: ${ modalCompany.entry_name }</p>
-                                <p class="subtitle is-6">
-                                    Category: ${ modalCompany.entry_category }
+                                    Name: ${ modalCompany.name }</p>
+                                <p class="subtitle is-6" v-for="(category,index) in modalCompany.category" id="index">
+                                    Category: ${ category } &nbsp;
                                 </p>
-                                <p class="subtitle is-6">
-                                    Sector: ${ modalCompany.entry_sector }
+                                <p class="subtitle is-6" v-for="(sector,index) in modalCompany.sector" id="index">
+                                    Sector: ${ sector } &nbsp;
                                 </p>
                                 <p class="description">
-                                    ${ modalCompany.entry_descripton }
+                                    ${ modalCompany.description }
                                 </p>
-                                <p>Product sector: ${ modalCompany.entry_sector }</p>
-                                <p>Product sector: ${ modalCompany.entry_type }</p>
+                                <p>Product category: ${ modalCompany.soft_type }</p>
+                                <p >Product sector:
+                                    <span v-for="(product_sector, index) in modalCompany.sector" id="index">
+                                        ${ product_sector }
+                                    </span>
+                                </p>
                                 <p>Product link:
-                                    <a :href="modalCompany.entry_url" rel='noopener nofollow'>${ modalCompany.entry_sector }</a>
+                                    <a :href="modalCompany.official_url" rel='noopener nofollow'>${ modalCompany.official_url }</a>
                                 </p>
-                                <p v-if="modalCompany.entry_maintainers">Product curently maintained by:
+                                <p v-if="modalCompany.maintainers">Product curently maintained by:
                                     <ul>
-                                        <li v-for='maintainer in modalCompany.entry_maintainers' :key='maintainer.id'>
+                                        <li v-for='maintainer in modalCompany.maintainers' :key='maintainer.id'>
                                             <span>
                                                 <a :href="maintainer.link">
-                                                    ${maintainer.name}
+                                                    ${maintainer.maintainer_name}
                                                 </a>
                                             </span>
                                             <span>
                                                 Repository:
-                                                <a :href="maintainer.repo">
-                                                    ${maintainer.repo}</a>
+                                                <a :href="maintainer.maintainer_repository">
+                                                    ${maintainer.maintainer_repository}</a>
                                             </span>
                                         </li>
                                     </ul>

@@ -1,3 +1,6 @@
+to implement https://github.com/korzio/djv for automatic entry.json testing against a defined schema and refuse the PR
+
+
 [![Latest GitHub Release](https://img.shields.io/github/release/robbinfellow/public-code-directory-grav.svg?style=flat-square)](https://github.com/robbinfellow/public-code-directory-grav/releases)
 [![Open Issues On Github](https://img.shields.io/github/issues-raw/robbinfellow/public-code-directory-grav.svg?style=flat-square)](https://github.com/robbinfellow/public-code-directory-grav/issues)
 [![Software License](https://img.shields.io/github/license/robbinfellow/public-code-directory-grav.svg?style=flat-square)](https://github.com/robbinfellow/public-code-directory-grav/blob/master/LICENSE)

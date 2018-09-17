@@ -7,7 +7,8 @@
   delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.imagePath = "";
   L.Icon.Default.mergeOptions({
-    iconRetinaUrl:"/user/themes/public-code-directory/images/logos/marker-icon-2x.png",
+    iconRetinaUrl:
+      "/user/themes/public-code-directory/images/logos/marker-icon-2x.png",
     iconUrl: "/user/themes/public-code-directory/images/logos/marker-icon.png",
     shadowUrl: "/user/themes/public-code-directory/images/logos/marker-shadow.png"
   });

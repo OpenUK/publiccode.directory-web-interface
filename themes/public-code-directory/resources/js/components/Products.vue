@@ -30,20 +30,23 @@
       list() {
         if (!this.loading) {
           let { countries, categories, licences } = this.activeFilters;
-          return this.products.filter(
-            ({ entry_origin_country, entry_category, entry_license }) => {
-              if (countries.length && !~countries.indexOf(entry_origin_country))
-                return false;
-              if (licences.length && !~licences.indexOf(entry_license))
-                return false;
-              if (categories.length && !~categories.indexOf(entry_category))
-                return false;
+          return this.products.filter(({ origin_country, category, license }) => {
+            if (countries.length && !~countries.indexOf(origin_country))
+              return false;
+            if (licences.length)
               return (
-                this.companies.length ||
-                this.companies.every(cat => ~entry_name.indexOf(cat))
+                !licences.length || licences.every(cat => ~license.indexOf(cat))
               );
-            }
-          );
+            if (categories.length)
+              return (
+                !categories.length ||
+                categories.every(cat => ~categories.indexOf(cat))
+              );
+            return (
+              this.companies.length ||
+              this.companies.every(cat => ~name.indexOf(cat))
+            );
+          });
         }
       },
       activeFilters() {
@@ -63,7 +66,7 @@
             this.dropdown.height = 0;
           } else {
             this.dropdown.height = `${this.$refs.menu[index].clientHeight +
-              16}px`;
+              25}px`;
           }
         });
       }
@@ -95,18 +98,9 @@
           this.menus[tab] = !active && tab === menu;
         });
       },
-      createCompanies() {
-        this.companies = this.products;
-        this.companies.forEach(
-          ({ entry_origin_country, entry_category, entry_license }) => {
-            this.$set(this.filters.countries, entry_origin_country, false);
-            this.$set(this.filters.licences, entry_license, false);
-            this.$set(this.filters.categories, entry_category, false);
-          }
-        );
-      },
+
       cancel() {
-        this.modalCompany = [];
+        this.modalCompany = {};
         this.isCardModalActive = false;
       },
       modalComp(element) {
@@ -117,9 +111,12 @@
     },
     mounted() {
       setTimeout(() => {
-        this.createCompanies();
+        this.companies = this.products;
+        this.$set(this.filters.countries, this.$store.getters.countries, false);
+        this.$set(this.filters.categories, this.$store.getters.categories, false);
+        this.$set(this.filters.licences, this.$store.getters.licences, false);
         this.loading = false;
-      }, 150);
+      }, 350);
     }
   };
 </script>

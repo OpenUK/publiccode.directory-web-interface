@@ -46,11 +46,13 @@ RUN set -ex; \
     wget https://getgrav.org/download/core/grav/latest && \
     unzip latest && \
     mkdir -p "$SOURCE" && \
-    cp -r grav/. "$SOURCE" && \
-    rm -rf grav latest && \
-    rm -rf user "$PATHS" && \
+    cp -r grav-admin/. "$SOURCE" && \
+    rm -rf grav-admin latest && \
+    rm -rf "$SOURCE"/user && \
+
     chown -R www-data:www-data "$SOURCE"
 
+COPY ./ /var/www/html/user
 COPY docker-entrypoint.sh /
 
 COPY ./ /var/www/html/user
@@ -61,3 +63,4 @@ RUN chmod +x /docker-entrypoint.sh && \
 EXPOSE 80
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
+

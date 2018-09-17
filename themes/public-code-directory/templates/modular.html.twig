@@ -12,14 +12,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="columns is-multiline is-centered">
-        <div class="column is-8">
-            {{page.content}}
-        </div>
-        {% for module in page.collection()if module.template != 'modular/hero' %}
-            <div class='column is-8' id="{{ _self.pageLinkName(module.menu) }}">
-                {{ module.content }}
+    <div class="container">
+        <div class="columns is-multiline is-centered">
+            <div class="column is-8">
+                {{page.content}}
             </div>
-        {% endfor %}
+            {% for module in page.collection()if module.template != 'modular/hero' %}
+                <div class='column is-8' id="{{ _self.pageLinkName(module.menu) }}">
+                    {{ module.content }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
