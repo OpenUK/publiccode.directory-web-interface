@@ -127,8 +127,8 @@ session:
   initialize: true
   timeout: 1800
   name: grav-site
-  secure: false
-  httponly: true
+  secure: true
+  httponly: false
   split: true
 gpm:
   releases: stable

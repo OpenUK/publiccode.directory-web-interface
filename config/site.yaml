@@ -7,7 +7,7 @@ taxonomies:
   - category
   - tag
 metadata:
-  description: 'Grav is an easy to use, yet powerful, open source flat-file CMS'
+  description: 'Public Code Directory is a federated Open Source Software database. '
 summary:
   enabled: true
   format: short
