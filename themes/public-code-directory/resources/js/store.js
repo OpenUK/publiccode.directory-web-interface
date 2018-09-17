@@ -496,7 +496,11 @@ const actions = {
         commit
     }) {
         fetch(
-                "https://raw.githubusercontent.com/OpenUK/publiccode.directory/master/database/database.index.json"
+                "https://raw.githubusercontent.com/OpenUK/publiccode.directory/master/database/database.index.json", {
+                    headers: {
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                }
             )
             .then(res => res.json())
             .then(data => {
