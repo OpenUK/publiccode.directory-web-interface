@@ -33,37 +33,20 @@ const schemaType = {
             "type": "string",
             "title": "The Name Schema",
             "default": "",
-            // "examples": [
-            //     "Project name"
-            // ],
             "pattern": "^(.*)$"
         },
         "entry_type": {
             "$id": "#/properties/entry_type",
-            "type": "array",
+            "type": "string",
             "title": "The Entry_type Schema",
-            "items": {
-                "$id": "#/properties/entry_type/items",
-                "type": "string",
-                "title": "The Items Schema",
-                "default": "",
-                // "examples": [
-                //     "software",
-                //     "resource",
-                //     "case study",
-                //     "some other type"
-                // ],
-                "pattern": "^(.*)$"
-            }
+            "default": "",
+            "pattern": "^(.*)$"
         },
         "description": {
             "$id": "#/properties/description",
             "type": "string",
             "title": "The Description Schema",
             "default": "",
-            // "examples": [
-            //     "description of the project - please mind the double quotes inside the description and make sure you escape them like this - \" ; also do not use the 'Enter' key as the description has to be one paragraph. "
-            // ],
             "pattern": "^(.*)$"
         },
         "official_url": {
@@ -71,9 +54,6 @@ const schemaType = {
             "type": "string",
             "title": "The Official_url Schema",
             "default": "",
-            // "examples": [
-            //     "https://project.website.if.it.has.any"
-            // ],
             "pattern": "^(.*)$"
         },
         "repository": {
@@ -81,9 +61,6 @@ const schemaType = {
             "type": "string",
             "title": "The Repository Schema",
             "default": "",
-            // "examples": [
-            //     "https://project.repository"
-            // ],
             "pattern": "^(.*)$"
         },
         "logo_url": {
@@ -91,9 +68,6 @@ const schemaType = {
             "type": "string",
             "title": "The Logo_url Schema",
             "default": "",
-            // "examples": [
-            //     "https://project.logo - if it exists"
-            // ],
             "pattern": "^(.*)$"
         },
         "language": {
@@ -105,10 +79,6 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                // "examples": [
-                //     "EN",
-                //     "DE"
-                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -117,9 +87,6 @@ const schemaType = {
             "type": "string",
             "title": "The Origin_country Schema",
             "default": "",
-            // "examples": [
-            //     "UK"
-            // ],
             "pattern": "^(.*)$"
         },
         "sector": {
@@ -131,13 +98,6 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                // "examples": [
-                //     "localgov",
-                //     "council",
-                //     "education",
-                //     "medicine",
-                //     "etc ..."
-                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -150,14 +110,6 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                // "examples": [
-                //     "website",
-                //     "software product",
-                //     "election software",
-                //     "education platform",
-                //     "specific type of category ",
-                //     "etc ..."
-                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -170,11 +122,6 @@ const schemaType = {
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
-                // "examples": [
-                //     "MIT",
-                //     "GNU-3",
-                //     "any-type-of-licence"
-                // ],
                 "pattern": "^(.*)$"
             }
         },
@@ -198,9 +145,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_name Schema",
                         "default": "",
-                        // "examples": [
-                        //     "developer name"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "developer_logo_url": {
@@ -208,9 +152,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_logo_url Schema",
                         "default": "",
-                        // "examples": [
-                        //     "https://developer.logo"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "developer_url": {
@@ -218,9 +159,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_url Schema",
                         "default": "",
-                        // "examples": [
-                        //     "https://developer.domain"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "developer_category": {
@@ -228,9 +166,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Developer_category Schema",
                         "default": "",
-                        // "examples": [
-                        //     "Public"
-                        // ],
                         "pattern": "^(.*)$"
                     }
                 }
@@ -256,9 +191,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_name Schema",
                         "default": "",
-                        // "examples": [
-                        //     "maintainer 1"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "maintainer_url": {
@@ -266,9 +198,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_url Schema",
                         "default": "",
-                        // "examples": [
-                        //     "https://maintainer1.url"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "maintainer_logo_url": {
@@ -276,9 +205,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_logo_url Schema",
                         "default": "",
-                        // "examples": [
-                        //     "https://maintainer1.logo.url"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "maintainer_repository": {
@@ -286,9 +212,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The Maintainer_repository Schema",
                         "default": "",
-                        // "examples": [
-                        //     "https://git.repository if it exists"
-                        // ],
                         "pattern": "^(.*)$"
                     }
                 }
@@ -315,9 +238,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_name Schema",
                         "default": "",
-                        // "examples": [
-                        //     "City council"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_location": {
@@ -325,9 +245,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_location Schema",
                         "default": "",
-                        // "examples": [
-                        //     "London, UK"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_logo_url": {
@@ -335,9 +252,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_logo_url Schema",
                         "default": "",
-                        // "examples": [
-                        //     "https://link.to.logo.if.it.exists"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_url": {
@@ -345,9 +259,6 @@ const schemaType = {
                         "type": "string",
                         "title": "The User_url Schema",
                         "default": "",
-                        // "examples": [
-                        //     "https://link.to.curent.public.website"
-                        // ],
                         "pattern": "^(.*)$"
                     },
                     "user_geolocation": {
@@ -364,18 +275,12 @@ const schemaType = {
                                 "type": "number",
                                 "title": "The Lat Schema",
                                 "default": 0.0,
-                                // "examples": [
-                                //     53.371376
-                                // ]
                             },
                             "long": {
                                 "$id": "#/properties/users/items/properties/user_geolocation/properties/long",
                                 "type": "number",
                                 "title": "The Long Schema",
                                 "default": 0.0,
-                                // "examples": [
-                                //     -1.23398
-                                // ]
                             }
                         }
                     }
