@@ -12,13 +12,13 @@
         filters: { countries: {}, categories: {}, licences: {} },
         menus: { countries: false, categories: false, licences: false },
         isProdModal: false,
-        prodModal: {}
+        prodModal: {},
       };
     },
 
     computed: {
       ...mapGetters({
-        products: "allProducts"
+        products: "allProducts",
       }),
       activeMenu() {
         return Object.keys(this.menus).reduce(
@@ -53,21 +53,9 @@
         return {
           countries: Object.keys(countries).filter(c => countries[c]),
           categories: Object.keys(categories).filter(c => categories[c]),
-          licences: Object.keys(licences).filter(c => licences[c])
+          licences: Object.keys(licences).filter(c => licences[c]),
         };
       },
-      initialFilters(){
-         for (const iterator of this.$store.getters.countries) {
-           this.filters.countries[iterator]=false
-         }
-         for (const iterator of this.$store.getters.categories) {
-           this.filters.categories[iterator]=false
-         }
-         for (const iterator of this.$store.getters.licences) {
-           this.filters.licences[iterator]=false
-         }
-        this.loading=false
-      }
     },
     watch: {
       activeMenu(index, from) {
@@ -80,7 +68,7 @@
               25}px`;
           }
         });
-      }
+      },
     },
     methods: {
       setFilter(filter, option) {
@@ -117,10 +105,20 @@
         this.cancel();
         Object.assign(this.prodModal, element);
         this.isProdModal = true;
-      }
+      },
+      initialFilters() {
+        this.products.forEach(({ origin_country, category, license }) => {
+          this.$set(this.filters.countries, origin_country, false);
+          this.$set(this.filters.licences, license, false);
+          this.$set(this.filters.categories, category, false);
+        });
+        this.loading = false;
+      },
     },
     mounted() {
-      this.initialFilters
-    }
+      setTimeout(() => {
+        this.initialFilters();
+      }, 650);
+    },
   };
 </script>

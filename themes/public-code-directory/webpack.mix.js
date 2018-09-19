@@ -1,4 +1,4 @@
-let mix = require('laravel-mix');
+let mix = require( 'laravel-mix' );
 
 /*
  |--------------------------------------------------------------------------
@@ -11,10 +11,10 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.setPublicPath('dist')
-   .js('resources/js/app.js', 'js/app.js')
-   .sass('resources/sass/app.sass', 'css/app.css')
-   .options({
-      processCssUrls: false
-    })
-   .version();
+mix.setPublicPath( 'dist' )
+  .js( 'resources/js/app.js', 'js/app.js' )
+  .sass( 'resources/scss/app.scss', 'css/app.css' )
+  .options( {
+    processCssUrls: false
+  } )
+  .version();
