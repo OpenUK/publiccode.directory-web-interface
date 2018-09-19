@@ -416,7 +416,6 @@ const actions = {
                             const valid = avj
                                 .addSchema( schemaType, "projSchema" )
                                 .validate( "projSchema", data );
-
                             if ( !valid ) {
                                 return;
                             } else {

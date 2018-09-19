@@ -19,9 +19,6 @@
     computed: {
       ...mapGetters({
         products: "allProducts",
-        countries: "countries",
-        categories: "categories",
-        licences: "licences",
       }),
       activeMenu() {
         return Object.keys(this.menus).reduce(
@@ -110,18 +107,18 @@
         this.isProdModal = true;
       },
       initialFilters() {
-        this.$set(this.filters.countries, this.countries, false);
-        this.$set(this.filters.categories, this.categories, false);
-        this.$set(this.filters.licences, this.licences, false);
+        this.products.forEach(({ origin_country, category, license }) => {
+          this.$set(this.filters.countries, origin_country, false);
+          this.$set(this.filters.licences, license, false);
+          this.$set(this.filters.categories, category, false);
+        });
         this.loading = false;
       },
     },
     mounted() {
-      // setTimeout(() => {
-      this.$nextTick(() => {
+      setTimeout(() => {
         this.initialFilters();
-      });
-      // }, 550);
+      }, 650);
     },
   };
 </script>

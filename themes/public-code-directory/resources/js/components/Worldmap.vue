@@ -10,7 +10,8 @@
     iconRetinaUrl:
       "/user/themes/public-code-directory/images/logos/marker-icon-2x.png",
     iconUrl: "/user/themes/public-code-directory/images/logos/marker-icon.png",
-    shadowUrl: "/user/themes/public-code-directory/images/logos/marker-shadow.png"
+    shadowUrl:
+      "/user/themes/public-code-directory/images/logos/marker-shadow.png",
   });
 
   export default {
@@ -24,12 +25,12 @@
           '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         locations: [],
         minZoom: 3,
-        maxZoom: 13
+        maxZoom: 13,
       };
     },
     computed: {
       ...mapGetters({
-        products: "allProducts"
+        products: "allProducts",
       }),
     },
     components: {
@@ -37,29 +38,25 @@
       LMap,
       LTileLayer,
       LMarker,
-      LPopup
+      LPopup,
     },
-    methods: {
-     
-    },
+    methods: {},
     mounted() {
       setTimeout(() => {
-   
-          for (let index = 0; index < this.products.length; index++) {
-                this.locations.push({
-                  id: index,
-                  position: {  
-                    lat: this.products[index].users[0].user_geolocation.lat,
-                    lng: this.products[index].users[0].user_geolocation.long
-                  },
-                  url: this.products[index].developers[0].developer_url,
-                  // icon: this.products[index].logo_url,
-                  attribution: this.products[index].developers[0].developer_name
-                })
-              }
+        for (let index = 0; index < this.products.length; index++) {
+          this.locations.push({
+            id: index,
+            position: {
+              lat: this.products[index].users[0].user_geolocation.lat,
+              lng: this.products[index].users[0].user_geolocation.long,
+            },
+            url: this.products[index].developers[0].developer_url,
+            // icon: this.products[index].logo_url,
+            attribution: this.products[index].developers[0].developer_name,
+          });
+        }
         this.$refs.map.mapObject._onResize();
-      },450);
-      
-    }
+      }, 450);
+    },
   };
 </script>
