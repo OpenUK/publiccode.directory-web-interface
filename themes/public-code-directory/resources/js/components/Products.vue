@@ -8,12 +8,11 @@
     data() {
       return {
         loading: true,
-        companies: "",
         dropdown: { height: 0 },
         filters: { countries: {}, categories: {}, licences: {} },
         menus: { countries: false, categories: false, licences: false },
-        isCardModalActive: false,
-        modalCompany: {}
+        isProdModal: false,
+        prodModal: {}
       };
     },
 
@@ -43,8 +42,8 @@
                 categories.every(cat => ~categories.indexOf(cat))
               );
             return (
-              this.companies.length ||
-              this.companies.every(cat => ~name.indexOf(cat))
+              this.products.length ||
+              this.products.every(cat => ~name.indexOf(cat))
             );
           });
         }
@@ -56,6 +55,18 @@
           categories: Object.keys(categories).filter(c => categories[c]),
           licences: Object.keys(licences).filter(c => licences[c])
         };
+      },
+      initialFilters(){
+         for (const iterator of this.$store.getters.countries) {
+           this.filters.countries[iterator]=false
+         }
+         for (const iterator of this.$store.getters.categories) {
+           this.filters.categories[iterator]=false
+         }
+         for (const iterator of this.$store.getters.licences) {
+           this.filters.licences[iterator]=false
+         }
+        this.loading=false
       }
     },
     watch: {
@@ -98,25 +109,18 @@
           this.menus[tab] = !active && tab === menu;
         });
       },
-
       cancel() {
-        this.modalCompany = {};
-        this.isCardModalActive = false;
+        this.prodModal = {};
+        this.isProdModal = false;
       },
-      modalComp(element) {
+      prodMod(element) {
         this.cancel();
-        Object.assign(this.modalCompany, element);
-        this.isCardModalActive = true;
+        Object.assign(this.prodModal, element);
+        this.isProdModal = true;
       }
     },
     mounted() {
-      setTimeout(() => {
-        this.companies = this.products;
-        this.$set(this.filters.countries, this.$store.getters.countries, false);
-        this.$set(this.filters.categories, this.$store.getters.categories, false);
-        this.$set(this.filters.licences, this.$store.getters.licences, false);
-        this.loading = false;
-      }, 150);
+      this.initialFilters
     }
   };
 </script>
