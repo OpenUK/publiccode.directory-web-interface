@@ -17,8 +17,8 @@
             <section class="section">
                 {% block content %}{% endblock %}
             </section>
-            {% include 'partials/footer.html.twig' %}
         </div>
+        {% include 'partials/footer.html.twig' %}
 
         {{ assets.js() }}
         {{ assets.js('bottom') }}

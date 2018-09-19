@@ -31,7 +31,20 @@
       ...mapGetters({
         products: "allProducts"
       }),
-        getLocations() {
+    },
+    components: {
+      // L,
+      LMap,
+      LTileLayer,
+      LMarker,
+      LPopup
+    },
+    methods: {
+     
+    },
+    mounted() {
+      setTimeout(() => {
+   
           for (let index = 0; index < this.products.length; index++) {
                 this.locations.push({
                   id: index,
@@ -44,23 +57,8 @@
                   attribution: this.products[index].developers[0].developer_name
                 })
               }
-      }
-    },
-    components: {
-      // L,
-      LMap,
-      LTileLayer,
-      LMarker,
-      LPopup
-    },
-    methods: {
-
-    },
-    mounted() {
-      this.getLocations
-      this.$nextTick( () => {
         this.$refs.map.mapObject._onResize();
-      })
+      },450);
       
     }
   };

@@ -409,11 +409,7 @@ const actions = {
             } )
             .then( function () {
                 state.links.forEach( item => {
-                    fetch( item, {
-                            // headers: {
-                            //     "Access-Control-Allow-Origin": "*"
-                            // }
-                        } )
+                    fetch( item )
                         .then( res => res.json() )
                         .then( data => {
                             const avj = new Ajv();
