@@ -1,10 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
-const _ = require("lodash");
-const Ajv = require("ajv");
+const _ = require( "lodash" );
+const Ajv = require( "ajv" );
 
-Vue.use(Vuex);
+Vue.use( Vuex );
 const schemaType = {
     "definitions": {},
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -289,13 +289,13 @@ const schemaType = {
         }
     }
 }
-const vuexLocal = new VuexPersistence({
+const vuexLocal = new VuexPersistence( {
     storage: window.localStorage,
-    reducer: state => ({
+    reducer: state => ( {
         checked: state.checked
-    })
-});
-Vue.use(Vuex);
+    } )
+} );
+Vue.use( Vuex );
 const allprods = [];
 const state = {
     links: [],
@@ -309,168 +309,172 @@ const state = {
     users: [],
     developers: [],
     maintainers: [],
-    checked: false
+    checked: false,
+    errors: []
 };
 const mutations = {
-    fetchLinks(state, all) {
+    fetchLinks( state, all ) {
         state.links = all.directory_index;
     },
-    fetchProducts(state, data) {
-        allprods.push(data);
-        state.products = [...new Set(allprods)];
+    fetchProducts( state, data ) {
+        allprods.push( data );
+        state.products = [ ...new Set( allprods ) ];
     },
-    filterData(state, item) {
+    filterData( state, item ) {
         state.filteredProd = state.products.filter(
             el => el.developer_name === item
         );
     },
-    getCategories(state) {
+    getCategories( state ) {
         let categoriesSet = new Set();
-        state.products.filter(el => {
-            el.category.forEach(element => {
-                categoriesSet.add(element);
-            });
-        });
-        state.categories = Array.from(categoriesSet);
+        state.products.filter( el => {
+            el.category.forEach( element => {
+                categoriesSet.add( element );
+            } );
+        } );
+        state.categories = Array.from( categoriesSet );
     },
-    getLicences(state) {
+    getLicences( state ) {
         let categoriesSet = new Set();
-        state.products.filter(el => {
-            el.license.forEach(element => {
-                categoriesSet.add(element);
-            });
-        });
-        state.licences = Array.from(categoriesSet);
+        state.products.filter( el => {
+            el.license.forEach( element => {
+                categoriesSet.add( element );
+            } );
+        } );
+        state.licences = Array.from( categoriesSet );
     },
-    getSector(state) {
+    getSector( state ) {
         let categoriesSet = new Set();
-        state.products.filter(el => {
-            el.sector.forEach(element => {
-                categoriesSet.add(element);
-            });
-        });
-        state.public_sector = Array.from(categoriesSet);
+        state.products.filter( el => {
+            el.sector.forEach( element => {
+                categoriesSet.add( element );
+            } );
+        } );
+        state.public_sector = Array.from( categoriesSet );
     },
-    getCountries(state) {
+    getCountries( state ) {
         let categoriesSet = new Set();
-        state.products.filter(el => {
-            categoriesSet.add(el.origin_country);
-        });
-        state.countries = Array.from(categoriesSet);
+        state.products.filter( el => {
+            categoriesSet.add( el.origin_country );
+        } );
+        state.countries = Array.from( categoriesSet );
     },
-    getDevelopers(state) {
+    getDevelopers( state ) {
         let devSet = new Set()
-        state.products.filter(el => {
-            el.developers.forEach(developer => {
-                devSet.add(developer.developer_name)
-            })
-        })
-        state.developers = Array.from(devSet)
+        state.products.filter( el => {
+            el.developers.forEach( developer => {
+                devSet.add( developer.developer_name )
+            } )
+        } )
+        state.developers = Array.from( devSet )
     },
-    getUsers(state) {
+    getUsers( state ) {
         let usersSet = new Set()
-        state.products.filter(el => {
-            el.users.forEach(user => {
-                usersSet.add(user.user_name)
-            })
-        })
-        state.users = Array.from(usersSet)
+        state.products.filter( el => {
+            el.users.forEach( user => {
+                usersSet.add( user.user_name )
+            } )
+        } )
+        state.users = Array.from( usersSet )
     },
-    getMaintainers(state) {
+    getMaintainers( state ) {
         let maintainerSet = new Set()
-        state.products.filter(el => {
-            el.maintainers.forEach(maintainer => {
-                maintainerSet.add(maintainer.maintainer_name)
-            })
-        })
-        state.maintainers = Array.from(maintainerSet)
+        state.products.filter( el => {
+            el.maintainers.forEach( maintainer => {
+                maintainerSet.add( maintainer.maintainer_name )
+            } )
+        } )
+        state.maintainers = Array.from( maintainerSet )
     },
-    getCompanies(state) {
+    getCompanies( state ) {
         // let companySet = new Set();
         // state.products.filter(el => {
         //     companySet.add(el.developer_name);
         // });
         // state.companies = Array.from(companySet);
     },
-    updateChecked(state, payload) {
+    updateChecked( state, payload ) {
         state.checked = payload;
     }
 };
 const actions = {
-    fetchLinks({
+    fetchLinks( {
         commit
-    }) {
+    } ) {
         fetch(
-                "https://raw.githubusercontent.com/OpenUK/publiccode.directory/master/database/database.index.json")
-            .then(res => res.json())
-            .then(data => {
-                commit("fetchLinks", data);
-            })
-            .then(function () {
-                state.links.forEach(item => {
-                    fetch(item)
-                        .then(res => res.json())
-                        .then(data => {
+                "https://raw.githubusercontent.com/OpenUK/publiccode.directory/master/database/database.index.json" )
+            .then( res => res.json() )
+            .then( data => {
+                commit( "fetchLinks", data );
+            } )
+            .then( function () {
+                state.links.forEach( item => {
+                    fetch( item, {
+                            // headers: {
+                            //     "Access-Control-Allow-Origin": "*"
+                            // }
+                        } )
+                        .then( res => res.json() )
+                        .then( data => {
                             const avj = new Ajv();
                             const valid = avj
-                                .addSchema(schemaType, "projSchema")
-                                .validate("projSchema", data);
-                            console.log(valid, data, schemaType);
+                                .addSchema( schemaType, "projSchema" )
+                                .validate( "projSchema", data );
 
-                            if (!valid) {
+                            if ( !valid ) {
                                 return;
                             } else {
-                                commit("fetchProducts", data);
-                                commit("getCategories");
-                                commit("getLicences");
-                                commit("getSector");
-                                commit("getCompanies");
-                                commit("getCountries");
-                                commit("getDevelopers");
-                                commit("getMaintainers");
-                                commit("getUsers");
+                                commit( "fetchProducts", data );
+                                commit( "getCategories" );
+                                commit( "getLicences" );
+                                commit( "getSector" );
+                                commit( "getCompanies" );
+                                commit( "getCountries" );
+                                commit( "getDevelopers" );
+                                commit( "getMaintainers" );
+                                commit( "getUsers" );
                             }
-                        })
-                        .catch(error => console.log(error));
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+                        } )
+                        .catch( error => console.log( error ) );
+                } );
+            } )
+            .catch( error => {
+                console.log( error );
+            } );
     },
-    getCategories({
+    getCategories( {
         commit
-    }) {
-        commit("getCategories");
+    } ) {
+        commit( "getCategories" );
     },
-    getLicences({
+    getLicences( {
         commit
-    }) {
-        commit("getLicences");
+    } ) {
+        commit( "getLicences" );
     },
-    getSector({
+    getSector( {
         commit
-    }) {
-        commit("getSector");
+    } ) {
+        commit( "getSector" );
     },
-    getCountries({
+    getCountries( {
         commit
-    }) {
-        commit("getCountries");
+    } ) {
+        commit( "getCountries" );
     },
-    getCompanies({
+    getCompanies( {
         commit
-    }) {
-        commit("getCompanies");
+    } ) {
+        commit( "getCompanies" );
     }
 };
 const getters = {
     allProducts: state => {
-        state.filter = [...new Set(state.products)];
+        state.filter = [ ...new Set( state.products ) ];
         return state.filter;
     },
     categories: state => {
-        return _.flatten(state.categories);
+        return _.flatten( state.categories );
     },
     licences: state => state.licences,
     sectors: state => state.public_sector,
@@ -478,11 +482,11 @@ const getters = {
     filteredData: state => state.filteredProd,
     companies: state => state.companies
 };
-const plugins = [vuexLocal.plugin];
-export default new Vuex.Store({
+const plugins = [ vuexLocal.plugin ];
+export default new Vuex.Store( {
     state,
     actions,
     mutations,
     plugins,
     getters
-});
+} );

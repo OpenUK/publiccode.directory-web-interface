@@ -29,8 +29,22 @@
     },
     computed: {
       ...mapGetters({
-        companies: "allProducts"
-      })
+        products: "allProducts"
+      }),
+        getLocations() {
+          for (let index = 0; index < this.products.length; index++) {
+                this.locations.push({
+                  id: index,
+                  position: {  
+                    lat: this.products[index].users[0].user_geolocation.lat,
+                    lng: this.products[index].users[0].user_geolocation.long
+                  },
+                  url: this.products[index].developers[0].developer_url,
+                  // icon: this.products[index].logo_url,
+                  attribution: this.products[index].developers[0].developer_name
+                })
+              }
+      }
     },
     components: {
       // L,
@@ -39,25 +53,15 @@
       LMarker,
       LPopup
     },
+    methods: {
+
+    },
     mounted() {
-      setTimeout(() => {
-        for (let index = 0; index < this.companies.length; index++) {
-          this.locations.push({
-            id: index,
-            position: {
-              lat: this.companies[index].developer_geolocation.lat,
-              lng: this.companies[index].developer_geolocation.long
-            },
-            url: this.companies[index].developer_url,
-            icon: this.companies[index].entry_logoURL,
-            attribution: this.companies[index].developer_name
-          });
-        }
-      }, 500);
-      // setTimeout(function() {
-      //   window.dispatchEvent(new Event("resize"));
-      // }, 50);
-      this.$refs.map.mapObject._onResize();
+      this.getLocations
+      this.$nextTick( () => {
+        this.$refs.map.mapObject._onResize();
+      })
+      
     }
   };
 </script>

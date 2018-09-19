@@ -27,16 +27,16 @@
                 </transition-group>
 
                 <transition-group name="company" tag="section" class="content__list">
-                    <div class="card company" v-for="(company,index) in list" :key="index">
+                    <div class="card company" v-for="(product,index) in list" :key="index">
                         <header class="card-header company__info">
-                            <h2 class="is-centered">${company.name}</h2>
+                            <h2 class="is-centered">${product.name}</h2>
                         </header>
                         <div class="card-content ">
                             <div class="content ">
-                                <p class="content-text">${company.description | truncate(50)}</p>
+                                <p class="content-text">${product.description | truncate(50)}</p>
                                 <p>Category:
-                                    <button v-for='(comp_categ, index) in company.category' id="index" class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', comp_categ)">
-                                        ${comp_categ}
+                                    <button v-for='(prod_categ, index) in product.category' id="index" class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', prod_categ)">
+                                        ${prod_categ}
                                     </button>
                                 </p>
                             </div>
@@ -46,15 +46,15 @@
                                 <p class="company__country">
                                     <span>From:
                                     </span>
-                                    <button class='button is-outlined is-info' @click.prevent='modalComp(company)'>More Info</button>
+                                    <button class='button is-outlined is-info' @click.prevent='prodMod(product)'>More Info</button>
                                 </p>
                             </div>
                             <div class="card-footer-item">
                                 <p class="company__rating">
                                     <span>Licence:</span>
                                     <span>
-                                        <strong v-for="(comp_licence, index) in company.license" id="index">
-                                            ${comp_licence}
+                                        <strong v-for="(prod_licence, index) in product.license" id="index">
+                                            ${prod_licence}
                                         </strong>
                                     </span>
                                 </p>
@@ -63,38 +63,42 @@
                         </footer>
                     </div>
                 </transition-group>
-                <b-modal :active.sync="isCardModalActive" :width="640" scroll="keep">
+                <b-modal :active.sync="isProdModal" :width="640" scroll="keep">
                     <div class="card">
-                        <div v-if='modalCompany.official_url' class="card-image">
-                            <figure class="image is-4by3">
-                                <img :src="modalCompany.logo_url" alt="Image">
-                            </figure>
-                        </div>
                         <div class="card-content">
+                            <div class="media">
+                                <div v-if='prodModal.official_url' class="media-left">
+                                    <figure class="image is-128x128">
+                                        <img :src="prodModal.logo_url" alt="Image">
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">
+                                        Name: ${ prodModal.name }</p>
+                                    <p class="subtitle is-6" v-for="(category,index) in prodModal.category" id="index">
+                                        Category: ${ category } &nbsp;
+                                    </p>
+                                    <p class="subtitle is-6" v-for="(sector,index) in prodModal.sector" id="index">
+                                        Sector: ${ sector } &nbsp;
+                                    </p>
+                                </div>
+                            </div>
                             <div class="content">
-                                <p class="title is-4">
-                                    Name: ${ modalCompany.name }</p>
-                                <p class="subtitle is-6" v-for="(category,index) in modalCompany.category" id="index">
-                                    Category: ${ category } &nbsp;
-                                </p>
-                                <p class="subtitle is-6" v-for="(sector,index) in modalCompany.sector" id="index">
-                                    Sector: ${ sector } &nbsp;
-                                </p>
                                 <p class="description">
-                                    ${ modalCompany.description }
+                                    ${ prodModal.description }
                                 </p>
-                                <p>Product type: ${ modalCompany.entry_type }</p>
-                                <p >Product sector:
-                                    <span v-for="(product_sector, index) in modalCompany.sector" id="index">
+                                <p>Product type: ${ prodModal.entry_type }</p>
+                                {# <p >Product sector:
+                                    <span v-for="(product_sector, index) in prodModal.sector" id="index">
                                         ${ product_sector }
                                     </span>
-                                </p>
+                                </p> #}
                                 <p>Product link:
-                                    <a :href="modalCompany.official_url" rel='noopener nofollow'>${ modalCompany.official_url }</a>
+                                    <a :href="prodModal.official_url" rel='noopener nofollow'>${ prodModal.official_url }</a>
                                 </p>
-                                <p v-if="modalCompany.maintainers">Product curently maintained by:
+                                <p v-if="prodModal.maintainers">Product curently maintained by:
                                     <ul>
-                                        <li v-for='maintainer in modalCompany.maintainers' :key='maintainer.id'>
+                                        <li v-for='maintainer in prodModal.maintainers' :key='maintainer.id'>
                                             <span>
                                                 <a :href="maintainer.link">
                                                     ${maintainer.maintainer_name}
