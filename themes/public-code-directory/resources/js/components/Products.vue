@@ -56,6 +56,14 @@
           licences: Object.keys(licences).filter(c => licences[c]),
         };
       },
+      initialFilters() {
+        this.products.forEach(({ origin_country, category, license }) => {
+          this.$set(this.filters.countries, origin_country, false);
+          this.$set(this.filters.licences, license, false);
+          this.$set(this.filters.categories, category, false);
+        });
+        this.loading = false;
+      },
     },
     watch: {
       activeMenu(index, from) {
@@ -106,19 +114,7 @@
         Object.assign(this.prodModal, element);
         this.isProdModal = true;
       },
-      initialFilters() {
-        this.products.forEach(({ origin_country, category, license }) => {
-          this.$set(this.filters.countries, origin_country, false);
-          this.$set(this.filters.licences, license, false);
-          this.$set(this.filters.categories, category, false);
-        });
-        this.loading = false;
-      },
     },
-    mounted() {
-      setTimeout(() => {
-        this.initialFilters();
-      }, 650);
-    },
+    mounted() {},
   };
 </script>
