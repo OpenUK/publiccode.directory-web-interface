@@ -19,12 +19,12 @@ use Grav\Common\Utils;
 use Grav\Common\Backup\ZipBackup;
 use Grav\Plugin\Admin\Twig\AdminTwigExtension;
 use Grav\Plugin\Login\TwoFactorAuth\TwoFactorAuth;
+use Grav\Common\Yaml;
 use RocketTheme\Toolbox\Event\Event;
 use RocketTheme\Toolbox\File\File;
 use RocketTheme\Toolbox\File\JsonFile;
 use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
+
 
 /**
  * Class AdminController
@@ -760,16 +760,8 @@ class AdminController extends AdminBaseController
     public function checkValidFrontmatter($frontmatter)
     {
         try {
-            // Try native PECL YAML PHP extension first if available.
-            if (function_exists('yaml_parse')) {
-                $saved = @ini_get('yaml.decode_php');
-                @ini_set('yaml.decode_php', 0);
-                @yaml_parse("---\n" . $frontmatter . "\n...");
-                @ini_set('yaml.decode_php', $saved);
-            } else {
-                Yaml::parse($frontmatter);
-            }
-        } catch (ParseException $e) {
+            Yaml::parse($frontmatter);
+        } catch (\RuntimeException $e) {
             return false;
         }
 
@@ -876,6 +868,10 @@ class AdminController extends AdminBaseController
 
     protected function taskGetNewsFeed()
     {
+        if (!$this->authorizeTask('dashboard', ['admin.login', 'admin.super'])) {
+            return false;
+        }
+
         $cache = $this->grav['cache'];
 
         if ($this->post['refresh'] === 'true') {
@@ -924,6 +920,10 @@ class AdminController extends AdminBaseController
      */
     protected function taskGetUpdates()
     {
+        if (!$this->authorizeTask('dashboard', ['admin.login', 'admin.super'])) {
+            return false;
+        }
+
         $data  = $this->post;
         $flush = (isset($data['flush']) && $data['flush'] == true) ? true : false;
 
@@ -970,6 +970,10 @@ class AdminController extends AdminBaseController
      */
     protected function taskGetNotifications()
     {
+        if (!$this->authorizeTask('dashboard', ['admin.login', 'admin.super'])) {
+            return false;
+        }
+
         $cache = $this->grav['cache'];
         if (!(bool)$this->grav['config']->get('system.cache.enabled') || !$notifications = $cache->fetch('notifications')) {
             //No notifications cache (first time)
@@ -1009,6 +1013,10 @@ class AdminController extends AdminBaseController
      */
     protected function taskProcessNotifications()
     {
+        if (!$this->authorizeTask('notifications', ['admin.login', 'admin.super'])) {
+            return false;
+        }
+
         $cache = $this->grav['cache'];
 
         $data          = $this->post;
@@ -1216,6 +1224,15 @@ class AdminController extends AdminBaseController
         $type            = isset($data['type']) ? $data['type'] : '';
         $package_name    = isset($data['package_name']) ? $data['package_name'] : '';
         $current_version = isset($data['current_version']) ? $data['current_version'] : '';
+
+        if (!$this->authorizeTask('install ' . $type, ['admin.' . $type, 'admin.super'])) {
+            $json_response = [
+                'status'  => 'error',
+                'message' => $this->admin->translate('PLUGIN_ADMIN.INSUFFICIENT_PERMISSIONS_FOR_TASK')
+            ];
+            echo json_encode($json_response);
+            exit;
+        }
 
         $url = "https://getgrav.org/download/{$type}s/$slug/$current_version";
 
@@ -1801,7 +1818,13 @@ class AdminController extends AdminBaseController
         // Remove Extra Files
         foreach (scandir($media->path(), SCANDIR_SORT_NONE) as $file) {
             if (preg_match("/{$fileParts['filename']}@\d+x\.{$fileParts['extension']}(?:\.meta\.yaml)?$|{$filename}\.meta\.yaml$/", $file)) {
-                $result = unlink($media->path() . '/' . $file);
+
+                $targetPath = $media->path() . '/' . $file;
+                if ($locator->isStream($targetPath)) {
+                    $targetPath = $locator->findResource($targetPath, true, true);
+                }
+
+                $result = unlink($targetPath);
 
                 if (!$result) {
                     $this->admin->json_response = [
@@ -1845,9 +1868,9 @@ class AdminController extends AdminBaseController
      */
     protected function taskProcessMarkdown()
     {
-        /*if (!$this->authorizeTask('process markdown', ['admin.pages', 'admin.super'])) {
+        if (!$this->authorizeTask('process markdown', ['admin.pages', 'admin.super'])) {
             return;
-        }*/
+        }
 
         try {
             $page = $this->admin->page(true);
@@ -1863,6 +1886,7 @@ class AdminController extends AdminBaseController
 
             $this->preparePage($page, true);
             $page->header();
+            $page->templateFormat('html');
 
             // Add theme template paths to Twig loader
             $template_paths = $this->grav['locator']->findResources('theme://templates');
@@ -2173,6 +2197,10 @@ class AdminController extends AdminBaseController
      */
     protected function taskSwitchlanguage()
     {
+        if (!$this->authorizeTask('switch language', ['admin.pages', 'admin.super'])) {
+            return false;
+        }
+
         $data = (array)$this->data;
 
         if (isset($data['lang'])) {
@@ -2196,6 +2224,56 @@ class AdminController extends AdminBaseController
 
         $admin_route = $this->admin->base;
         $this->setRedirect('/' . $language . $admin_route . '/' . $redirect);
+    }
+
+    /**
+     * Handle direct install.
+     */
+    protected function taskDirectInstall()
+    {
+        if (!$this->authorizeTask('install', ['admin.super'])) {
+            return false;
+        }
+
+        $file_path = isset($this->data['file_path']) ? $this->data['file_path'] : null ;
+
+        if (isset($_FILES['uploaded_file'])) {
+
+            // Check $_FILES['file']['error'] value.
+            switch ($_FILES['uploaded_file']['error']) {
+                case UPLOAD_ERR_OK:
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.NO_FILES_SENT'), 'error');
+                    return false;
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.EXCEEDED_FILESIZE_LIMIT'), 'error');
+                    return false;
+                case UPLOAD_ERR_NO_TMP_DIR:
+                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.UPLOAD_ERR_NO_TMP_DIR'), 'error');
+                    return false;
+                default:
+                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.UNKNOWN_ERRORS'), 'error');
+                    return false;
+            }
+
+            $file_path = $_FILES['uploaded_file']['tmp_name'];
+        }
+
+
+        $result = Gpm::directInstall($file_path);
+
+        if ($result === true) {
+            $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.INSTALLATION_SUCCESSFUL'), 'info');
+        } else {
+            $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.INSTALLATION_FAILED') . ': ' . $result,
+                'error');
+        }
+
+        $this->setRedirect('/tools');
+
+        return true;
     }
 
     /**
@@ -2269,49 +2347,5 @@ class AdminController extends AdminBaseController
         return $filename . '.md';
     }
 
-    /**
-     * Handle direct install.
-     */
-    protected function taskDirectInstall()
-    {
-        $file_path = isset($this->data['file_path']) ? $this->data['file_path'] : null ;
 
-        if (isset($_FILES['uploaded_file'])) {
-
-            // Check $_FILES['file']['error'] value.
-            switch ($_FILES['uploaded_file']['error']) {
-                case UPLOAD_ERR_OK:
-                    break;
-                case UPLOAD_ERR_NO_FILE:
-                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.NO_FILES_SENT'), 'error');
-                    return false;
-                case UPLOAD_ERR_INI_SIZE:
-                case UPLOAD_ERR_FORM_SIZE:
-                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.EXCEEDED_FILESIZE_LIMIT'), 'error');
-                    return false;
-                case UPLOAD_ERR_NO_TMP_DIR:
-                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.UPLOAD_ERR_NO_TMP_DIR'), 'error');
-                    return false;
-                default:
-                    $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.UNKNOWN_ERRORS'), 'error');
-                    return false;
-            }
-
-            $file_path = $_FILES['uploaded_file']['tmp_name'];
-        }
-
-
-        $result = Gpm::directInstall($file_path);
-
-        if ($result === true) {
-            $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.INSTALLATION_SUCCESSFUL'), 'info');
-        } else {
-            $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.INSTALLATION_FAILED') . ': ' . $result,
-                'error');
-        }
-
-        $this->setRedirect('/tools');
-
-        return true;
-    }
 }

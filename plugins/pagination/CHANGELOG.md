@@ -1,3 +1,20 @@
+# v1.4.1
+## 08/28/2018
+
+1. [](#bugfix)
+    * Reverted Twig fix to address broken `url` in Twig [#34](https://github.com/getgrav/grav-plugin-pagination/issues/34)
+    * Removed duplicate README text [#30](https://github.com/getgrav/grav-plugin-pagination/issues/30)
+
+# v1.4.0
+## 08/20/2018
+
+1. [](#new)
+    * Added Twig pagination function [#22](https://github.com/getgrav/grav-plugin-pagination/pull/22)
+1. [](#improved)
+    * Removed Grav trait in favor of `Grav::instance()`
+    * Changed delta blueprint type from `text` to `number`
+    * Code cleanup
+    
 # v1.3.2
 ## 05/03/2016
 

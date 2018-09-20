@@ -1,7 +1,7 @@
 //init gdpr privacy plugin js
 var gdprPrivacySetupPluginSettings = {
-    setupPage: "{{  setup.privacyPage }}",
-    setupConsent: "{{  setup.consentButtonText }}",
+    setupPage: "{{ setup.privacyPage }}",
+    setupConsent: "{{ setup.consentButtonText }}",
     denyConsent: "{{ setup.denyButtonText }}",
     inputPrefix: "{{ setup.inputPrefix }}",
     modalContentId: "{{ setup.modalWindow }}",
@@ -15,6 +15,6 @@ var gdprPrivacySetupPluginSettings = {
     tempCookieName: "noConsent",
     lastConsentVersion: "{{ setup.lastConsentVersion }}",
     whitelist: "{{ setup.whitelist }}",
-    userConsent: {{  setup.userConsent }}
+    userConsent: {{ setup.userConsent | raw }}
 };
 gdprPrivacySetupPlugin.init(gdprPrivacySetupPluginSettings);

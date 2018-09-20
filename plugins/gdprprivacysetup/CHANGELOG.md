@@ -1,3 +1,9 @@
+# v0.1.0
+## 09/06/2018
+
+1. [](#bugfix)
+    * Plugin now works with Gantry5 (Hydrogen) theme
+    
 # v0.0.6
 ## 06/29/2018
 
@@ -6,6 +12,7 @@
     * Some code refactor
     * Moved templates to subdirectory templates/partials/gdpr_privacy
 
+# v0.0.5
 ## 06/21/2018
 
 1. [](#improved)
