@@ -14,7 +14,7 @@ remote:
   name: origin
   branch: master
 git:
-  author: gituser
+  author: gitsync
   name: GitSync-PCD
   email: john.mica@opusvl.com
   bin: git
