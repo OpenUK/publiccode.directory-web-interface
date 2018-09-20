@@ -310,7 +310,8 @@ const state = {
     developers: [],
     maintainers: [],
     checked: false,
-    errors: []
+    errors: [],
+
 };
 const mutations = {
     fetchLinks( state, all ) {
@@ -395,6 +396,9 @@ const mutations = {
     },
     updateChecked( state, payload ) {
         state.checked = payload;
+    },
+    productLoaded( state ) {
+        state.productLoaded = true
     }
 };
 const actions = {
@@ -433,6 +437,7 @@ const actions = {
                         .catch( error => console.log( error ) );
                 } );
             } )
+
             .catch( error => {
                 console.log( error );
             } );
@@ -475,7 +480,8 @@ const getters = {
     sectors: state => state.public_sector,
     countries: state => state.countries,
     filteredData: state => state.filteredProd,
-    companies: state => state.companies
+    companies: state => state.companies,
+
 };
 const plugins = [ vuexLocal.plugin ];
 export default new Vuex.Store( {
