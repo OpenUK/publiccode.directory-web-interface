@@ -1,14 +1,16 @@
 ---
-title: 'World Map'
+title: Directory
 content:
     items: '@self.modular'
     order:
         by: default
         dir: asc
         custom:
-            - _worldmap
+            - _products
 visible: true
 template: modular
 ---
 
-# Software by location
+# Live updatable products {.is-size-1}
+
+This is the modular parent page content

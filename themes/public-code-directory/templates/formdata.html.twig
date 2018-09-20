@@ -7,11 +7,10 @@
                 {{ page.content }}
             </div>
             <div class="column is-8">
-                {% include "forms/form.html.twig" %}
+                {% include "forms/data.html.twig" %}
             </div>
         </div>
     </div>
-
     {% do 
         assets.addJs('system://assets/jquery/jquery-3.x.min.js') %}
 {% endblock %}

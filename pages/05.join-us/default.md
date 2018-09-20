@@ -1,5 +1,49 @@
 ---
-title: 'Join Us'
+title: 'Join us'
+process:
+    markdown: true
+    twig: true
+cache_enable: false
+forms:
+    custom_form:
+        fields:
+            -
+                name: name
+                type: text
+                label: 'Your name'
+                validate:
+                    required: true
+            -
+                name: email
+                label: 'Your email'
+                type: email
+                validate:
+                    required: true
+            -
+                name: upload-file
+                label: 'Add a file'
+                type: file
+                multiple: false
+                destination: user/data/files
+                accept:
+                    - application/json
+                    - application/yaml
+                    - application/yml
+                    - .json
+                    - .yaml
+                    - .yml
+        buttons:
+            -
+                type: submit
+                value: Submit
+        process:
+            -
+                email:
+                    body: '{% include "forms/data.html.twig" %}'
+                    attachments:
+                        - upload-file
+            -
+                display: /join-us/thankyou
 ---
 
 ## There are few ways to join us {.is-size-2}
@@ -20,4 +64,7 @@ Please raise an issue on the main [repository](https://github.com/OpenUK/publicc
 
 ##### Non-technical users {.is-size-5}
 
-Get in touch with [OpenUK](https://openuk.uk) and share your thoughts
+Upload your entry file here
+{% include "forms/form.html.twig" with {form: forms( 'custom_form' ) } %}
+
+or simply get in touch with [OpenUK](https://openuk.uk) and share your thoughts

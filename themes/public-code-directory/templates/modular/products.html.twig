@@ -4,68 +4,126 @@
 </div>
 {% verbatim %}
     <products inline-template="inline-template">
-        <div class="product-wrapper" v-if="loading" v-cloak="v-cloak">
-            'loading' something
-        </div>
-        <div class="product-wrapper" v-else="v-else">
-            <main class="content products">
-                <h4 class='is-size-4'>Open Source Software</h4>
-                <div class="nav">
-                    <menu class="nav__controls">
-                        <a v-for="(active, menu) in menus" class="button is-primary is-outlined nav__label" :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)">
-                            ${menu}
-                        </a>
-                        <button class="button is-danger is-outlined nav__label nav__label--clear" @click.prevent="clearAllFilters">Clear all</button>
-                    </menu>
-                </div>
-                <transition-group name="dropdown" tag="section" class="dropdown" :style="dropdown">
-                    <menu v-for="(options, filter) in filters" class="filters" v-show="menus[filter]" ref="menu" :key="filter">
-                        <li v-for="(active, option) in options" class="filters__item" :class="{ 'filters__item--active': active }" @click="setFilter(filter, option)" :key='option'>
-                            ${option}
-                        </li>
-                    </menu>
-                </transition-group>
-
-                <transition-group name="company" tag="section" class="content__list">
-                    <div class="card company" v-for="(company,index) in list" :key="index">
-                        <header class="card-header company__info">
-                            <h2 class="is-centered">${company.entry_name}</h2>
-                        </header>
-                        <div class="card-content ">
-                            <div class="content ">
-                                <p class="content-text">${company.entry_descripton | truncate(50)}</p>
-                                <p>Category:
-                                    <a class='button is-outlined tagg' @click.prevent="clearFilter('categories', company.entry_category)">
-                                        ${company.entry_category}
-                                    </a>
-                                </p>
-                            </div>
-                        </div>
-                        <footer class="card-footer">
-                            <div class="card-footer-item">
-                                <p class="company__country">
-                                    <span>From:
-                                    </span>
-                                    <a href="" class='button is-primary is-outlined' @click.prevent="clearFilter('countries', company.entry_country)">
-                                        ${company.entry_origin_country}
-                                    </a>
-                                </p>
-                            </div>
-                            <div class="card-footer-item">
-                                <p class="company__rating">
-                                    <span>Licence:</span>
-                                    <span>
-                                        <strong>
-                                            ${company.entry_license}
-                                        </strong>
-                                    </span>
-                                </p>
-                            </div>
-                        </footer>
+        <div class="prod">
+            <div class="product-wrapper" v-if="loading">
+                <main class="content products">
+                    <h4 class='is-size-4'>Loading products</h4>
+                </main>
+            </div>
+            <div class="product-wrapper" v-cloak="v-cloak" v-if="!loading">
+                <main class="content products">
+                    <h4 class='is-size-4'>Open Source Software</h4>
+                    <div class="nav">
+                        <menu class="nav__controls">
+                            <a v-for="(active, menu) in menus" class="button is-primary is-outlined nav__label" :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)">
+                                ${menu}
+                            </a>
+                            <button class="button is-danger is-outlined nav__label nav__label--clear" @click.prevent="clearAllFilters">Clear all</button>
+                        </menu>
                     </div>
-                </transition-group>
+                    <transition-group name="dropdown" tag="section" class="dropdown" :style="dropdown">
+                        <menu v-for="(options, filter) in filters" class="filters" v-show="menus[filter]" ref="menu" :key="filter">
+                            <li v-for="(active, option) in options" class="filters__item" :class="{ 'filters__item--active': active }" @click="setFilter(filter, option)" :key='option'>
+                                ${option}
+                            </li>
+                        </menu>
+                    </transition-group>
 
-            </main>
+                    <transition-group name="company" tag="section" class="content__list">
+                        <div class="card company" v-for="(product,index) in list" :key="index">
+                            <header class="card-header company__info">
+                                <h2 class="is-centered">${product.name}</h2>
+                            </header>
+                            <div class="card-content ">
+                                <div class="content ">
+                                    <p class="content-text">${product.description | truncate(50)}</p>
+                                    <p>Category:
+                                        <button v-for='(prod_categ, index) in product.category' id="index" class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', prod_categ)">
+                                            ${prod_categ}
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                            <footer class="card-footer">
+                                <div class="card-footer-item">
+                                    <p class="company__country">
+                                        <span>From:
+                                        </span>
+                                        <button class='button is-outlined is-info' @click.prevent='prodMod(product)'>More Info</button>
+                                    </p>
+                                </div>
+                                <div class="card-footer-item">
+                                    <p class="company__rating">
+                                        <span>Licence:</span>
+                                        <span>
+                                            <strong v-for="(prod_licence, index) in product.license" id="index">
+                                                ${prod_licence}
+                                            </strong>
+                                        </span>
+                                    </p>
+                                </div>
+
+                            </footer>
+                        </div>
+                    </transition-group>
+                    <b-modal :active.sync="isProdModal" :width="640" scroll="keep">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="media">
+                                    <div v-if='prodModal.official_url' class="media-left">
+                                        <figure class="image is-128x128">
+                                            <img :src="prodModal.logo_url" alt="Image">
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <p class="title is-4">
+                                            Name: ${ prodModal.name }</p>
+                                        <p class="subtitle is-6" v-for="(category,index) in prodModal.category" id="index">
+                                            Category: ${ category } &nbsp;
+                                        </p>
+                                        <p class="subtitle is-6" v-for="(sector,index) in prodModal.sector" id="index">
+                                            Sector: ${ sector } &nbsp;
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <p class="description">
+                                        ${ prodModal.description }
+                                    </p>
+                                    <p>Product type: ${ prodModal.entry_type }</p>
+                                    {# <p >Product sector:
+                                    <span v-for="(product_sector, index) in prodModal.sector" id="index">
+                                        ${ product_sector }
+                                    </span>
+                                </p> #}
+                                    <p>Product link:
+                                        <a :href="prodModal.official_url" rel='noopener nofollow'>${ prodModal.official_url }</a>
+                                    </p>
+                                    <p v-if="prodModal.maintainers">Product curently maintained by:
+                                        <ul>
+                                            <li v-for='maintainer in prodModal.maintainers' :key='maintainer.id'>
+                                                <span>
+                                                    <a :href="maintainer.link">
+                                                        ${maintainer.maintainer_name}
+                                                    </a>
+                                                </span>
+                                                <span>
+                                                    Repository:
+                                                    <a :href="maintainer.maintainer_repository">
+                                                        ${maintainer.maintainer_repository}</a>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </p>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </b-modal>
+
+                </main>
+            </div>
         </div>
     </products>
 

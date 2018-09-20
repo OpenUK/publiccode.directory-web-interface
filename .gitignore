@@ -21,3 +21,13 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+config/plugins/
+data/contact-form
+data/files
+data/logerrors
+data/licenses.yaml
+accounts/
+themes/quark/
+**package-lock.json
+themes/public-code-directory/package-lock.json
