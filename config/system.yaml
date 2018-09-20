@@ -9,7 +9,7 @@ pwd_regex: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
 intl_enabled: true
 languages:
   include_default_lang: true
-  translations: false
+  translations: true
   translations_fallback: true
   session_store_active: false
   http_accept_language: false
