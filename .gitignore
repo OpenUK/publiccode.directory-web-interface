@@ -22,7 +22,7 @@ yarn-error.log*
 *.sln
 *.sw*
 
-config/
+core/
 data/contact-form
 data/files
 data/logerrors

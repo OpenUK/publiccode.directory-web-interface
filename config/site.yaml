@@ -1,0 +1,17 @@
+title: 'Public Code Directory'
+default_lang: en
+author:
+  name: 'Public Code Directory Team'
+  email: info@publiccode.directory
+taxonomies:
+  - category
+  - tag
+metadata:
+  description: 'Public Code Directory is a federated Open Source Software database. '
+summary:
+  enabled: true
+  format: short
+  size: 300
+  delimiter: '==='
+blog:
+  route: /blog
