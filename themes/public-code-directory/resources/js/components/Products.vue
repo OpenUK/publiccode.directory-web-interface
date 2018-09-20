@@ -77,6 +77,16 @@
           }
         });
       },
+      initialFilters(newval, oldval) {
+        this.$nextTick(() => {
+          this.products.forEach(({ origin_country, category, license }) => {
+            this.$set(this.filters.countries, origin_country, false);
+            this.$set(this.filters.licences, license, false);
+            this.$set(this.filters.categories, category, false);
+          });
+          this.loading = false;
+        });
+      },
     },
     methods: {
       setFilter(filter, option) {
