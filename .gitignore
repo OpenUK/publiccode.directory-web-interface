@@ -31,3 +31,4 @@ accounts/
 themes/quark/
 **package-lock.json
 themes/public-code-directory/package-lock.json
+*.codekit3
