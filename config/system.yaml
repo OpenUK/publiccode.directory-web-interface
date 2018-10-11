@@ -8,7 +8,7 @@ username_regex: '^[a-z0-9_-]{3,16}$'
 pwd_regex: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
 intl_enabled: true
 languages:
-  include_default_lang: true
+  include_default_lang: false
   translations: true
   translations_fallback: true
   session_store_active: false
@@ -105,7 +105,7 @@ assets:
   collections:
     jquery: 'system://assets/jquery/jquery-3.x.min.js'
 errors:
-  display: 1
+  display: 0
   log: true
 debugger:
   enabled: false
@@ -114,7 +114,7 @@ debugger:
   twig: true
 images:
   default_image_quality: 85
-  cache_all: false
+  cache_all: true
   cache_perms: '0755'
   debug: false
   auto_fix_orientation: false
