@@ -37,10 +37,15 @@
                             <div class="card-content ">
                                 <div class="content ">
                                     <p class="content-text">${product.description | truncate(50)}</p>
-                                    <p>Category:
-                                        <button v-for='(prod_categ, index) in product.category' id="index" class='button is-outlined is-warning tagg' @click.prevent="clearFilter('categories', prod_categ)">
+                                    <p v-if="product.category.length === 1 ">Category:
+                                        <span v-for='(prod_categ, index) in product.category' id="index" class=' tag'>
                                             ${prod_categ}
-                                        </button>
+                                        </span>
+                                    </p>
+                                    <p v-else="v-else">Categories:
+                                        <span v-for='(prod_categ, index) in product.category' id="index" class=' tag'>
+                                            ${prod_categ}
+                                        </span>
                                     </p>
                                 </div>
                             </div>

@@ -19,6 +19,9 @@
     computed: {
       ...mapGetters({
         products: "allProducts",
+        countries: "countries",
+        categories: "categories",
+        licences: "licenses",
       }),
       activeMenu() {
         return Object.keys(this.menus).reduce(
@@ -29,22 +32,34 @@
       list() {
         if (!this.loading) {
           let { countries, categories, licences } = this.activeFilters;
-          return this.products.filter(({ origin_country, category, license }) => {
-            if (countries.length && !~countries.indexOf(origin_country))
-              return false;
-            if (licences.length)
-              return (
-                !licences.length || licences.every(cat => ~license.indexOf(cat))
-              );
-            if (categories.length)
-              return (
-                !categories.length ||
-                categories.every(cat => ~categories.indexOf(cat))
-              );
-            return (
-              this.products.length ||
-              this.products.every(cat => ~name.indexOf(cat))
-            );
+          return this.products.filter(product => {
+            let match = true;
+            if (countries.length && !~countries.indexOf(product.origin_country)) {
+              match = false;
+            }
+            if (licences.length) {
+              match =
+                match &&
+                (!licences.length ||
+                  licences.some(
+                    cat =>
+                      ~licences.indexOf(
+                        product.license[product.license.indexOf(cat)]
+                      )
+                  ));
+            }
+            if (categories.length) {
+              match =
+                match &&
+                (!categories.length ||
+                  categories.some(
+                    cat =>
+                      ~categories.indexOf(
+                        product.category[product.category.indexOf(cat)]
+                      )
+                  ));
+            }
+            return match;
           });
         }
       },
@@ -57,10 +72,14 @@
         };
       },
       initialFilters() {
-        this.products.forEach(({ origin_country, category, license }) => {
-          this.$set(this.filters.countries, origin_country, false);
-          this.$set(this.filters.licences, license, false);
-          this.$set(this.filters.categories, category, false);
+        this.countries.forEach(element => {
+          this.$set(this.filters.countries, element, false);
+        });
+        this.categories.forEach(el => {
+          this.$set(this.filters.categories, el, false);
+        });
+        this.licences.forEach(el => {
+          this.$set(this.filters.licences, el, false);
         });
         this.loading = false;
       },
@@ -79,10 +98,14 @@
       },
       initialFilters(newval, oldval) {
         this.$nextTick(() => {
-          this.products.forEach(({ origin_country, category, license }) => {
-            this.$set(this.filters.countries, origin_country, false);
-            this.$set(this.filters.licences, license, false);
-            this.$set(this.filters.categories, category, false);
+          this.countries.forEach(element => {
+            this.$set(this.filters.countries, element, false);
+          });
+          this.categories.forEach(el => {
+            this.$set(this.filters.categories, el, false);
+          });
+          this.licences.forEach(el => {
+            this.$set(this.filters.licences, el, false);
           });
           this.loading = false;
         });

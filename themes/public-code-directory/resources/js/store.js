@@ -301,9 +301,9 @@ const state = {
     links: [],
     products: [],
     categories: [],
-    licences: [],
+    licenses: [],
     public_sector: [],
-    filteredProd: [],
+    // filteredProd: [],
     countries: [],
     companies: [],
     users: [],
@@ -321,11 +321,6 @@ const mutations = {
         allprods.push( data );
         state.products = [ ...new Set( allprods ) ];
     },
-    filterData( state, item ) {
-        state.filteredProd = state.products.filter(
-            el => el.developer_name === item
-        );
-    },
     getCategories( state ) {
         let categoriesSet = new Set();
         state.products.filter( el => {
@@ -335,14 +330,14 @@ const mutations = {
         } );
         state.categories = Array.from( categoriesSet );
     },
-    getLicences( state ) {
+    getlicenses( state ) {
         let categoriesSet = new Set();
         state.products.filter( el => {
             el.license.forEach( element => {
                 categoriesSet.add( element );
             } );
         } );
-        state.licences = Array.from( categoriesSet );
+        state.licenses = Array.from( categoriesSet );
     },
     getSector( state ) {
         let categoriesSet = new Set();
@@ -425,7 +420,7 @@ const actions = {
                             } else {
                                 commit( "fetchProducts", data );
                                 commit( "getCategories" );
-                                commit( "getLicences" );
+                                commit( "getlicenses" );
                                 commit( "getSector" );
                                 commit( "getCompanies" );
                                 commit( "getCountries" );
@@ -447,10 +442,10 @@ const actions = {
     } ) {
         commit( "getCategories" );
     },
-    getLicences( {
+    getlicenses( {
         commit
     } ) {
-        commit( "getLicences" );
+        commit( "getlicenses" );
     },
     getSector( {
         commit
@@ -476,10 +471,9 @@ const getters = {
     categories: state => {
         return _.flatten( state.categories );
     },
-    licences: state => state.licences,
+    licenses: state => state.licenses,
     sectors: state => state.public_sector,
     countries: state => state.countries,
-    filteredData: state => state.filteredProd,
     companies: state => state.companies,
 
 };
