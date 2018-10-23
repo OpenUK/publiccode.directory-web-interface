@@ -170,11 +170,11 @@ class Admin
 
         /** @var \DirectoryIterator $directory */
         foreach (new \DirectoryIterator($path) as $file) {
-            if ($file->isDir() || $file->isDot() || Utils::startsWith($file->getBasename(), '.')) {
+            if ($file->isDir() || $file->isDot() || Utils::startsWith($file->getFilename(), '.')) {
                 continue;
             }
 
-            $lang = basename($file->getBasename(), '.yaml');
+            $lang = $file->getBasename('.yaml');
 
             $languages[$lang] = LanguageCodes::getNativeName($lang);
 
@@ -202,7 +202,7 @@ class Admin
             if ($file->isDir() || !preg_match('/^[^.].*.yaml$/', $file->getFilename())) {
                 continue;
             }
-            $configurations[] = basename($file->getBasename(), '.yaml');
+            $configurations[] = $file->getBasename('.yaml');
         }
 
         return $configurations;
@@ -365,7 +365,7 @@ class Admin
         
         $userKey = isset($credentials['username']) ? (string)$credentials['username'] : '';
         $ipKey = Uri::ip();
-        $redirect = $this->base . $this->route;
+        $redirect = isset($post['redirect']) ? $post['redirect'] : $this->base . $this->route;
 
         // Check if the current IP has been used in failed login attempts.
         $attempts = count($rateLimiter->getAttempts($ipKey, 'ip'));
@@ -595,7 +595,8 @@ class Admin
         }
 
         if (!$post) {
-            $post = isset($_POST['data']) ? $_POST['data'] : [];
+            $post = $this->grav['uri']->post();
+            $post = isset($post['data']) ? $post['data'] : [];
         }
 
         // Check to see if a data type is plugin-provided, before looking into core ones
@@ -669,10 +670,10 @@ class Admin
             $obj->file = $file;
             $obj->page = $this->grav['pages']->get(dirname($obj->path));
 
-            $filename = pathinfo($obj->title)['filename'];
-            $filename = str_replace(['@3x', '@2x'], '', $filename);
-            if (isset(pathinfo($obj->title)['extension'])) {
-                $filename .= '.' . pathinfo($obj->title)['extension'];
+            $fileInfo = pathinfo($obj->title);
+            $filename = str_replace(['@3x', '@2x'], '', $fileInfo['filename']);
+            if (isset($fileInfo['extension'])) {
+                $filename .= '.' . $fileInfo['extension'];
             }
 
             if ($obj->page && isset($obj->page->media()[$filename])) {
@@ -1417,6 +1418,9 @@ class Admin
         if ($path && $path[0] !== '/') {
             $path = "/{$path}";
         }
+
+        // Fix for entities in path causing looping...
+        $path = urldecode($path);
 
         $page = $path ? $pages->dispatch($path, true) : $pages->root();
 
