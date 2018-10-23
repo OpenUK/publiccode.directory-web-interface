@@ -53,6 +53,7 @@ pages:
     - rss
     - atom
   expires: 604800
+  cache_control: 'public, max-age=31536000'
   last_modified: true
   etag: true
   vary_accept_encoding: true
