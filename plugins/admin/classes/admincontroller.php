@@ -14,6 +14,7 @@ use Grav\Common\Page\Medium\Medium;
 use Grav\Common\Page\Page;
 use Grav\Common\Page\Pages;
 use Grav\Common\Page\Collection;
+use Grav\Common\Security;
 use Grav\Common\User\User;
 use Grav\Common\Utils;
 use Grav\Common\Backup\ZipBackup;
@@ -611,6 +612,8 @@ class AdminController extends AdminBaseController
         $reorder = true;
         $data    = (array)$this->data;
 
+        $this->grav['twig']->twig_vars['current_form_data'] = $data;
+
         // Special handler for user data.
         if ($this->view === 'user') {
             if (!$this->grav['user']->exists()) {
@@ -645,11 +648,23 @@ class AdminController extends AdminBaseController
             // Ensure route is prefixed with a forward slash.
             $route = '/' . ltrim($route, '/');
 
+            // Check for valid frontmatter
             if (isset($data['frontmatter']) && !$this->checkValidFrontmatter($data['frontmatter'])) {
                 $this->admin->setMessage($this->admin->translate('PLUGIN_ADMIN.INVALID_FRONTMATTER_COULD_NOT_SAVE'),
                     'error');
-
                 return false;
+            }
+
+            // XSS Checks for page content
+            $xss_whitelist = $this->grav['config']->get('security.xss_whitelist', 'admin.super');
+            if (!$this->admin->authorize($xss_whitelist)) {
+                $check_what = ['header' => $data['header'], 'content' => $data['content']];
+                $results = Security::detectXssFromArray($check_what);
+                if (!empty($results)) {
+                    $this->admin->setMessage('<i class="fa fa-ban"></i> ' . $this->admin->translate('PLUGIN_ADMIN.XSS_ONSAVE_ISSUE'),
+                        'error');
+                    return false;
+                }
             }
 
 
@@ -1363,7 +1378,7 @@ class AdminController extends AdminBaseController
         }
 
         $download = urlencode(base64_encode($backup));
-        $url      = rtrim($this->grav['uri']->rootUrl(true), '/') . '/' . trim($this->admin->base,
+        $url      = rtrim($this->grav['uri']->rootUrl(false), '/') . '/' . trim($this->admin->base,
                 '/') . '/task' . $param_sep . 'backup/download' . $param_sep . $download . '/admin-nonce' . $param_sep . Utils::getNonce('admin-form');
 
         $log->content([
@@ -1670,6 +1685,19 @@ class AdminController extends AdminBaseController
                 return false;
         }
 
+        $filename = $_FILES['file']['name'];
+
+        // Handle bad filenames.
+        if (!Utils::checkFilename($filename)) {
+            $this->admin->json_response = [
+                'status'  => 'error',
+                'message' => sprintf($this->admin->translate('PLUGIN_ADMIN.FILEUPLOAD_UNABLE_TO_UPLOAD'),
+                    $filename, 'Bad filename')
+            ];
+
+            return false;
+        }
+
         $grav_limit = $config->get('system.media.upload_limit', 0);
         // You should also check filesize here.
         if ($grav_limit > 0 && $_FILES['file']['size'] > $grav_limit) {
@@ -1683,18 +1711,13 @@ class AdminController extends AdminBaseController
 
 
         // Check extension
-        $fileParts = pathinfo($_FILES['file']['name']);
-
-        $fileExt = '';
-        if (isset($fileParts['extension'])) {
-            $fileExt = strtolower($fileParts['extension']);
-        }
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
         // If not a supported type, return
-        if (!$fileExt || !$config->get("media.types.{$fileExt}")) {
+        if (!$extension || !$config->get("media.types.{$extension}")) {
             $this->admin->json_response = [
                 'status'  => 'error',
-                'message' => $this->admin->translate('PLUGIN_ADMIN.UNSUPPORTED_FILE_TYPE') . ': ' . $fileExt
+                'message' => $this->admin->translate('PLUGIN_ADMIN.UNSUPPORTED_FILE_TYPE') . ': ' . $extension
             ];
 
             return false;
@@ -1720,7 +1743,7 @@ class AdminController extends AdminBaseController
 
         // Upload it
         if (!move_uploaded_file($_FILES['file']['tmp_name'],
-            sprintf('%s/%s', $path, $_FILES['file']['name']))
+            sprintf('%s/%s', $path, $filename))
         ) {
             $this->admin->json_response = [
                 'status'  => 'error',
@@ -1732,13 +1755,12 @@ class AdminController extends AdminBaseController
 
         // Add metadata if needed
         $include_metadata = Grav::instance()['config']->get('system.media.auto_metadata_exif', false);
-        $filename = $fileParts['basename'];
-        $filename = str_replace(['@3x', '@2x'], '', $filename);
+        $basename = str_replace(['@3x', '@2x'], '', pathinfo($filename, PATHINFO_BASENAME));
 
         $metadata = [];
 
-        if ($include_metadata && isset($media[$filename])) {
-            $img_metadata = $media[$filename]->metadata();
+        if ($include_metadata && isset($media[$basename])) {
+            $img_metadata = $media[$basename]->metadata();
             if ($img_metadata) {
                 $metadata = $img_metadata;
             }
@@ -1780,6 +1802,11 @@ class AdminController extends AdminBaseController
         }
 
         $filename = !empty($this->post['filename']) ? $this->post['filename'] : null;
+
+        // Handle bad filenames.
+        if (!Utils::checkFilename($filename)) {
+            $filename = null;
+        }
 
         if (!$filename) {
             $this->admin->json_response = [
@@ -1869,7 +1896,7 @@ class AdminController extends AdminBaseController
     protected function taskProcessMarkdown()
     {
         if (!$this->authorizeTask('process markdown', ['admin.pages', 'admin.super'])) {
-            return;
+            return false;
         }
 
         try {
@@ -2259,6 +2286,16 @@ class AdminController extends AdminBaseController
             }
 
             $file_path = $_FILES['uploaded_file']['tmp_name'];
+
+            // Handle bad filenames.
+            if (!Utils::checkFilename($file_path)) {
+                $this->admin->json_response = [
+                    'status'  => 'error',
+                    'message' => $this->admin->translate('PLUGIN_ADMIN.UNKNOWN_ERRORS')
+                ];
+
+                return false;
+            }
         }
 
 

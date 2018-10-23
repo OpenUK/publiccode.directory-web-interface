@@ -1,14 +1,14 @@
 absolute_urls: false
-param_sep: ':'
+param_sep: ":"
 wrapped_site: false
 reverse_proxy_setup: false
 force_ssl: false
 force_lowercase_urls: true
-username_regex: '^[a-z0-9_-]{3,16}$'
+username_regex: "^[a-z0-9_-]{3,16}$"
 pwd_regex: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'
 intl_enabled: true
 languages:
-  include_default_lang: true
+  include_default_lang: false
   translations: true
   translations_fallback: true
   session_store_active: false
@@ -25,7 +25,7 @@ pages:
   list:
     count: 20
   dateformat:
-    short: 'jS M Y'
+    short: "jS M Y"
     long: 'F jS \a\t g:ia'
   publish_dates: true
   process:
@@ -38,12 +38,12 @@ pages:
     twig: true
   markdown:
     extra: true
-    auto_line_breaks: false
+    auto_line_breaks: true
     auto_url_links: false
     escape_markup: false
     special_chars:
-      '>': gt
-      '<': lt
+      ">": gt
+      "<": lt
   types:
     - txt
     - xml
@@ -57,7 +57,7 @@ pages:
   etag: true
   vary_accept_encoding: true
   redirect_default_route: false
-  redirect_default_code: '302'
+  redirect_default_code: "302"
   redirect_trailing_slash: true
   ignore_files:
     - .DS_Store
@@ -83,7 +83,7 @@ cache:
   gzip: false
   allow_webserver_gzip: false
 twig:
-  cache: true
+  cache: false
   debug: false
   auto_reload: true
   autoescape: false
@@ -103,9 +103,9 @@ assets:
   js_minify: true
   enable_asset_timestamp: false
   collections:
-    jquery: 'system://assets/jquery/jquery-3.x.min.js'
+    jquery: "system://assets/jquery/jquery-3.x.min.js"
 errors:
-  display: 1
+  display: 0
   log: true
 debugger:
   enabled: false
@@ -115,7 +115,7 @@ debugger:
 images:
   default_image_quality: 85
   cache_all: false
-  cache_perms: '0755'
+  cache_perms: "0755"
   debug: false
   auto_fix_orientation: false
 media:
@@ -127,8 +127,8 @@ session:
   initialize: true
   timeout: 1800
   name: grav-site
-  secure: true
-  httponly: false
+  secure: false
+  httponly: true
   split: true
 gpm:
   releases: stable
