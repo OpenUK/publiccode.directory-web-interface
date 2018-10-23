@@ -34,15 +34,13 @@
       }),
     },
     components: {
-      // L,
       LMap,
       LTileLayer,
       LMarker,
       LPopup,
     },
-    methods: {},
-    mounted() {
-      setTimeout(() => {
+    methods: {
+      makeLocations() {
         for (let index = 0; index < this.products.length; index++) {
           this.locations.push({
             id: index,
@@ -51,12 +49,26 @@
               lng: this.products[index].users[0].user_geolocation.long,
             },
             url: this.products[index].developers[0].developer_url,
-            // icon: this.products[index].logo_url,
-            attribution: this.products[index].developers[0].developer_name,
+            logo: this.products[index].developers[0].developer_logo_url,
+            // icon: L.icon({this.products[index].developers[0].developer_logo_url}),
+            attribution: ` 
+                      <a href='${
+                        this.products[index].developers[0].developer_url
+                      }'>
+                        <img src='${
+                          this.products[index].developers[0].developer_logo_url
+                        }' class='small-logo'/>
+                        ${this.products[index].developers[0].developer_name}
+                      </a>`,
           });
         }
         this.$refs.map.mapObject._onResize();
-      }, 450);
+      },
+    },
+    mounted() {
+      setTimeout(() => {
+        this.makeLocations();
+      }, 650);
     },
   };
 </script>
