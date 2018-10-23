@@ -53,6 +53,7 @@ pages:
     - rss
     - atom
   expires: 604800
+  cache_control: 'public, max-age=31536000'
   last_modified: true
   etag: true
   vary_accept_encoding: true
@@ -114,8 +115,8 @@ debugger:
   twig: true
 images:
   default_image_quality: 85
-  cache_all: false
-  cache_perms: "0755"
+  cache_all: true
+  cache_perms: '0755'
   debug: false
   auto_fix_orientation: false
 media:
