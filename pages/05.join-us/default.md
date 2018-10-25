@@ -46,7 +46,7 @@ forms:
                 display: /join-us/thankyou
 ---
 
-## There are few ways to join us {.is-size-2}
+## There are few ways to join us {.is-size-3}
 
 #### Getting involved {.is-size-4}
 

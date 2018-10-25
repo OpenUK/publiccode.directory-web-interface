@@ -1,6 +1,5 @@
 ---
 title: 'Public Code Directory'
-menu: 'Public Code Directory'
 media_order: '3d.svg,api.svg,back.svg,coding.svg,color-balance.svg,creative-process.svg,sketching.svg'
 features:
     -
@@ -15,9 +14,10 @@ features:
         image: api.svg
         title: 'Where do we find the software?'
         text: "Software is everywhere around us and in order to be able to make it enter the public mind and to be used as such in the public domain we're finding the software for you.\r\nAll the software is their creators responsibility and as such we only gather the information automatically and display it for your better use."
+menu: 'Public Code Directory'
 visible: false
 ---
 
-## Welcome to the Public Code Directory project
+# Welcome to the Public Code Directory project {.is-size-3}
 
 The curated, distributed and federated directory of code, resources and studies that have been funded by Public Administrations around the world.
