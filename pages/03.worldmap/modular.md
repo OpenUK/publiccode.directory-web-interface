@@ -11,4 +11,6 @@ visible: true
 template: modular
 ---
 
-# Software by location
+# Software by location {.is-size-3}
+
+The map is displaying different OOS users and updates in realtime once the filters are used
