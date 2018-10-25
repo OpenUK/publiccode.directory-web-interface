@@ -301,7 +301,7 @@ const state = {
     links: [],
     products: [],
     categories: [],
-    licenses: [],
+    licences: [],
     public_sector: [],
     languages: [],
     countries: [],
@@ -330,14 +330,14 @@ const mutations = {
         } );
         state.categories = Array.from( categoriesSet );
     },
-    getlicenses( state ) {
+    getlicences( state ) {
         let categoriesSet = new Set();
         state.products.filter( el => {
-            el.license.forEach( element => {
+            el.licence.forEach( element => {
                 categoriesSet.add( element );
             } );
         } );
-        state.licenses = Array.from( categoriesSet );
+        state.licences = Array.from( categoriesSet );
     },
     getLanguage( state ) {
         let categoriesSet = new Set();
@@ -422,7 +422,7 @@ const actions = {
                             } else {
                                 commit( "fetchProducts", data );
                                 commit( "getCategories" );
-                                commit( "getlicenses" );
+                                commit( "getlicences" );
                                 commit( "getSector" );
                                 commit( "getCountries" );
                                 commit( "getDevelopers" );
@@ -444,10 +444,10 @@ const actions = {
     } ) {
         commit( "getCategories" );
     },
-    getlicenses( {
+    getlicences( {
         commit
     } ) {
-        commit( "getlicenses" );
+        commit( "getlicences" );
     },
     getSector( {
         commit
@@ -469,7 +469,7 @@ const getters = {
     categories: state => {
         return _.flatten( state.categories );
     },
-    licenses: state => state.licenses,
+    licences: state => state.licences,
     users: state => state.users,
     sectors: state => state.public_sector,
     countries: state => state.countries,
