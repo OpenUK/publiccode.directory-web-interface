@@ -114,11 +114,11 @@ const schemaType = {
             }
         },
         "licence": {
-            "$id": "#/properties/license",
+            "$id": "#/properties/licence",
             "type": "array",
-            "title": "The License Schema",
+            "title": "The Licence Schema",
             "items": {
-                "$id": "#/properties/license/items",
+                "$id": "#/properties/licence/items",
                 "type": "string",
                 "title": "The Items Schema",
                 "default": "",
