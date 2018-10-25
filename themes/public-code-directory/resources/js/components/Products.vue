@@ -44,7 +44,7 @@
                   licences.some(
                     cat =>
                       ~licences.indexOf(
-                        product.license[product.license.indexOf(cat)]
+                        product.licence[product.licence.indexOf(cat)]
                       )
                   ));
             }
@@ -91,8 +91,7 @@
           if (!this.$refs.menu || !this.$refs.menu[index]) {
             this.dropdown.height = 0;
           } else {
-            this.dropdown.height = `${this.$refs.menu[index].clientHeight +
-              25}px`;
+            this.dropdown.height = `100%`;
           }
         });
       },
