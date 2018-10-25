@@ -146,8 +146,7 @@
           if (!this.$refs.menu || !this.$refs.menu[index]) {
             this.dropdown.height = 0;
           } else {
-            this.dropdown.height = `${this.$refs.menu[index].clientHeight +
-              100}%`;
+            this.dropdown.height = ` 100%`;
           }
         });
       },

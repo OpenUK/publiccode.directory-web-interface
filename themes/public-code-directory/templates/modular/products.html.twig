@@ -61,7 +61,7 @@
                                     <p class="company__rating">
                                         <span>Licence:</span>
                                         <span>
-                                            <strong v-for="(prod_licence, index) in product.license" id="index">
+                                            <strong v-for="(prod_licence, index) in product.licence" id="index">
                                                 ${prod_licence}
                                             </strong>
                                         </span>
@@ -96,23 +96,18 @@
                                         ${ prodModal.description }
                                     </p>
                                     <p>Product type: ${ prodModal.entry_type }</p>
-                                    {# <p >Product sector:
-                                    <span v-for="(product_sector, index) in prodModal.sector" id="index">
-                                        ${ product_sector }
-                                    </span>
-                                </p> #}
                                     <p>Product link:
                                         <a :href="prodModal.official_url" rel='noopener nofollow'>${ prodModal.official_url }</a>
                                     </p>
-                                    <p v-if="prodModal.maintainers">Product curently maintained by:
+                                    <p v-if="prodModal.maintainers ">Product curently maintained by:
                                         <ul>
                                             <li v-for='maintainer in prodModal.maintainers' :key='maintainer.id'>
-                                                <span>
+                                                <span v-if="maintainer.link !=='' ">
                                                     <a :href="maintainer.link">
                                                         ${maintainer.maintainer_name}
                                                     </a>
                                                 </span>
-                                                <span>
+                                                <span v-if="maintainer.maintainer_repository !==''">
                                                     Repository:
                                                     <a :href="maintainer.maintainer_repository">
                                                         ${maintainer.maintainer_repository}</a>
