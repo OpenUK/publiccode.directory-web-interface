@@ -22,7 +22,7 @@ const schemaType = {
         "origin_country",
         "sector",
         "category",
-        "license",
+        "licence",
         "developers",
         "maintainers",
         "users"
@@ -113,7 +113,7 @@ const schemaType = {
                 "pattern": "^(.*)$"
             }
         },
-        "license": {
+        "licence": {
             "$id": "#/properties/license",
             "type": "array",
             "title": "The License Schema",
