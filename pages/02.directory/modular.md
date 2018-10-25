@@ -11,6 +11,6 @@ visible: true
 template: modular
 ---
 
-# Live updatable products {.is-size-1}
+# Live updatable products {.is-size-3}
 
-This is the modular parent page content
+These products appear from the federated database
