@@ -21,7 +21,7 @@
         products: "allProducts",
         countries: "countries",
         categories: "categories",
-        licences: "licenses",
+        licences: "licences",
       }),
       activeMenu() {
         return Object.keys(this.menus).reduce(
