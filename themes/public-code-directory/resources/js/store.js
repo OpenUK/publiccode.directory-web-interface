@@ -303,7 +303,7 @@ const state = {
     categories: [],
     licenses: [],
     public_sector: [],
-    // filteredProd: [],
+    languages: [],
     countries: [],
     companies: [],
     users: [],
@@ -338,6 +338,15 @@ const mutations = {
             } );
         } );
         state.licenses = Array.from( categoriesSet );
+    },
+    getLanguage( state ) {
+        let categoriesSet = new Set();
+        state.products.filter( el => {
+            el.language.forEach( element => {
+                categoriesSet.add( element );
+            } );
+        } );
+        state.languages = Array.from( categoriesSet );
     },
     getSector( state ) {
         let categoriesSet = new Set();
@@ -382,13 +391,6 @@ const mutations = {
         } )
         state.maintainers = Array.from( maintainerSet )
     },
-    getCompanies( state ) {
-        // let companySet = new Set();
-        // state.products.filter(el => {
-        //     companySet.add(el.developer_name);
-        // });
-        // state.companies = Array.from(companySet);
-    },
     updateChecked( state, payload ) {
         state.checked = payload;
     },
@@ -422,11 +424,11 @@ const actions = {
                                 commit( "getCategories" );
                                 commit( "getlicenses" );
                                 commit( "getSector" );
-                                commit( "getCompanies" );
                                 commit( "getCountries" );
                                 commit( "getDevelopers" );
                                 commit( "getMaintainers" );
                                 commit( "getUsers" );
+                                commit( "getLanguage" );
                             }
                         } )
                         .catch( error => console.log( error ) );
@@ -457,11 +459,7 @@ const actions = {
     } ) {
         commit( "getCountries" );
     },
-    getCompanies( {
-        commit
-    } ) {
-        commit( "getCompanies" );
-    }
+
 };
 const getters = {
     allProducts: state => {
@@ -472,9 +470,11 @@ const getters = {
         return _.flatten( state.categories );
     },
     licenses: state => state.licenses,
+    users: state => state.users,
     sectors: state => state.public_sector,
     countries: state => state.countries,
     companies: state => state.companies,
+    languages: state => state.languages,
 
 };
 const plugins = [ vuexLocal.plugin ];
