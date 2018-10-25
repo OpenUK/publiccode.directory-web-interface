@@ -18,6 +18,6 @@ menu: 'Public Code Directory'
 visible: false
 ---
 
-## Welcome to the Public Code Directory project {.is-size-2}
+# Welcome to the Public Code Directory project {.is-size-3}
 
 The curated, distributed and federated directory of code, resources and studies that have been funded by Public Administrations around the world.
