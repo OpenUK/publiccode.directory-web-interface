@@ -60,8 +60,8 @@
                                 <div class="card-footer-item">
                                     <p class="company__rating">
                                         <span>Licence:</span>
-                                        <span>
-                                            <strong v-for="(prod_licence, index) in product.licence" id="index">
+                                        <span calss="block" v-for="(prod_licence, index) in product.licence" id="index">
+                                            <strong >
                                                 ${prod_licence}
                                             </strong>
                                         </span>
@@ -75,7 +75,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
-                                    <div v-if='prodModal.official_url' class="media-left">
+                                    <div v-if='prodModal.logo_url' class="media-left">
                                         <figure class="image is-128x128">
                                             <img :src="prodModal.logo_url" alt="Image">
                                         </figure>
@@ -97,14 +97,14 @@
                                     </p>
                                     <p>Product type: ${ prodModal.entry_type }</p>
                                     <p>Product link:
-                                        <a :href="prodModal.official_url" rel='noopener nofollow'>${ prodModal.official_url }</a>
+                                        <a :href="prodModal.official_url" rel='noopener nofollow'>Repository</a>
                                     </p>
                                     <p class="developers">Product developed by:
                                         <ul>
                                             <li v-for="devs in prodModal.developers">
-                                                <span>${devs.developer_name}</span>
+
                                                 <span>
-                                                    <a :href="devs.developer_url">${devs.developer_url}</a>
+                                                    <a :href="devs.developer_url">${devs.developer_name}</a>
                                                 </span>
                                             </li>
                                         </ul>
@@ -120,7 +120,7 @@
                                                 <span v-if="maintainer.maintainer_repository !==''">
                                                     Repository:
                                                     <a :href="maintainer.maintainer_repository">
-                                                        ${maintainer.maintainer_repository}</a>
+                                                        click here</a>
                                                 </span>
                                             </li>
                                         </ul>

@@ -31,3 +31,15 @@ body {
 footer {
     flex-shrink: 0;
 }
+
+.media {
+    flex-wrap: wrap;
+}
+
+.media-left {
+    padding-bottom: 1rem;
+
+    figure {
+        margin-left: 0;
+    }
+}
