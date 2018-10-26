@@ -24,7 +24,7 @@
         attribution:
           '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         locations: [],
-        minZoom: 3,
+        minZoom: 1,
         maxZoom: 13,
         loading: true,
         dropdown: { height: 0 },
@@ -94,10 +94,10 @@
             if (users.length) {
               match =
                 match &&
-                (!users.length ||
-                  users.some(
-                    cat => ~product.users.findIndex(el => el.user_name === cat)
-                  ));
+                users.some(
+                  cat =>
+                    product.users.findIndex(el => el.user_name === cat) !== -1
+                );
             }
             return match;
           });
@@ -113,6 +113,7 @@
           languages: Object.keys(languages).filter(c => languages[c]),
         };
       },
+
       initialFilters() {
         this.countries.forEach(element => {
           this.$set(this.filters.countries, element, false);
@@ -129,7 +130,6 @@
         this.sectors.forEach(el => {
           this.$set(this.filters.sectors, el, false);
         });
-
         this.loading = false;
       },
     },
@@ -172,22 +172,37 @@
       },
     },
     methods: {
+      updateLocations() {
+        let newlocations = [];
+        this.locations.filter(element => {
+          return this.activeFilters.users.forEach(item => {
+            if (element.name === item) {
+              newlocations.push(element);
+            }
+          });
+        });
+        this.locations = [];
+        this.locations = newlocations;
+      },
       makeLocations() {
         this.locations = [];
         for (let index = 0; index < this.list.length; index++) {
           this.list[index].users.forEach(user => {
-            this.locations.push({
-              id: index,
-              position: {
-                lat: user.user_geolocation.lat,
-                lng: user.user_geolocation.long,
-              },
-              url: user.user_url,
-              logo: user.user_logo_url,
-              attribution: ` <a href='${user.user_url}'>  <img src='${
-                user.user_logo_url
-              }' class='small-logo'/>  ${user.user_name}</a>`,
-            });
+            if (user.user_name !== "") {
+              this.locations.push({
+                id: index,
+                position: {
+                  lat: user.user_geolocation.lat,
+                  lng: user.user_geolocation.long,
+                },
+                url: user.user_url,
+                logo: user.user_logo_url,
+                name: user.user_name,
+                attribution: ` <a href='${user.user_url}'>  <img src='${
+                  user.user_logo_url
+                }' class='small-logo'/>  ${user.user_name}</a>`,
+              });
+            }
           });
         }
         this.$refs.map.mapObject._onResize();
@@ -196,22 +211,28 @@
         if (filter === "countries") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
+          this.updateLocations();
         } else if (filter === "languages") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
+          this.updateLocations();
         } else if (filter === "sectors") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
+          this.updateLocations();
         } else if (filter === "users") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
+          this.updateLocations();
         } else if (filter === "categories") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
+          this.updateLocations();
         } else {
           setTimeout(() => {
             this.clearFilter(filter, option, this.filters[filter][option]);
             this.makeLocations();
+            this.updateLocations();
           }, 100);
         }
       },
@@ -234,7 +255,7 @@
     mounted() {
       setTimeout(() => {
         this.makeLocations();
-      }, 600);
+      }, 1000);
     },
   };
 </script>
