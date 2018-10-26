@@ -211,15 +211,15 @@
         if (filter === "countries") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
-          this.updateLocations();
+          // this.updateLocations();
         } else if (filter === "languages") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
-          this.updateLocations();
+          // this.updateLocations();
         } else if (filter === "sectors") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
-          this.updateLocations();
+          // this.updateLocations();
         } else if (filter === "users") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
@@ -227,12 +227,12 @@
         } else if (filter === "categories") {
           this.filters[filter][option] = !this.filters[filter][option];
           this.makeLocations();
-          this.updateLocations();
+          // this.updateLocations();
         } else {
           setTimeout(() => {
             this.clearFilter(filter, option, this.filters[filter][option]);
             this.makeLocations();
-            this.updateLocations();
+            // this.updateLocations();
           }, 100);
         }
       },
