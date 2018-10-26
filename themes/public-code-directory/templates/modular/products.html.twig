@@ -99,7 +99,7 @@
                                     <p>Product link:
                                         <a :href="prodModal.official_url" rel='noopener nofollow'>${ prodModal.official_url }</a>
                                     </p>
-                                    <p v-if="prodModal.maintainers ">Product curently maintained by:
+                                    <p v-if="prodModal.maintainers ">Product currently maintained by:
                                         <ul>
                                             <li v-for='maintainer in prodModal.maintainers' :key='maintainer.id'>
                                                 <span v-if="maintainer.link !=='' ">
