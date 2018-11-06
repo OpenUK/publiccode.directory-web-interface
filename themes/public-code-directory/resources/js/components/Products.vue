@@ -9,8 +9,13 @@
       return {
         loading: true,
         dropdown: { height: 0 },
-        filters: { countries: {}, categories: {}, licences: {} },
-        menus: { countries: false, categories: false, licences: false },
+        filters: { countries: {}, sectors: {}, categories: {}, licences: {} },
+        menus: {
+          countries: false,
+          sectors: false,
+          categories: false,
+          licences: false,
+        },
         isProdModal: false,
         prodModal: {},
       };
@@ -22,6 +27,7 @@
         countries: "countries",
         categories: "categories",
         licences: "licences",
+        sectors: "sectors",
       }),
       activeMenu() {
         return Object.keys(this.menus).reduce(
@@ -31,7 +37,7 @@
       },
       list() {
         if (!this.loading) {
-          let { countries, categories, licences } = this.activeFilters;
+          let { countries, sectors, categories, licences } = this.activeFilters;
           return this.products.filter(product => {
             let match = true;
             if (countries.length && !~countries.indexOf(product.origin_country)) {
@@ -59,15 +65,27 @@
                       )
                   ));
             }
+            if (sectors.length) {
+              match =
+                match &&
+                (!sectors.length ||
+                  sectors.some(
+                    cat =>
+                      ~sectors.indexOf(
+                        product.sector[product.sector.indexOf(cat)]
+                      )
+                  ));
+            }
             return match;
           });
         }
       },
       activeFilters() {
-        let { countries, categories, licences } = this.filters;
+        let { countries, sectors, categories, licences } = this.filters;
         return {
           countries: Object.keys(countries).filter(c => countries[c]),
           categories: Object.keys(categories).filter(c => categories[c]),
+          sectors: Object.keys(sectors).filter(c => sectors[c]),
           licences: Object.keys(licences).filter(c => licences[c]),
         };
       },
@@ -77,6 +95,9 @@
         });
         this.categories.forEach(el => {
           this.$set(this.filters.categories, el, false);
+        });
+        this.sectors.forEach(el => {
+          this.$set(this.filters.sectors, el, false);
         });
         this.licences.forEach(el => {
           this.$set(this.filters.licences, el, false);
@@ -100,6 +121,9 @@
           this.countries.forEach(element => {
             this.$set(this.filters.countries, element, false);
           });
+          this.sectors.forEach(element => {
+            this.$set(this.filters.sectors, element, false);
+          });
           this.categories.forEach(el => {
             this.$set(this.filters.categories, el, false);
           });
@@ -117,6 +141,8 @@
         } else if (filter === "licences") {
           this.filters[filter][option] = !this.filters[filter][option];
         } else if (filter === "categories") {
+          this.filters[filter][option] = !this.filters[filter][option];
+        } else if (filter === "sectors") {
           this.filters[filter][option] = !this.filters[filter][option];
         } else {
           setTimeout(() => {
