@@ -22,11 +22,8 @@ yarn-error.log*
 *.sln
 *.sw*
 
-config/plugins/
-data/contact-form
-data/files
-data/logerrors
-data/licenses.yaml
+config
+data
 accounts/
 themes/quark/
 **package-lock.json
