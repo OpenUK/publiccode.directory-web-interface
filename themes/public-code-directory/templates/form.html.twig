@@ -1,0 +1,17 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="columns is-centered is-multiline">
+            <div class="column is-8">
+                {{ page.content }}
+            </div>
+            <div class="column is-8">
+                {% include "forms/form.html.twig" %}
+            </div>
+        </div>
+    </div>
+
+    {% do 
+        assets.addJs('system://assets/jquery/jquery-3.x.min.js') %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="container">
+    <div class="columns is-centered">
+        <div class="column is-7">
+
+            <div class="content">
+                <h1>
+                    {{ page.title }}
+                </h1>
+                {{ page.content }}
+            </div>
+
+            <hr>
+
+            {% for post in page.find('/blog').children.order('publish_date', 'desc').slice(0, 3) %}
+                {% include 'partials/post.html.twig' %}
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

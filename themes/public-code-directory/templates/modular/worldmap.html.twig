@@ -1,0 +1,38 @@
+<div class="page-content">
+    {{page.content}}
+</div>
+<worldmap inline-template="inline-template">
+    <div class="map-and-filters">
+        <div class="product-wrapper" v-if="loading">
+            <main class="content products">
+                <h4 class='is-size-4'>Loading map</h4>
+            </main>
+        </div>
+        <div class="filters" v-cloak="v-cloak" v-else="v-else">
+            <div class="nav">
+                <menu class="nav__controls">
+                    <a v-for="(active, menu) in menus" class="button is-primary is-outlined nav__label" :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)">
+                        ${menu}
+                    </a>
+                    <button class="button is-danger is-outlined nav__label nav__label--clear" @click.prevent="clearAllFilters">Clear all</button>
+                </menu>
+            </div>
+            <transition-group name="dropdown" tag="section" class="dropdown" :style="dropdown">
+                <menu v-for="(options, filter) in filters" class="filters" v-show="menus[filter]" ref="menu" :key="filter">
+                    <li v-for="(active, option) in options" class="filters__item" :class="{ 'filters__item--active': active }" @click="setFilter(filter, option)" :key='option'>
+                        ${option}
+                    </li>
+                </menu>
+            </transition-group>
+        </div>
+
+        <div class="map">
+            <l-map ref="map" :max-zoom='maxZoom' :min-zoom='minZoom' :zoom="zoom" :center="center" style="height:500px;">
+                <l-tile-layer :attribution="attribution" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></l-tile-layer>
+                <l-marker v-for="(marker,id) in locations" :key="id" :lat-lng="marker.position" :icon="marker.icon">
+                    <l-popup :content="marker.attribution" :title='marker.url'></l-popup>
+                </l-marker>
+            </l-map>
+        </div>
+    </div>
+</worldmap>

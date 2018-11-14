@@ -1,0 +1,8 @@
+/*
+!.gitignore
+!themes
+!pages
+!themes
+!plugins
+**node_modules
+**yarn.lock

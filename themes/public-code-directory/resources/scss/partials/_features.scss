@@ -1,0 +1,37 @@
+.features {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.feature-image {
+    height: 120px;
+}
+
+.bottom-link {
+    padding-bottom: 3rem;
+}
+
+.inline {
+    vertical-align: middle;
+}
+
+@media screen and(min-width: 576px) {
+    .features {
+        .image,
+        .feature {
+            width: 50%;
+        }
+        .image {
+            text-align: center;
+        }
+        &:nth-child(even) {
+            .image {
+                order: 2;
+            }
+        }
+    }
+}

@@ -1,0 +1,57 @@
+name: PublicCodeDirectory
+version: 0.4.3
+description: Starter theme for Grav CMS using modern tools and frameworks such as Laravel Mix, Vuejs, Bulma.
+icon: empire
+author:
+  name: Robbin Johansson
+  email: robbinfellow@gmail.com
+  url: https://github.com/robbinfellow/
+homepage: https://github.com/robbinfellow/public-code-directory-grav#readme
+keywords: public-code-directory, grav, boilerplate, starter-theme, vuejs, laravel-mix, bulma
+bugs: https://github.com/robbinfellow/public-code-directory-grav/issues
+docs: https://github.com/robbinfellow/public-code-directory-grav#readme
+license: MIT
+
+form:
+  validation: loose
+  fields:
+    dropdown.enabled:
+      type: toggle
+      label: Dropdown in navbar
+      highlight: 1
+      default: 1
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+    theme.upload_image:
+        type: file
+        label: Upload Images
+        destination: 'theme@:/assets'
+        autofocus: false
+        multiple: true
+        random_name: false
+        avoid_overwriting: false
+        limit: 5
+        accept:
+          - image/*
+    theme.logo:
+      type: filepicker
+      folder: 'theme@:/assets'
+      label: Chose Theme Logo 
+      preview_images: true
+      accept:
+        - .svg
+        - .png
+        - .jpg
+        - .jpeg
+    theme.favicon:
+      type: filepicker
+      folder: 'theme@:/images'
+      label: Theme Favicon
+      preview_images: true
+      accept:
+        - .jpg
+        - .png
+        - .jpeg   

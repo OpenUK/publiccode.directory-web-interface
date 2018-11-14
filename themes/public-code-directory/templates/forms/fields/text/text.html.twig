@@ -1,0 +1,28 @@
+{% set value = (value is null ? field.default : value) %}
+
+<div class="field">
+    <label class="label"> 
+        {% if field.label %}   
+            {{ field.label|default(field.name|capitalize)|t }}
+        {% endif %}
+        {{ field.validate.required in ['on', 'true', 1] ? '<span class="required">*</span>' }}
+    
+    </label>
+    <div class="control  {% if field.help %} tooltip is-tooltip-top {% endif %}"    data-tooltip=" {{ field.help|e }} ">
+        <input  type="text"
+                class="input"
+                name="{{ (scope ~ field.name)|fieldName }}"
+                value="{{ value|join(', ') }}"
+                {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %}
+                {% if field.autofocus in ['on', 'true', 1] %}autofocus="autofocus"{% endif %}
+                {% if field.novalidate in ['on', 'true', 1] %}novalidate="novalidate"{% endif %}
+                {% if field.autocomplete in ['on', 'off'] %}autocomplete="{{ field.autocomplete }}"{% endif %}
+                {% if field.validate.required in ['on', 'true', 1] %}required="required"{% endif %}
+                {% if field.validate.pattern %}pattern="{{ field.validate.pattern }}"{% endif %}
+        />
+
+    </div>
+    {% if field.help %}
+        <p class="help is-warning" >{{ field.help|default(field.name|capitalize)|t }}</p>
+    {% endif %}
+</div>

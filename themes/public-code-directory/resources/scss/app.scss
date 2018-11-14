@@ -1,0 +1,45 @@
+// Custom variables
+@import "variables";
+// Import Bulma
+@import "~bulma";
+// Partials
+@import "partials/navbar";
+@import "partials/products";
+@import "partials/homepage";
+@import "partials/features";
+@import "partials/footer";
+
+html,
+body {
+    height: 100%;
+}
+
+object {
+    pointer-events: none;
+}
+
+body {
+    display: flex;
+    flex-flow: column nowrap;
+
+}
+
+#app {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+.media {
+    flex-wrap: wrap;
+}
+
+.media-left {
+    padding-bottom: 1rem;
+
+    figure {
+        margin-left: 0;
+    }
+}

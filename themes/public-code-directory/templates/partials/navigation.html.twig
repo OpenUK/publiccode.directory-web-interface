@@ -1,0 +1,33 @@
+{% macro loop(page) %}
+    {% for p in page.children.visible %}
+        {% set current_page = (p.active or p.activeChild) ? 'is-active' : '' %}
+        {% if p.children.visible.count > 0 %}
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a href="{{ p.url }}" class="navbar-link {{ p.slug }} {{ current_page }}" {% if p.template == 'external' %} target="_BLANK" rel="noopener" {% endif %}>
+                    {{ p.menu }}
+                </a>
+
+                <div class="navbar-dropdown is-right">
+                    {{ _self.loop(p) }}
+                </div>
+            </div>
+        {% else %}
+            <a href="{{ p.url }}" class="navbar-item {{ p.slug }} {{ current_page }}" {% if p.template == 'external' %} target="_BLANK" rel="noopener" {% endif %}>
+                {{ p.menu }}
+            </a>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+<div class="navbar-end">
+    {% if theme_config.dropdown.enabled %}
+        {{ _self.loop(pages) }}
+    {% else %}
+        {% for page in pages.children.visible %}
+            {% set current_page = (page.active or page.activeChild) ? 'is-active' : '' %}
+            <a href="{{ page.url }}" class="navbar-item {{ p.slug }} {{ current_page }}" {% if p.template == 'external' %} target="_BLANK" rel="noopener" {% endif %}>
+                {{ page.menu }}
+            </a>
+        {% endfor %}
+    {% endif %}
+</div>

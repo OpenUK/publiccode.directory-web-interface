@@ -1,0 +1,31 @@
+title: Home Page
+'@extends': default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          fields:
+            header.features:
+              type: list
+              label: Features
+              fields:
+                .image:
+                  folder: 'self@'
+                  type: filepicker
+                  toggleable: true
+                  preview_images: true
+                  label: Select Feature Image
+                .title:
+                  type: text
+                  label: Feature title
+                .text:
+                  type: textarea
+                  label: Feature Text
+                .link:
+                  type: text
+                  label: Feature link
+                .link_text:
+                  type: text
+                  label: Button Text

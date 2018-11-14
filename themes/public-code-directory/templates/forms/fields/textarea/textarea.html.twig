@@ -1,0 +1,16 @@
+{% set value = (value is null ? field.default : value) %}
+
+<div class="field">    
+    <label class="label">
+        {% if field.label %}
+            {{ field.label|default(field.name|capitalize)|t }}
+        {% endif %}
+        {{ field.validate.required in ['on', 'true', 1] ? '<span class="required">*</span>' }}
+    </label>
+    <div class="control {% if field.help %} tooltip is-tooltip-top {% endif %}"    data-tooltip=" {{ field.help|e }} " >
+        <textarea rows="10" class="textarea" name="{{ (scope ~ field.name)|fieldName }}">{{ value|join("\n") }}</textarea>
+    </div>
+    {% if field.help %}
+        <p class="help is-warning" >{{ field.help|default(field.name|capitalize)|t }}</p>
+    {% endif %}
+</div>

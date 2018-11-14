@@ -1,0 +1,21 @@
+// Footer style
+.footer {
+    margin-top: 2rem;
+    box-shadow: 0 1000px 0 1000px $footer-background-color;
+    .images {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        .footer-image {
+            margin-right: 2.5rem;
+            display: block;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+        .partner-image {
+            height: 70px;
+        }
+    }
+}

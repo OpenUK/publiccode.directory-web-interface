@@ -1,0 +1,20 @@
+//init gdpr privacy plugin js
+var gdprPrivacySetupPluginSettings = {
+    setupPage: "{{ setup.privacyPage }}",
+    setupConsent: "{{ setup.consentButtonText }}",
+    denyConsent: "{{ setup.denyButtonText }}",
+    inputPrefix: "{{ setup.inputPrefix }}",
+    modalContentId: "{{ setup.modalWindow }}",
+    cookieName: "{{ setup.cookieName }}",
+    privacySettingsButtonClass: "{{ setup.privacySettingsBtnClass }}",
+    acceptBtnClass: "{{ setup.consentButtonClass }}",
+    denyBtnClass: "{{ setup.denyButtonClass }}",
+    denyRedirectionTarget: "{{ setup.denyRedirection }}",
+    deferInfoPopup: {{ setup.deferInfoPopupTime }},
+    consentExpires: {{ setup.consentExpires }},
+    tempCookieName: "noConsent",
+    lastConsentVersion: "{{ setup.lastConsentVersion }}",
+    whitelist: "{{ setup.whitelist }}",
+    userConsent: {{ setup.userConsent | raw }}
+};
+gdprPrivacySetupPlugin.init(gdprPrivacySetupPluginSettings);
