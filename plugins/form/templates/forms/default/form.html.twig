@@ -39,7 +39,6 @@
     window.GravForm.translations = jQuery.extend({}, window.GravForm.translations || {}, { PLUGIN_FORM: {} });
 ", {'group': 'bottom'}) %}
 
-
 <form name="{{ form.name }}"
       action="{{ action | trim('/', 'right') }}"
       method="{{ method }}"{{ multipart }}
@@ -54,9 +53,12 @@
   {% block inner_markup_fields_start %}{% endblock %}
 
   {% set data = data ?? form.data %}
+  {% set context = context ?? data %}
   {% for field in form.fields %}
     {% set value = form.value(field.name) %}
+    {% block process_field %}
     {% include "forms/fields/#{field.type}/#{field.type}.html.twig" ignore missing %}
+    {% endblock %}
   {% endfor %}
 
   {% include "forms/fields/formname/formname.html.twig" %}
