@@ -1,93 +1,52 @@
-to implement https://github.com/korzio/djv for automatic entry.json testing against a defined schema and refuse the PR
+# PCD Web interface
 
+This is the web interface to the [PublicCode.Directory (PCD) project](https://github.com/OpenUK/publiccode.directory).
 
-[![Latest GitHub Release](https://img.shields.io/github/release/robbinfellow/public-code-directory-grav.svg?style=flat-square)](https://github.com/robbinfellow/public-code-directory-grav/releases)
-[![Open Issues On Github](https://img.shields.io/github/issues-raw/robbinfellow/public-code-directory-grav.svg?style=flat-square)](https://github.com/robbinfellow/public-code-directory-grav/issues)
-[![Software License](https://img.shields.io/github/license/robbinfellow/public-code-directory-grav.svg?style=flat-square)](https://github.com/robbinfellow/public-code-directory-grav/blob/master/LICENSE)
+Like everything else in life it is not complicated but it will take a bit of time and the responsability for the information provided lies only with the maintainers of the respective software.
 
-> This theme is in active development, use `master` branch for the latest stable version.
+## How to improve / develop the web interface
 
-# Starter theme for Grav CMS
+In order for this to improve / fix the web interface project, the following steps must apply:
 
-Starter theme for [Grav CMS](https://github.com/getgrav/grav) using modern tools and frameworks such as [Laravel Mix](https://github.com/JeffreyWay/laravel-mix), [Vuejs](https://github.com/vuejs/vue), [Bulma](https://github.com/jgthms/bulma).
+- You will need to have **Docker**, **Noje.js** and a **Code editor** installed on your computer
 
-## Features
+- Clone / fork this repository
+- `cd` into the newly downloaded folder
+- Run the `docker build . -t image-name` command to build the image locally
+- Modify the `docker-compose.yaml` file to modify the image to the newly locally build image `image-name`
+- Run `docker-compose up -d`
+- `cd` into the `themes/public-code-directory`
+- You ca run the following comamnds locally:
+  - `npm run serve` or `yarn serve` to start a local live development session
+  - `npm run build` or `yarn build` to build the final project
+- Once changes are done, you can push back to Github and create a Pull Request
 
-* Laravel Mix
-* Vuejs
-* Bulma
+* Credits go to our partners:
+  - [OpenUK](https://openuk.uk) for supporting this project
+  - [FSFE](https://fsfe.org) for supporting this project
+  - [Public Code Europe](https://publiccode.eu/) for helping out with the discovery and localization of the open source software
+  - [Vue.js](https://vuejs.org/) and its creators for the simplicity and flexibility of their tools
+  - [Vue.js CLI](https://cli.vuejs.org/) for simplifying the creation of such websites / SPA / PWA
 
-## Installation / Usage
+# ![](https://avatars1.githubusercontent.com/u/8237355?v=2&s=50) Grav
 
-### (Recommended) bin/gpm ([Grav Package Manager](http://learn.getgrav.org/advanced/grav-gpm))
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/cfd20465-d0f8-4a0a-8444-467f5b5f16ad/mini.png)](https://insight.sensiolabs.com/projects/cfd20465-d0f8-4a0a-8444-467f5b5f16ad) [![Slack](https://grav-chat.now.sh/badge.svg)](https://chat.getgrav.org) [![Build Status](https://travis-ci.org/getgrav/grav.svg?branch=develop)](https://travis-ci.org/getgrav/grav) [![OpenCollective](https://opencollective.com/grav/backers/badge.svg)](#backers) [![OpenCollective](https://opencollective.com/grav/sponsors/badge.svg)](#sponsors)
 
-```shell
-# @ path/to/grav/installation
-$ bin/gpm install public-code-directory
-$ cd user/themes/public-code-directory
-$ yarn && yarn production
-```
+Grav is a **Fast**, **Simple**, and **Flexible**, file-based Web-platform. There is **Zero** installation required. Just extract the ZIP archive, and you are already up and running. It follows similar principles to other flat-file CMS platforms, but has a different design philosophy than most. Grav comes with a powerful **Package Management System** to allow for simple installation and upgrading of plugins and themes, as well as simple updating of Grav itself.
 
-### Manual installation
+The underlying architecture of Grav is designed to use well-established and _best-in-class_ technologies to ensure that Grav is simple to use and easy to extend. Some of these key technologies include:
 
-```shell
-# @ path/to/grav/installation
-$ cd user/themes/
-$ git clone https://github.com/robbinfellow/public-code-directory-grav.git public-code-directory
-$ cd public-code-directory
-$ yarn && yarn production
-```
+- [Twig Templating](http://twig.sensiolabs.org/): for powerful control of the user interface
+- [Markdown](http://en.wikipedia.org/wiki/Markdown): for easy content creation
+- [YAML](http://yaml.org): for simple configuration
+- [Parsedown](http://parsedown.org/): for fast Markdown and Markdown Extra support
+- [Doctrine Cache](http://doctrine-orm.readthedocs.io/projects/doctrine-orm/en/latest/reference/caching.html): layer for performance
+- [Pimple Dependency Injection Container](http://pimple.sensiolabs.org/): for extensibility and maintainability
+- [Symfony Event Dispatcher](http://symfony.com/doc/current/components/event_dispatcher/introduction.html): for plugin event handling
+- [Symfony Console](http://symfony.com/doc/current/components/console/introduction.html): for CLI interface
+- [Gregwar Image Library](https://github.com/Gregwar/Image): for dynamic image manipulation
 
-### Activate theme
+# Requirements
 
-After installation navigate to `user/config/system.yaml` and update the theme:
-``` yaml
-pages:
-  theme: public-code-directory
-```
-
-### Demo
-
-Installing through bin/gpm will prompt you to install the demo content automatically.
-
-However if you install the theme manually, copy the contents of `user/themes/public-code-directory/_demo/pages/` into your `user/pages/` folder for a quick demo content of your site.
-
-### Laravel Mix
-
-Laravel Mix is preconfigured when installing a fresh instance of this theme. However it might be a good idea to review the full documentation [on GitHub.](https://github.com/JeffreyWay/laravel-mix/tree/master/docs#readme)
-
-```shell
-# Compile assets without minification
-$ yarn dev
-
-# Watch working assets
-$ yarn watch
-
-# Minify and compile assets for production
-$ yarn production
-```
-
-> Compiled assets goes into the `dist/` directory, these files are generated for you through Laravel Mix, you should **not** edit these files manually! Your working directory is `resources/`.
-
-## Updating
-
-### bin/gpm update
-
-The easiest way to update this theme is via the Grav Package Manager:
-
-```shell
-$ bin/gpm update public-code-directory
-```
-
-## Contribute
-
-If you're interested in contributing, please read the [contribution guidelines.](.github/CONTRIBUTING.md)
-
-## Credits
-
-* [Robbin Johansson](https://github.com/robbinfellow)
-* [All Contributors](https://github.com/robbinfellow/public-code-directory-grav/graphs/contributors)
-
-## License
-
-PublicCodeDirectory grav theme is an open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+- PHP 5.5.9 or higher. Check the [required modules list](https://learn.getgrav.org/basics/requirements#php-requirements)
+- Check the [Apache](https://learn.getgrav.org/basics/requirements#apache-requirements) or [IIS](https://learn.getgrav.org/basics/requirements#iis-requirements) requirements
