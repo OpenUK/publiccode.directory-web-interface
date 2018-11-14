@@ -22,18 +22,20 @@
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
     "bulma": "^0.7.1",
-    "cross-env": "^5.1.4",
+    "cross-env": "^5.2.0",
+    "imagemin": "^6.0.0",
     "laravel-mix": "^2.1.14",
-    "vue": "^2.5.16"
+    "vue": "^2.5.17",
+    "webpack": "^4.25.1"
   },
   "dependencies": {
-    "vue": "^2.5.16",
-    "ajv": "^6.5.3",
-    "buefy": "^0.6.6",
-    "imagemin": "^5.3.1",
+    "ajv": "^6.5.5",
+    "imagemin": "^6.0.0",
+    "buefy": "^0.7.0",
     "leaflet-defaulticon-compatibility": "^0.1.1",
-    "vue2-leaflet": "^1.0.2",
+    "vue": "^2.5.17",
+    "vue2-leaflet": "^1.2.3",
     "vuex": "^3.0.1",
-    "vuex-persist": "^1.4.3"
+    "vuex-persist": "^2.0.0"
   }
 }
