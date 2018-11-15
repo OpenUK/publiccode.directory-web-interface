@@ -1,8 +1,8 @@
-version: '2'
+version: "2"
 services:
   grav:
     restart: unless-stopped
-    image: pcd:latest
+    image: newimage:latest
     ports:
       - 12200:80
     volumes:
