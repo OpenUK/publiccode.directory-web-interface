@@ -174,5 +174,8 @@
       },
     },
     mounted() {},
+    beforeCreate() {
+      this.$store.dispatch("fetchLinks");
+    },
   };
 </script>
