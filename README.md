@@ -6,16 +6,19 @@ Like everything else in life it is not complicated but it will take a bit of tim
 
 ## How to improve / develop the web interface
 
-In order for this to improve / fix the web interface project, the following steps must apply:
+In order for this to improve / fix the web interface project, please follow the steps below:
+
+- You need a folder that contains the GRAV CMS. You can download a copy from [here](https://getgrav.org/downloads)
+- Clone / fork / download this repository
+- Extract the downloaded folder and replace the content of the `user/pages` `user/plugins` `user/themes` folders with the folders from this repostiory
 
 - You will need to have **Docker**, **Noje.js** and a **Code editor** installed on your computer
-
-- Clone / fork this repository
-- `cd` into the newly downloaded folder
+- `cd` into the newly created folder that contains the full Grav CMS with your changes
 - Run the `docker build . -t image-name` command to build the image locally
 - Modify the `docker-compose.yaml` file to modify the image to the newly locally build image `image-name`
 - Run `docker-compose up -d`
-- `cd` into the `themes/public-code-directory`
+- `cd` into the `user/themes/public-code-directory`
+- Run `npm install` to get all dependencies installed locally
 - You ca run the following comamnds locally:
   - `npm run serve` or `yarn serve` to start a local live development session
   - `npm run build` or `yarn build` to build the final project

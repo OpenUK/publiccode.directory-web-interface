@@ -1,32 +1,19 @@
-FROM php:7.2-apache
+FROM php:7.2.8-apache
 
-# Image based on the Wordpress docker image from:
-
-LABEL name="grav-docker"
-LABEL version="1.0.1"
-
-# install the PHP extensions we need
-RUN set -ex; \
-    \
-    apt-get update; \
-    apt-get install -y \
-    wget \
+#Install core packages
+RUN apt-get update && apt-get install -y  git \
     unzip \
-    libjpeg-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
     libpng-dev \
-    zlib1g-dev \
-    libpng16-16 \
-    git \
-    ; \
-    rm -rf /var/lib/apt/lists/*; \
-    apt-get clean && \
-    \
-    docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-    docker-php-ext-install gd zip opcache
-# TODO consider removing the *-dev deps and only keeping the necessary lib* packages
+    libyaml-dev \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install zip
 
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
+RUN apt-get clean -q && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 RUN { \
     echo 'opcache.memory_consumption=128'; \
     echo 'opcache.interned_strings_buffer=8'; \
@@ -36,31 +23,24 @@ RUN { \
     echo 'opcache.enable_cli=1'; \
     echo 'upload_max_filesize=128M'; \
     echo 'post_max_size=128M'; \
-    } > /usr/local/etc/php/conf.d/opcache-recommended.ini
+    } > /usr/local/etc/php/conf.d/php-recommended.ini
 
+WORKDIR /var/www/html
+
+COPY . /var/www/html
+
+RUN bin/composer.phar self-update
+RUN bin/grav install
+RUN chown -R www-data:www-data *
+RUN find . -type f | xargs chmod 664
+RUN find . -type d | xargs chmod 775
+RUN find . -type d | xargs chmod +s
+RUN umask 0002
+
+# Enable Apache Rewrite + Expires Module
 RUN a2enmod rewrite expires
 
-ENV SOURCE="/usr/src/grav"
-ENV PATHS="/var/www/html"
-RUN set -ex; \
-    wget https://getgrav.org/download/core/grav/latest && \
-    unzip latest && \
-    mkdir -p "$SOURCE" && \
-    cp -r grav-admin/. "$SOURCE" && \
-    rm -rf grav-admin latest && \
-    rm -rf "$SOURCE"/user && \
 
-    chown -R www-data:www-data "$SOURCE"
-
-COPY ./ /var/www/html/user
-COPY docker-entrypoint.sh /
-
-COPY ./ /var/www/html/user
-
-RUN chmod +x /docker-entrypoint.sh && \
-    chown root:root /docker-entrypoint.sh
-
-EXPOSE 80
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["apache2-foreground"]
-
+VOLUME [ "/var/www/html" ]
+#Public ports
+EXPOSE 80 
