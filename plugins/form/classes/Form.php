@@ -385,13 +385,11 @@ class Form extends Iterator implements \Serializable
     public function uploadFiles()
     {
         $grav = Grav::instance();
-        $language = $grav['language'];
         $config = $grav['config'];
         $session = $grav['session'];
         $uri = $grav['uri'];
         $url = $uri->url;
         $post = $uri->post();
-        $task = isset($post['task']) ? $post['task'] : null;
 
         $settings = $this->data->blueprints()->schema()->getProperty($post['name']);
         $settings = (object) array_merge(
@@ -410,31 +408,26 @@ class Form extends Iterator implements \Serializable
         $grav->fireEvent('onFormUploadSettings', new Event(['settings' => &$settings, 'post' => $post]));
         
         $upload = $this->normalizeFiles($_FILES['data'], $settings->name);
-        $filename = !empty($post['filename']) ? $post['filename'] : $upload->file->name;
 
         // Handle errors and breaks without proceeding further
-        if ($upload->file->error !== UPLOAD_ERR_OK) {
+        if ($upload->file->error != UPLOAD_ERR_OK) {
             // json_response
             return [
                 'status' => 'error',
-                'message' => sprintf($language->translate('PLUGIN_FORM.FILEUPLOAD_UNABLE_TO_UPLOAD', null, true), $filename, $this->upload_errors[$upload->file->error])
+                'message' => sprintf($grav['language']->translate('PLUGIN_FORM.FILEUPLOAD_UNABLE_TO_UPLOAD', null, true), $upload->file->name, $this->upload_errors[$upload->file->error])
             ];
         }
 
         // Handle bad filenames.
-        if (!Utils::checkFilename($filename)) {
-            return [
+        $filename = $upload->file->name;
+        if (strtr($filename, "\t\n\r\0\x0b", '_____') !== $filename || rtrim($filename, ". ") !== $filename || preg_match('|\.php|', $filename)) {
+            $this->admin->json_response = [
                 'status'  => 'error',
-                'message' => sprintf($language->translate('PLUGIN_FORM.FILEUPLOAD_UNABLE_TO_UPLOAD', null),
+                'message' => sprintf($this->admin->translate('PLUGIN_ADMIN.FILEUPLOAD_UNABLE_TO_UPLOAD', null),
                     $filename, 'Bad filename')
             ];
-        }
 
-        if (!isset($settings->destination)) {
-            return [
-                'status'  => 'error',
-                'message' => $language->translate('PLUGIN_FORM.DESTINATION_NOT_SPECIFIED', null)
-            ];
+            return false;
         }
 
         // Remove the error object to avoid storing it
@@ -445,11 +438,7 @@ class Form extends Iterator implements \Serializable
         // Accept can only be mime types (image/png | image/*) or file extensions (.pdf|.jpg)
         $accepted = false;
         $errors = [];
-
-        // Do not trust mimetype sent by the browser
-        $mime = Utils::getMimeByFilename($filename);
-
-        foreach ((array)$settings->accept as $type) {
+        foreach ((array) $settings->accept as $type) {
             // Force acceptance of any file when star notation
             if ($type === '*') {
                 $accepted = true;
@@ -457,24 +446,15 @@ class Form extends Iterator implements \Serializable
             }
 
             $isMime = strstr($type, '/');
-            $find   = str_replace(['.', '*'], ['\.', '.*'], $type);
+            $find = str_replace('*', '.*', $type);
 
-            if ($isMime) {
-                $match = preg_match('#' . $find . '$#', $mime);
-                if (!$match) {
-                    $errors[] = sprintf($language->translate('PLUGIN_FORM.INVALID_MIME_TYPE', null, true), $mime, $filename);
-                } else {
-                    $accepted = true;
-                    break;
-                }
+            $match = preg_match('#'. $find .'$#', $isMime ? $upload->file->type : $upload->file->name);
+            if (!$match) {
+                $message = $isMime ? 'The MIME type "' . $upload->file->type . '"' : 'The File Extension';
+                $errors[] = $message . ' for the file "' . $upload->file->name . '" is not an accepted.';
+                $accepted |= false;
             } else {
-                $match = preg_match('#' . $find . '$#', $filename);
-                if (!$match) {
-                    $errors[] = sprintf($language->translate('PLUGIN_FORM.INVALID_FILE_EXTENSION', null, true), $filename);
-                } else {
-                    $accepted = true;
-                    break;
-                }
+                $accepted |= true;
             }
         }
 
@@ -493,7 +473,7 @@ class Form extends Iterator implements \Serializable
             // json_response
             return [
                 'status'  => 'error',
-                'message' => $language->translate('PLUGIN_FORM.EXCEEDED_GRAV_FILESIZE_LIMIT')
+                'message' => $grav['language']->translate('PLUGIN_FORM.EXCEEDED_GRAV_FILESIZE_LIMIT')
             ];
         }
 
@@ -510,7 +490,7 @@ class Form extends Iterator implements \Serializable
             // json_response
             return [
                 'status' => 'error',
-                'message' => sprintf($language->translate('PLUGIN_FORM.FILEUPLOAD_UNABLE_TO_MOVE', null, true), '', $tmp)
+                'message' => sprintf($grav['language']->translate('PLUGIN_FORM.FILEUPLOAD_UNABLE_TO_MOVE', null, true), '', $tmp)
             ];
         }
 
@@ -541,20 +521,19 @@ class Form extends Iterator implements \Serializable
 
         // Generate random name if required
         if ($settings->random_name) {
-            $extension = pathinfo($filename, PATHINFO_EXTENSION);
-            $filename = Utils::generateRandomString(15) . '.' . $extension;
+            $extension = pathinfo($upload->file->name)['extension'];
+            $upload->file->name = Utils::generateRandomString(15) . '.' . $extension;
         }
 
         // Handle conflicting name if needed
         if ($settings->avoid_overwriting) {
-            if (file_exists($destination . '/' . $filename)) {
-                $filename = date('YmdHis') . '-' . $filename;
+            if (file_exists($destination . '/' . $upload->file->name)) {
+                $upload->file->name = date('YmdHis') . '-' . $upload->file->name;
             }
         }
 
         // Prepare object for later save
-        $path = $destination . '/' . $filename;
-        $upload->file->name = $filename;
+        $path = $destination . '/' . $upload->file->name;
         $upload->file->path = $path;
         // $upload->file->route = $page ? $path : null;
 

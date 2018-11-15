@@ -1,7 +1,6 @@
 <?php
 namespace Grav\Plugin\Admin;
 
-use Grav\Common\Backup\Backups;
 use Grav\Common\Cache;
 use Grav\Common\Config\Config;
 use Grav\Common\File\CompiledYamlFile;
@@ -18,6 +17,7 @@ use Grav\Common\Page\Collection;
 use Grav\Common\Security;
 use Grav\Common\User\User;
 use Grav\Common\Utils;
+use Grav\Common\Backup\ZipBackup;
 use Grav\Plugin\Admin\Twig\AdminTwigExtension;
 use Grav\Plugin\Login\TwoFactorAuth\TwoFactorAuth;
 use Grav\Common\Yaml;
@@ -1296,28 +1296,18 @@ class AdminController extends AdminBaseController
             $clear = 'standard';
         }
 
-        if ($clear === 'purge') {
-            $msg = Cache::purgeJob();
+        $results = Cache::clearCache($clear);
+        if (count($results) > 0) {
             $this->admin->json_response = [
                 'status'  => 'success',
-                'message' => $msg,
+                'message' => $this->admin->translate('PLUGIN_ADMIN.CACHE_CLEARED') . ' <br />' . $this->admin->translate('PLUGIN_ADMIN.METHOD') . ': ' . $clear . ''
             ];
         } else {
-            $results = Cache::clearCache($clear);
-            if (count($results) > 0) {
-                $this->admin->json_response = [
-                    'status'  => 'success',
-                    'message' => $this->admin->translate('PLUGIN_ADMIN.CACHE_CLEARED') . ' <br />' . $this->admin->translate('PLUGIN_ADMIN.METHOD') . ': ' . $clear . ''
-                ];
-            } else {
-                $this->admin->json_response = [
-                    'status'  => 'error',
-                    'message' => $this->admin->translate('PLUGIN_ADMIN.ERROR_CLEARING_CACHE')
-                ];
-            }
+            $this->admin->json_response = [
+                'status'  => 'error',
+                'message' => $this->admin->translate('PLUGIN_ADMIN.ERROR_CLEARING_CACHE')
+            ];
         }
-
-
 
         return true;
     }
@@ -1371,22 +1361,22 @@ class AdminController extends AdminBaseController
 
         $download = $this->grav['uri']->param('download');
 
-        try {
-            if ($download) {
-                $file             = base64_decode(urldecode($download));
-                $backups_root_dir = $this->grav['locator']->findResource('backup://', true);
+        if ($download) {
+            $file             = base64_decode(urldecode($download));
+            $backups_root_dir = $this->grav['locator']->findResource('backup://', true);
 
-                if (0 !== strpos($file, $backups_root_dir)) {
-                    header('HTTP/1.1 401 Unauthorized');
-                    exit();
-                }
-
-                Utils::download($file, true);
+            if (0 !== strpos($file, $backups_root_dir)) {
+                header('HTTP/1.1 401 Unauthorized');
+                exit();
             }
 
-            $log = JsonFile::instance($this->grav['locator']->findResource("log://backup.log", true, true));
-            $id = $this->grav['uri']->param('id', 0);
-            $backup = Backups::backup($id);
+            Utils::download($file, true);
+        }
+
+        $log = JsonFile::instance($this->grav['locator']->findResource("log://backup.log", true, true));
+
+        try {
+            $backup = ZipBackup::backup();
         } catch (\Exception $e) {
             $this->admin->json_response = [
                 'status'  => 'error',
@@ -1416,46 +1406,6 @@ class AdminController extends AdminBaseController
             ]
         ];
 
-        return true;
-    }
-
-    /**
-     * Handle delete backup action
-     *
-     * @return bool
-     */
-    protected function taskBackupDelete()
-    {
-        $param_sep = $this->grav['config']->get('system.param_sep', ':');
-        if (!$this->authorizeTask('backup', ['admin.maintenance', 'admin.super'])) {
-            return false;
-        }
-
-        $backup = $this->grav['uri']->param('backup', null);
-
-        if (!is_null($backup)) {
-            $file             = base64_decode(urldecode($backup));
-            $backups_root_dir = $this->grav['locator']->findResource('backup://', true);
-
-            $backup_path = $backups_root_dir . '/' . $file;
-
-            if (file_exists($backup_path)) {
-                unlink($backup_path);
-
-                $this->admin->json_response = [
-                    'status'  => 'success',
-                    'message' => $this->admin->translate('PLUGIN_ADMIN.BACKUP_DELETED'),
-                    'toastr'  => [
-                        'closeButton' => true
-                    ]
-                ];
-            } else {
-                $this->admin->json_response = [
-                    'status'  => 'error',
-                    'message' => $this->admin->translate('PLUGIN_ADMIN.BACKUP_NOT_FOUND'),
-                ];
-            }
-        }
         return true;
     }
 
@@ -2346,11 +2296,10 @@ class AdminController extends AdminBaseController
                     return false;
             }
 
-            $file_name = $_FILES['uploaded_file']['name'];
             $file_path = $_FILES['uploaded_file']['tmp_name'];
 
             // Handle bad filenames.
-            if (!Utils::checkFilename($file_name)) {
+            if (!Utils::checkFilename(basename($file_path))) {
                 $this->admin->json_response = [
                     'status'  => 'error',
                     'message' => $this->admin->translate('PLUGIN_ADMIN.UNKNOWN_ERRORS')

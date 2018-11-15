@@ -1,15 +1,15 @@
 name: PublicCodeDirectory
-version: 1.0.1
-description: Theme for the Federated database used to power up the Public Code Directory - Open Source around the world project
+version: 0.4.3
+description: Starter theme for Grav CMS using modern tools and frameworks such as Laravel Mix, Vuejs, Bulma.
 icon: empire
 author:
-  name: Open UK
-  email: info@openuk.uk
-  url: https://github.com/OpenUK/
-homepage: https://github.com/OpenUK/publiccode.directory-web-interface#readme
+  name: Robbin Johansson
+  email: robbinfellow@gmail.com
+  url: https://github.com/robbinfellow/
+homepage: https://github.com/robbinfellow/public-code-directory-grav#readme
 keywords: public-code-directory, grav, boilerplate, starter-theme, vuejs, laravel-mix, bulma
-bugs: https://github.com/OpenUK/publiccode.directory-web-interface/issues
-docs: https://github.com/OpenUK/publiccode.directory-web-interface#readme
+bugs: https://github.com/robbinfellow/public-code-directory-grav/issues
+docs: https://github.com/robbinfellow/public-code-directory-grav#readme
 license: MIT
 
 form:
@@ -26,20 +26,20 @@ form:
       validate:
         type: bool
     theme.upload_image:
-      type: file
-      label: Upload Images
-      destination: "theme@:/assets"
-      autofocus: false
-      multiple: true
-      random_name: false
-      avoid_overwriting: false
-      limit: 5
-      accept:
-        - image/*
+        type: file
+        label: Upload Images
+        destination: 'theme@:/assets'
+        autofocus: false
+        multiple: true
+        random_name: false
+        avoid_overwriting: false
+        limit: 5
+        accept:
+          - image/*
     theme.logo:
       type: filepicker
-      folder: "theme@:/assets"
-      label: Chose Theme Logo
+      folder: 'theme@:/assets'
+      label: Chose Theme Logo 
       preview_images: true
       accept:
         - .svg
@@ -48,10 +48,10 @@ form:
         - .jpeg
     theme.favicon:
       type: filepicker
-      folder: "theme@:/assets"
+      folder: 'theme@:/images'
       label: Theme Favicon
       preview_images: true
       accept:
         - .jpg
         - .png
-        - .jpeg
+        - .jpeg   

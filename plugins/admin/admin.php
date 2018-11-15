@@ -437,13 +437,7 @@ class AdminPlugin extends Plugin
                     throw new \RuntimeException('Page Not Found', 404);
                 }
             } else {
-                // Not Found and not logged in: Display login page.
-                $login_file = $this->grav['locator']->findResource('plugins://admin/pages/admin/login.md');
-                $page = new Page();
-                $page->init(new \SplFileInfo($login_file));
-                $page->slug(basename($this->route));
-                unset($this->grav['page']);
-                $this->grav['page'] = $page;
+                $this->grav->redirect($this->admin_route);
             }
         }
 
@@ -616,7 +610,6 @@ class AdminPlugin extends Plugin
             'onAdminRegisterPermissions' => ['onAdminRegisterPermissions', 0],
             'onOutputGenerated'          => ['onOutputGenerated', 0],
             'onAdminAfterSave'           => ['onAdminAfterSave', 0],
-            'onAdminData'                => ['onAdminData', 0],
         ]);
 
         // Autoload classes
@@ -760,40 +753,7 @@ class AdminPlugin extends Plugin
             $separator = (end($strings) === $string) ? '' : ',';
             $translations .= '"' . $string . '": "' . $this->admin->translate('PLUGIN_FORM.' . $string) . '"' . $separator;
         }
-        $translations .= '};';
 
-        $translations .= 'this.GravAdmin.translations.GRAV_CORE = {';
-        $strings = [
-            'NICETIME.SECOND',
-            'NICETIME.MINUTE',
-            'NICETIME.HOUR',
-            'NICETIME.DAY',
-            'NICETIME.WEEK',
-            'NICETIME.MONTH',
-            'NICETIME.YEAR',
-            'CRON.EVERY',
-            'CRON.EVERY_HOUR',
-            'CRON.EVERY_MINUTE',
-            'CRON.EVERY_DAY_OF_WEEK',
-            'CRON.EVERY_DAY_OF_MONTH',
-            'CRON.EVERY_MONTH',
-            'CRON.TEXT_PERIOD',
-            'CRON.TEXT_MINS',
-            'CRON.TEXT_TIME',
-            'CRON.TEXT_DOW',
-            'CRON.TEXT_MONTH',
-            'CRON.TEXT_DOM',
-            'CRON.ERROR1',
-            'CRON.ERROR2',
-            'CRON.ERROR3',
-            'CRON.ERROR4',
-            'MONTHS_OF_THE_YEAR',
-            'DAYS_OF_THE_WEEK'
-        ];
-        foreach ($strings as $string) {
-            $separator = (end($strings) === $string) ? '' : ',';
-            $translations .= '"' . $string . '": ' . json_encode($this->admin->translate('GRAV.'.$string)) . $separator;
-        }
         $translations .= '};';
 
         // set the actual translations state back
@@ -846,33 +806,8 @@ class AdminPlugin extends Plugin
      */
     public function onAdminTools(Event $event)
     {
-        $event['tools'] = array_merge($event['tools'], [
-            $this->grav['language']->translate('PLUGIN_ADMIN.BACKUPS'),
-            $this->grav['language']->translate('PLUGIN_ADMIN.SCHEDULER'),
-            $this->grav['language']->translate('PLUGIN_ADMIN.REPORTS'),
-            $this->grav['language']->translate('PLUGIN_ADMIN.DIRECT_INSTALL'),
-        ]);
-
+        $event['tools'] = array_merge($event['tools'], [$this->grav['language']->translate('PLUGIN_ADMIN.DIRECT_INSTALL')]);
         return $event;
-    }
-
-    /**
-     * Convert some types where we want to process out of the standard config path
-     *
-     * @param Event $e
-     */
-    public function onAdminData(Event $e)
-    {
-        $type = $e['type'] ?? null;
-        switch ($type) {
-            case 'tools/scheduler':
-                $e['type'] = 'config/scheduler';
-                break;
-            case  'tools':
-            case 'tools/backups':
-                $e['type'] = 'config/backups';
-                break;
-        }
     }
 
     public function onAdminDashboard()

@@ -14,22 +14,24 @@ forms:
                 validate:
                     required: true
             -
-                name: honeypot
-                type: honeypot
-            -
                 name: email
                 label: 'Your email'
                 type: email
                 validate:
                     required: true
             -
-                name: upload
+                name: upload-file
                 label: 'Add a file'
                 type: file
                 multiple: false
                 destination: user/data/files
                 accept:
                     - application/json
+                    - application/yaml
+                    - application/yml
+                    - .json
+                    - .yaml
+                    - .yml
         buttons:
             -
                 type: submit
@@ -39,7 +41,7 @@ forms:
                 email:
                     body: '{% include "forms/data.html.twig" %}'
                     attachments:
-                        - upload
+                        - upload-file
             -
                 display: /join-us/thankyou
 ---
