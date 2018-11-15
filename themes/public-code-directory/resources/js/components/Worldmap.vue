@@ -257,5 +257,8 @@
         this.makeLocations();
       }, 1000);
     },
+    beforeCreate() {
+      this.$store.dispatch("fetchLinks");
+    },
   };
 </script>

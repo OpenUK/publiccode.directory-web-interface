@@ -203,6 +203,29 @@ class AdminBaseController
     }
 
     /**
+     * Sends JSON response and terminates the call.
+     *
+     * @param array $response
+     * @param int $code
+     * @return bool
+     */
+    protected function sendJsonResponse(array $response, $code = 200)
+    {
+        // Make sure nothing extra gets written to the response.
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        // JSON response.
+        http_response_code($code);
+        header('Content-Type: application/json');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+
+        echo json_encode($response);
+        exit();
+    }
+
+    /**
      * Handles ajax upload for files.
      * Stores in a flash object the temporary file and deals with potential file errors.
      *
@@ -251,7 +274,7 @@ class AdminBaseController
         }
 
         // Do not use self@ outside of pages
-        if ($this->view !== 'pages' && in_array($settings->destination, ['@self', 'self@'])) {
+        if ($this->view !== 'pages' && in_array($settings->destination, ['@self', 'self@', '@self@'])) {
             $this->admin->json_response = [
                 'status'  => 'error',
                 'message' => sprintf($this->admin->translate('PLUGIN_ADMIN.FILEUPLOAD_PREVENT_SELF', null),

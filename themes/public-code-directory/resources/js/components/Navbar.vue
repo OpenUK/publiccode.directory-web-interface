@@ -2,7 +2,7 @@
   export default {
     data() {
       return {
-        navIsActive: false
+        navIsActive: false,
       };
     },
     methods: {
@@ -10,10 +10,10 @@
         !this.navIsActive
           ? (this.navIsActive = true)
           : (this.navIsActive = false);
-      }
+      },
     },
-    beforeCreate() {
-      this.$store.dispatch("fetchLinks");
-    }
+    // beforeCreate() {
+    //   this.$store.dispatch("fetchLinks");
+    // }
   };
 </script>

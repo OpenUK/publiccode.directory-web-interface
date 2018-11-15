@@ -24,6 +24,7 @@ forms:
                 label: 'Add a file'
                 type: file
                 multiple: false
+                limit: 1
                 destination: user/data/files
                 accept:
                     - application/json
@@ -64,7 +65,6 @@ Please raise an issue on the main [repository](https://github.com/OpenUK/publicc
 
 ##### Non-technical users {.is-size-5}
 
-Upload your entry file here
-{% include "forms/form.html.twig" with {form: forms( 'custom_form' ) } %}
+Get in touch with [OpenUK](https://openuk.uk) and share your thoughts
 
-or simply get in touch with [OpenUK](https://openuk.uk) and share your thoughts
+or upload your entry file here
