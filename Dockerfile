@@ -43,7 +43,7 @@ RUN a2enmod rewrite expires
 ENV SOURCE="/usr/src/grav"
 ENV PATHS="/var/www/html"
 RUN set -ex; \
-    wget https://getgrav.org/download/core/grav/latest && \
+    wget https://getgrav.org/download/core/grav-admin/latest && \
     unzip latest && \
     mkdir -p "$SOURCE" && \
     cp -r grav-admin/. "$SOURCE" && \
