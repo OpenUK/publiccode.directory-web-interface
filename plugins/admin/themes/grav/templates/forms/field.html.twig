@@ -1,17 +1,13 @@
-{% if not field.validate.ignore %}
-
-{% if not blueprints or (blueprints.schema.type(field.type)['input@'] ?? true) is sameas(true) %}
-    {% set originalValue = originalValue is defined ? originalValue : value %}
-    {% set toggleableChecked = field.toggleable and (originalValue is not null and originalValue is not empty) %}
-    {% set isDisabledToggleable = field.toggleable and not toggleableChecked %}
-    {% set value = (value is null ? field.default : value) %}
-
-    {% if (field.yaml or field.validate.type == 'yaml') and value is iterable%}
-        {% set value = value|toYaml %}
-    {% endif %}
-{% endif %}
+{% set originalValue = originalValue is defined ? originalValue : value %}
+{% set toggleableChecked = field.toggleable and (originalValue is not null and originalValue is not empty) %}
+{% set isDisabledToggleable = field.toggleable and not toggleableChecked %}
+{% set value = (value is null ? field.default : value) %}
 {% set vertical = field.style == 'vertical' %}
 {% set field_name = (scope ~ field.name)|fieldName %}
+
+{% if (field.yaml or field.validate.type == 'yaml') and value is iterable%}
+    {% set value = value|toYaml %}
+{% endif %}
 
 {% block field %}
     <div class="form-field grid{% if vertical %} vertical{% endif %}{% if field.toggleable %} form-field-toggleable{% endif %} {{ field.outerclasses }} {{ field.field_classes }}">
@@ -110,5 +106,3 @@
         {% endblock %}
     </div>
 {% endblock %}
-
-{% endif %}

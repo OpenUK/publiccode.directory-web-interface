@@ -13,12 +13,10 @@ use Grav\Common\Page\Collection;
 use Grav\Common\Page\Page;
 use Grav\Common\Page\Pages;
 use Grav\Common\Plugins;
-use Grav\Common\Security;
 use Grav\Common\Themes;
 use Grav\Common\Uri;
 use Grav\Common\User\User;
 use Grav\Common\Utils;
-use Grav\Framework\Collection\ArrayCollection;
 use Grav\Plugin\Admin\Twig\AdminTwigExtension;
 use Grav\Plugin\Login\Login;
 use Grav\Plugin\Login\TwoFactorAuth\TwoFactorAuth;
@@ -603,12 +601,8 @@ class Admin
 
         // Check to see if a data type is plugin-provided, before looking into core ones
         $event = $this->grav->fireEvent('onAdminData', new Event(['type' => &$type]));
-        if ($event) {
-            if (isset($event['data_type'])) {
-                return $event['data_type'];
-            } elseif (is_string($event['type'])) {
-                $type = $event['type'];
-            }
+        if ($event && isset($event['data_type'])) {
+            return $event['data_type'];
         }
 
         /** @var UniformResourceLocator $locator */
@@ -1506,23 +1500,6 @@ class Admin
         }
 
         return $page;
-    }
-
-    public function generateReports()
-    {
-        $reports = new ArrayCollection();
-
-        // Default to XSS Security Report
-        $result = Security::detectXssFromPages($this->grav['pages'], true);
-
-        $reports['Grav Security Check'] = $this->grav['twig']->processTemplate('reports/security.html.twig', [
-            'result' => $result,
-        ]);
-
-        // Fire new event to allow plugins to manipulate page frontmatter
-        $this->grav->fireEvent('onAdminGenerateReports', new Event(['reports' => $reports]));
-
-        return $reports;
     }
 
     /**
