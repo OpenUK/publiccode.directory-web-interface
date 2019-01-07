@@ -7,15 +7,21 @@
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
+        margin-top: 1rem;
+        margin-bottom:1rem;
+
         .footer-image {
             margin-right: 2.5rem;
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items:center;
+
             &:last-child {
                 margin-right: 0;
             }
         }
         .partner-image {
-            height: 70px;
+            height: 30px;
         }
     }
 }

@@ -29,12 +29,14 @@
     justify-content: space-between;
     margin-top: 2rem;
     padding-top: 0.75rem;
-    border-radius: 6px;
+    // border-radius: 6px;
     background-color: white;
     box-shadow: 0 0 0 1px #7d8181;
     backface-visibility: hidden;
     transform-origin: 10% 50%;
     z-index: 1;
+    min-width: 30%;
+    max-width: 260px;
 
     h2 {
         width: 100%;
@@ -129,11 +131,6 @@
     }
 }
 
-@media screen and (min-width: 768px) {
-    .company {
-        max-width: 260px;
-    }
-}
 
 .nav {
     display: flex;
@@ -142,7 +139,7 @@
     align-items: center;
     white-space: normal;
     margin: 0;
-    padding: 2rem 0.5rem 1rem;
+    padding: 2rem 0 1rem;
     border-bottom: 1px solid #c5d0d1;
 
     &__controls {
@@ -248,7 +245,7 @@
 }
 
 .filters {
-    padding: 0 1rem;
+    padding: 0 ;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -259,7 +256,7 @@
         margin-right: 0.5rem;
         padding: 0.25rem 0.5rem;
         border: 1px solid #c5d0d1;
-        border-radius: 6px;
+        // border-radius: 6px;
         font-size: 0.8rem;
         line-height: 1.35;
         cursor: pointer;
@@ -293,7 +290,7 @@
             width: 0.8rem;
             height: 0.8rem;
             margin-top: calc(-0.4rem + 2px);
-            border-radius: 100%;
+            // border-radius: 100%;
             background-color: currentColor;
         }
 

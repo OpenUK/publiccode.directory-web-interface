@@ -14,10 +14,10 @@
           countries: false,
           sectors: false,
           categories: false,
-          licences: false,
+          licences: false
         },
         isProdModal: false,
-        prodModal: {},
+        prodModal: {}
       };
     },
 
@@ -27,7 +27,7 @@
         countries: "countries",
         categories: "categories",
         licences: "licences",
-        sectors: "sectors",
+        sectors: "sectors"
       }),
       activeMenu() {
         return Object.keys(this.menus).reduce(
@@ -86,7 +86,7 @@
           countries: Object.keys(countries).filter(c => countries[c]),
           categories: Object.keys(categories).filter(c => categories[c]),
           sectors: Object.keys(sectors).filter(c => sectors[c]),
-          licences: Object.keys(licences).filter(c => licences[c]),
+          licences: Object.keys(licences).filter(c => licences[c])
         };
       },
       initialFilters() {
@@ -103,7 +103,7 @@
           this.$set(this.filters.licences, el, false);
         });
         this.loading = false;
-      },
+      }
     },
     watch: {
       activeMenu(index, from) {
@@ -132,7 +132,7 @@
           });
           this.loading = false;
         });
-      },
+      }
     },
     methods: {
       setFilter(filter, option) {
@@ -171,11 +171,11 @@
         this.cancel();
         Object.assign(this.prodModal, element);
         this.isProdModal = true;
-      },
+      }
     },
     mounted() {},
     beforeCreate() {
       this.$store.dispatch("fetchLinks");
-    },
+    }
   };
 </script>

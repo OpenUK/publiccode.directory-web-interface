@@ -30,3 +30,4 @@ themes/quark/
 **package-lock.json
 themes/public-code-directory/package-lock.json
 config.codekit3
+themes/public-code-directory/yarn.lock
