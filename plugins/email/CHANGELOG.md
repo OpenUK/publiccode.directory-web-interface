@@ -1,3 +1,16 @@
+# v3.0.0-beta.1
+## 12/14/2018
+
+1. [](#new)
+    * Switched to SwiftMailer v.6.1.3 (requires PHP7/Grav 1.6)
+    * Added support for Email Queue with Scheduler support
+1. [](#improved)
+    * SwiftMailer 6.x compatibility fixes  
+    * Updated various translations 
+1. [](#bugfix) 
+    * Fixed mailtrap hostname in README.md
+    * Disable autocomplete on SMTP `user` and `password` fields
+
 # v2.7.1
 ## 12/05/2017
 

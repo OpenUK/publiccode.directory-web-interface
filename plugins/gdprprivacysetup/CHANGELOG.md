@@ -1,3 +1,13 @@
+# v0.1.1
+## 11/29/2018
+
+1. [](#new)
+    * Added bottom bar popup style
+    * Added consent optional field to prevent possibility of disabling required consents
+    * Added option to disable default styles
+   [](#improved)
+    * Added base_url to popup page route, may fix error on non direct domain grav install (not tested :/)
+
 # v0.1.0
 ## 09/06/2018
 
