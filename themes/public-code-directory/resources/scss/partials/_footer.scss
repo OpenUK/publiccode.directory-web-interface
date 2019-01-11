@@ -2,20 +2,27 @@
 .footer {
     margin-top: 2rem;
     box-shadow: 0 1000px 0 1000px $footer-background-color;
+
     .images {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+
         .footer-image {
             margin-right: 2.5rem;
-            display: block;
+            display: flex;
+            align-self: center;
+
             &:last-child {
                 margin-right: 0;
             }
         }
+
         .partner-image {
-            height: 70px;
+            height: 35px;
         }
     }
 }
