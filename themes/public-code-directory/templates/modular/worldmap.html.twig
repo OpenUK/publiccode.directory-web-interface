@@ -11,7 +11,7 @@
         <div class="filters" v-cloak="v-cloak" v-else="v-else">
             <div class="nav">
                 <menu class="nav__controls">
-                    <a v-for="(active, menu) in menus" class="button is-primary is-outlined nav__label" :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)">
+                    <a v-for="(active, menu) in menus" class="button is-info is-outlined nav__label" :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)">
                         ${menu}
                     </a>
                     <button class="button is-danger is-outlined nav__label nav__label--clear" @click.prevent="clearAllFilters">Clear all</button>

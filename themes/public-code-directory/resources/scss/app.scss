@@ -1,7 +1,7 @@
 // Custom variables
 @import "variables";
 // Import Bulma
-@import "~bulma";
+@import "../../node_modules/bulma/bulma";
 // Partials
 @import "partials/navbar";
 @import "partials/products";
@@ -38,8 +38,12 @@ footer {
 
 .media-left {
     padding-bottom: 1rem;
+    max-width: 100%;
 
-    figure {
+    figure.image {
         margin-left: 0;
+        margin-right: 0;
+        // padding-right: 2rem;
     }
+
 }
