@@ -6745,14 +6745,17 @@ ul.styled {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap; }
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    margin-top: 2rem; }
     .footer .images .footer-image {
       margin-right: 2.5rem;
-      display: block; }
+      display: flex;
+      align-self: center; }
       .footer .images .footer-image:last-child {
         margin-right: 0; }
     .footer .images .partner-image {
-      height: 70px; }
+      height: 35px; }
 
 html,
 body {
