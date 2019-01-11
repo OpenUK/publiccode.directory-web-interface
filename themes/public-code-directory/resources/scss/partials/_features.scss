@@ -21,13 +21,16 @@
 
 @media screen and(min-width: 576px) {
     .features {
+
         .image,
         .feature {
             width: 50%;
         }
+
         .image {
             text-align: center;
         }
+
         &:nth-child(even) {
             .image {
                 order: 2;

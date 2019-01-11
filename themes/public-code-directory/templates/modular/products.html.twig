@@ -3,130 +3,129 @@
     {{ page.content }}
 </div>
 {% verbatim %}
-    <products inline-template="inline-template">
-        <div class="prod">
-            <div class="product-wrapper" v-if="loading">
-                <main class="content products">
-                    <h4 class='is-size-4'>Loading products</h4>
-                </main>
-            </div>
-            <div class="product-wrapper" v-cloak="v-cloak" v-if="!loading">
-                <main class="content products">
-                    <h4 class='is-size-4'>Open Source Software</h4>
-                    <div class="nav">
-                        <menu class="nav__controls">
-                            <a :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)" class="button is-info is-outlined nav__label" v-for="(active, menu) in menus">
+<products inline-template="inline-template">
+    <div class="prod">
+        <div class="product-wrapper" v-if="loading">
+            <main class="content products">
+                <h4 class='is-size-4'>Loading products</h4>
+            </main>
+        </div>
+        <div class="product-wrapper" v-cloak="v-cloak" v-if="!loading">
+            <main class="content products">
+                <h4 class='is-size-4'>Open Source Software</h4>
+                <div class="nav">
+                    <menu class="nav__controls">
+                        <a :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)" class="button is-info is-outlined nav__label" v-for="(active, menu) in menus">
                                 ${menu}
                             </a>
-                            <button class="button is-danger is-outlined nav__label nav__label--clear" @click.prevent="clearAllFilters">Clear all</button>
-                        </menu>
-                    </div>
-                    <transition-group :style="dropdown" class="dropdown" name="dropdown" tag="section">
-                        <menu :key="filter" class="filters" ref="menu" v-for="(options, filter) in filters" v-show="menus[filter]">
-                            <li :class="{ 'filters__item--active': active }" :key='option' @click="setFilter(filter, option)" class="filters__item" v-for="(active, option) in options">
-                                ${option}
-                            </li>
-                        </menu>
-                    </transition-group>
-                    <transition-group class="content__list" name="company" tag="section">
-                        <div :key="index" class="card company" v-for="(product,index) in list">
-                            <header class="card-header company__info">
-                                <h2 class="is-centered">${product.name}</h2>
-                            </header>
-                            <div class="card-content ">
-                                <div class="content ">
-                                    <p class="content-text">${product.description | truncate(50)}</p>
-                                    <p v-if="product.category.length === 1 ">Category:
-                                        <span class=' tag' id="index" v-for='(prod_categ, index) in product.category'>
-                                            ${prod_categ}
-                                        </span>
-                                    </p>
-                                    <p v-else="v-else">Categories:
-                                        <span class=' tag' id="index" v-for='(prod_categ, index) in product.category'>
-                                            ${prod_categ}
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <footer class="card-footer">
-                                <div class="card-footer-item">
-                                    <p class="company__country">
-                                        <span>From:
-                                        </span>
-                                        <button class='button is-outlined is-info' @click.prevent='prodMod(product)'>More Info</button>
-                                    </p>
-                                </div>
-                                <div class="card-footer-item">
-                                    <p class="company__rating">
-                                        <span>Licence:</span>
-                                        <span calss="block" id="index" v-for="(prod_licence, index) in product.licence">
-                                            <strong>
-                                                ${prod_licence}
-                                            </strong>
-                                        </span>
-                                    </p>
-                                </div>
-                            </footer>
-                        </div>
-                    </transition-group>
-                    <b-modal :active.sync="isProdModal" :width="640">
-                        <div class="card">
-                            <div class="card-content">
-                                <div class="media">
-                                    <div v-if='prodModal.logo_url' class="media-left">
-                                        <figure class="image is-128x128">
-                                            <img :src="prodModal.logo_url" alt="Image"></figure>
-                                        </div>
-                                        <div class="media-content">
-                                            <p class="title is-4">
-                                                Name: ${ prodModal.name }</p>
-                                            <p class="subtitle is-6" id="index" v-for="(category,index) in prodModal.category">
-                                                Category: ${ category } &nbsp;
-                                            </p>
-                                            <p class="subtitle is-6" id="index" v-for="(sector,index) in prodModal.sector">
-                                                Sector: ${ sector } &nbsp;
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <p class="description">
-                                            ${ prodModal.description }
-                                        </p>
-                                        <p>Product type: ${ prodModal.entry_type }</p>
-                                        <p>Product link:
-                                            <a :href="prodModal.official_url" rel='noopener nofollow'>Repository</a>
-                                        </p>
-                                        <p class="developers">Product developed by:
-                                            <ul>
-                                                <li v-for="devs in prodModal.developers">
-                                                    <span>
-                                                        <a :href="devs.developer_url">${devs.developer_name}</a>
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </p>
-                                        <p v-if="prodModal.maintainers ">Product currently maintained by:
-                                            <ul>
-                                                <li v-for='maintainer in prodModal.maintainers' :key='maintainer.id'>
-                                                    <span v-if="maintainer.maintainer_url !=='' ">
-                                                        <a :href="maintainer.maintainer_url">
-                                                            ${maintainer.maintainer_name}
-                                                        </a>
-                                                    </span>
-                                                    <span v-if="maintainer.maintainer_repository !==''">
-                                                        Repository:
-                                                        <a :href="maintainer.maintainer_repository">
-                                                            click here</a>
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </b-modal>
-                    </main>
+                        <button class="button is-danger is-outlined nav__label nav__label--clear" @click.prevent="clearAllFilters">Clear all</button>
+                    </menu>
                 </div>
-            </div>
-        </products>
-    {% endverbatim %}
+                <transition-group :style="dropdown" class="dropdown" name="dropdown" tag="section">
+                    <menu :key="filter" class="filters" ref="menu" v-for="(options, filter) in filters" v-show="menus[filter]">
+                        <li :class="{ 'filters__item--active': active }" :key='option' @click="setFilter(filter, option)" class="filters__item" v-for="(active, option) in options">
+                            ${option}
+                        </li>
+                    </menu>
+                </transition-group>
+                <transition-group class="content__list" name="company" tag="section">
+                    <div :key="index" class="card company" v-for="(product,index) in list">
+                        <header class="card-header company__info">
+                            <h2 class="is-centered">${product.name}</h2>
+                        </header>
+                        <div class="card-content ">
+                            <div class="content ">
+                                <p class="content-text">${product.description | truncate(50)}</p>
+                                <p v-if="product.category.length === 1 ">Category:
+                                    <span class=' tag' id="index" v-for='(prod_categ, index) in product.category'>
+                                        ${prod_categ}
+                                    </span>
+                                </p>
+                                <p v-else="v-else">Categories:
+                                    <span class=' tag' id="index" v-for='(prod_categ, index) in product.category'>
+                                        ${prod_categ}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <div class="card-footer-item">
+                                <p class="company__country">
+                                    <span>From:</span>
+                                    <button class='button is-outlined is-info' @click.prevent='prodMod(product)'>More Info</button>
+                                </p>
+                            </div>
+                            <div class="card-footer-item">
+                                <p class="company__rating">
+                                    <span>Licence:</span>
+                                    <span calss="block" id="index" v-for="(prod_licence, index) in product.licence">
+                                        <strong>
+                                            ${prod_licence}
+                                        </strong>
+                                    </span>
+                                </p>
+                            </div>
+                        </footer>
+                    </div>
+                </transition-group>
+                <b-modal :active.sync="isProdModal" :width="640">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="media">
+                                <div v-if='prodModal.logo_url' class="media-left">
+                                    <figure class="image is-128x128">
+                                        <img :src="prodModal.logo_url" alt="Image">
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">
+                                        Name: ${ prodModal.name }</p>
+                                    <p class="subtitle is-6" id="index" v-for="(category,index) in prodModal.category">
+                                        Category: ${ category } &nbsp;
+                                    </p>
+                                    <p class="subtitle is-6" id="index" v-for="(sector,index) in prodModal.sector">
+                                        Sector: ${ sector } &nbsp;
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <p class="description">
+                                    ${ prodModal.description }
+                                </p>
+                                <p>Product type: ${ prodModal.entry_type }</p>
+                                <p>Product link:
+                                    <a :href="prodModal.official_url" rel='noopener nofollow'>Repository</a>
+                                </p>
+                                <p class="developers">Product developed by:
+                                    <ul>
+                                        <li v-for="devs in prodModal.developers">
+                                            <span>
+                                                <a :href="devs.developer_url">${devs.developer_name}</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </p>
+                                <p v-if="prodModal.maintainers ">Product currently maintained by:
+                                    <ul>
+                                        <li v-for='maintainer in prodModal.maintainers' :key='maintainer.id'>
+                                            <span v-if="maintainer.maintainer_url !=='' ">
+                                                <a :href="maintainer.maintainer_url">
+                                                    ${maintainer.maintainer_name}
+                                                </a>
+                                            </span>
+                                            <span v-if="maintainer.maintainer_repository !==''">
+                                                Repository:
+                                                <a :href="maintainer.maintainer_repository">click here</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </b-modal>
+            </main>
+        </div>
+    </div>
+</products>
+{% endverbatim %}

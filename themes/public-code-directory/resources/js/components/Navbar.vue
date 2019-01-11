@@ -12,8 +12,6 @@
           : (this.navIsActive = false);
       },
     },
-    // beforeCreate() {
-    //   this.$store.dispatch("fetchLinks");
-    // }
+ 
   };
 </script>
