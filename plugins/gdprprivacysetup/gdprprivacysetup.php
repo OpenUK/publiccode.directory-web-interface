@@ -27,6 +27,9 @@ class GdprPrivacySetupPlugin extends Plugin
     private $cookieName;
     private $userConsent;
 
+    private const STYLE_BOTTOM_BAR = 0;
+    private const STYLE_MODAL = 1;
+
     public static function getSubscribedEvents()
     {
         return [
@@ -85,7 +88,16 @@ class GdprPrivacySetupPlugin extends Plugin
     {
         if (isset($_COOKIE[$this->cookieName])) {
             try {
-                 return json_decode($_COOKIE[$this->cookieName], true);
+                $optional = array_column($this->csp, 'optional', 'consent');
+                $consents = json_decode($_COOKIE[$this->cookieName], true);
+
+                foreach ($consents as $consent => $value) {
+                    if (isset($optional[$consent]) && !$optional[$consent]) {
+                        $consents[$consent] = true;
+                    }
+                }
+
+                return $consents;
             } catch (\Exception $e) {
                 return $this->getDefaultConsents();
             }
@@ -100,6 +112,7 @@ class GdprPrivacySetupPlugin extends Plugin
     private function getDefaultConsents()
     {
         $policies = $this->csp;
+
         if (is_array($policies)) {
             return array_column($policies, 'default', 'consent');
         }
@@ -122,7 +135,9 @@ class GdprPrivacySetupPlugin extends Plugin
 
         $page = $pages->dispatch($this->current_route);
 
-        if (!$page && $this->privacy_info_route == $this->current_route) {
+        $base_url = $this->grav['base_url'];
+
+        if (!$page && $base_url.$this->privacy_info_route == $this->current_route) {
             $page = new Page;
             $page->init(new \SplFileInfo(__DIR__ . "/pages/privacy_info.md"));
             $page->slug(basename($this->current_route));
@@ -170,13 +185,31 @@ class GdprPrivacySetupPlugin extends Plugin
 
     public function onTwigSiteVariables()
     {
-        $this->grav['assets']->addCss('plugin://gdprprivacysetup/assets/css/tingle.min.css');
         $this->grav['assets']->addJs('plugin://gdprprivacysetup/assets/js/js.cookie.js');
-        $this->grav['assets']->addJs('plugin://gdprprivacysetup/assets/js/tingle.min.js');
+
+        $use_default_styles = $this->getConf('use_default_styles');
+
+        switch ($this->getConf('style')) {
+            case self::STYLE_BOTTOM_BAR:
+                if ($use_default_styles) {
+                    $this->grav['assets']->addCss('plugin://gdprprivacysetup/assets/css/bottom_bar.css');
+                }
+                break;
+            case self::STYLE_MODAL:
+                if ($use_default_styles) {
+                    $this->grav['assets']->addCss('plugin://gdprprivacysetup/assets/css/tingle.min.css');
+                }
+                $this->grav['assets']->addJs('plugin://gdprprivacysetup/assets/js/tingle.min.js');
+                break;
+        }
+
         $this->grav['assets']->addJs('plugin://gdprprivacysetup/assets/js/gdprprivacysetup.js');
 
+        $base_url = $this->grav['base_url'];
+
         $setup = [
-            'privacyPage' => $this->privacy_info_route,
+            'style' => $this->getConf('style'),
+            'privacyPage' => $base_url . $this->privacy_info_route,
             'consentButtonText' => $this->getConf('consentButtonText'),
             'consentButtonClass' => $this->getConf('consentButtonClass'),
             'denyButtonText' => $this->getConf('denyButtonText'),

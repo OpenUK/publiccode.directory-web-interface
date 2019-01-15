@@ -1,5 +1,5 @@
 name: GDPR Privacy Setup
-version: 0.1.0
+version: 0.1.1
 description: "Show privacy information popup and manage CSP (Content Security Policy) based on visitor privacy consents"
 icon: shield
 author:
@@ -12,7 +12,7 @@ keywords: GDPR, CSP, Privacy, Popup
 license: MIT
 
 dependencies:
-    - { name: grav, version: '~1.5' }
+    - { name: grav, version: '~1.5.5' }
 
 form:
   validation: strict
@@ -38,6 +38,22 @@ form:
                 0: Disabled
               validate:
                 type: bool
+
+            style:
+              type: toggle
+              label: Popup Style
+              default: 1
+              options:
+                1: Modal
+                0: Bottom Bar
+
+            use_default_styles:
+              type: toggle
+              label: Use default styles
+              default: 1
+              options:
+                1: Yes
+                0: No
 
             privacy_page_route:
               type: text
@@ -134,6 +150,16 @@ form:
                   options:
                     1: Enabled
                     0: Disabled
+                .optional:
+                  type: toggle
+                  label: Can be disabled
+                  help: Check if cosent can be disabled by used
+                  default: 1
+                  validate:
+                    type: bool
+                  options:
+                    1: Yes
+                    0: No
 
         whitelistTab:
           type: tab

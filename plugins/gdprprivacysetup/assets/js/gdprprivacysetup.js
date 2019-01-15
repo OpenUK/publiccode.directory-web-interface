@@ -18,6 +18,7 @@ var gdprPrivacySetupPlugin = (function () {
     var callbacks = {};
 
     fn.settings = {
+        style: 1,
         setupPage: '',
         denyConsent: '',
         setupConsent: '',
@@ -65,12 +66,7 @@ var gdprPrivacySetupPlugin = (function () {
             if (settings.deferInfoPopup <= 0 || notGivenAnyConsentAfterVisit()) {
                 openPrivacyInfo();
             } else {
-                var deferOpenInfo = function() {
-                    setTimeout(openPrivacyInfo, settings.deferInfoPopup * 1000);
-                    window.removeEventListener('scroll', deferOpenInfo);
-                };
-
-                window.addEventListener('scroll', deferOpenInfo);
+                setTimeout(openPrivacyInfo, settings.deferInfoPopup * 1000);
             }
         }
 
@@ -114,6 +110,17 @@ var gdprPrivacySetupPlugin = (function () {
     }
 
     function openPrivacyInfo() {
+        switch (parseInt(settings.style)) {
+            case 1:
+                tingle !== undefined && openPrivacyModalInfo();
+                break;
+            case 0:
+                openBottomBarInfo();
+                break;
+        }
+    }
+
+    function openPrivacyModalInfo() {
         var modalContent = null;
 
         var modal = new tingle.modal({
@@ -142,26 +149,79 @@ var gdprPrivacySetupPlugin = (function () {
         });
 
         modal.addFooterBtn(settings.denyConsent, settings.denyBtnClass, function() {
-            Cookies.remove(settings.cookieName);
-            Cookies.remove(settings.tempCookieName);
-            //kick out user from page to referer or redirection target
-            var isReferrerSameDomain = document.referrer.indexOf(location.protocol + "//" + location.host) === 0;
-            if (!isReferrerSameDomain && document.referrer !== '') {
-                window.location.href = document.referrer;
-            } else {
-                window.location.href = settings.denyRedirectionTarget;
-            }
+            denyConsentExecution()
         });
 
         modal.addFooterBtn(settings.setupConsent, settings.acceptBtnClass, function() {
-            Cookies.remove(settings.tempCookieName);
-            setupVisitorPrivacy();
+            acceptConsentExecution();
             modal.close();
         });
 
         modal.setContent('<div id="'+ settings.modalContentId +'"></div>');
 
         modal.open();
+    }
+
+    function openBottomBarInfo() {
+        var popup = document.createElement('aside');
+        popup.setAttribute('id', settings.modalContentId);
+        popup.className = 'gdpr_bottom_bar';
+
+        document.body.appendChild(popup);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', settings.setupPage, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var popup = document.getElementById(settings.modalContentId);
+                popup.innerHTML = xhr.responseText;
+
+                var deny_btn = document.createElement('input');
+                deny_btn.setAttribute('type', 'button'); // input element of type button
+                deny_btn.setAttribute('value', settings.denyConsent);
+                deny_btn.className = "gdpr_deny_btn btn " + settings.denyBtnClass;
+                deny_btn.onclick = function () {
+                    denyConsentExecution()
+                };
+
+                var accept_btn = document.createElement('input');
+                accept_btn.setAttribute('type', 'button'); // input element of type button
+                accept_btn.setAttribute('value', settings.setupConsent);
+                accept_btn.className = "gdpr_accept_btn btn "+ settings.acceptBtnClass;
+                accept_btn.onclick = function () {
+                    acceptConsentExecution();
+                    popup.parentNode.removeChild(popup)
+                };
+
+                popup.appendChild(deny_btn);
+                popup.appendChild(accept_btn);
+                getVisitorPrivacySettings();
+
+            }
+            else {
+                alert('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send(null);
+
+        Cookies.set(settings.tempCookieName, 0, { expires: 1 });
+    }
+
+    function denyConsentExecution() {
+        Cookies.remove(settings.cookieName);
+        Cookies.remove(settings.tempCookieName);
+        //kick out user from page to referer or redirection target
+        var isReferrerSameDomain = document.referrer.indexOf(location.protocol + "//" + location.host) === 0;
+        if (!isReferrerSameDomain && document.referrer !== '') {
+            window.location.href = document.referrer;
+        } else {
+            window.location.href = settings.denyRedirectionTarget;
+        }
+    }
+
+    function acceptConsentExecution() {
+        Cookies.remove(settings.tempCookieName);
+        setupVisitorPrivacy();
     }
 
     /**
