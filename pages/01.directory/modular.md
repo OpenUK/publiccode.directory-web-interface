@@ -7,7 +7,7 @@ content:
         dir: asc
         custom:
             - _products
-visible: true
+visible: false
 template: modular
 ---
 

@@ -1,50 +1,58 @@
 ---
-title: "Join us"
+title: 'Join us'
 process:
-  markdown: true
-  twig: true
+    markdown: true
+    twig: true
 cache_enable: false
 form:
-  inline_errors: true
-  keep_alive: true
-  name: custom-form
-  fields:
-    - name: name
-      type: text
-      label: "Your name"
-      validate:
-        required: true
-    - name: email
-      label: "Your email"
-      type: email
-      validate:
-        required: true
-    - name: upload-file
-      label: "Add a file"
-      type: file
-      multiple: false
-      limit: 1
-      destination: user/data/files
-      accept:
-        - application/json
-        - .json
-        - .yaml
-        - .yml
-  buttons:
-    - type: submit
-      value: Submit
-  process:
-    - email:
-        body: '{% include "forms/data.html.twig" %}'
-        attachments:
-          - "upload-file"
-    - save:
-        fileprefix: uploaded-files-
-        dateformat: Ymd-His-u
-        extension: txt
-        body: "{% include 'forms/data.txt.twig' %}"
-    - message: Thank you for your email
-    - display: thankyou
+    inline_errors: true
+    keep_alive: true
+    name: custom-form
+    fields:
+        -
+            name: name
+            type: text
+            label: 'Your name'
+            validate:
+                required: true
+        -
+            name: email
+            label: 'Your email'
+            type: email
+            validate:
+                required: true
+        -
+            name: upload-file
+            label: 'Add a file'
+            type: file
+            multiple: false
+            limit: 1
+            destination: user/data/files
+            accept:
+                - application/json
+                - .json
+                - .yaml
+                - .yml
+    buttons:
+        -
+            type: submit
+            value: Submit
+    process:
+        -
+            email:
+                body: '{% include "forms/data.html.twig" %}'
+                attachments:
+                    - upload-file
+        -
+            save:
+                fileprefix: uploaded-files-
+                dateformat: Ymd-His-u
+                extension: txt
+                body: '{% include ''forms/data.txt.twig'' %}'
+        -
+            message: 'Thank you for your email'
+        -
+            display: thankyou
 ---
 
 ## There are few ways to join us {.is-size-3}
