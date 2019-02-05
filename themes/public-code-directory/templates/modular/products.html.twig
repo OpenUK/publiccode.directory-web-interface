@@ -18,11 +18,13 @@
                             <a :class="{ ' nav__label--active is-reverse ' : active, '  nav__label--filter is-active ': activeFilters[menu].length }" :key='menu' @click.prevent="setMenu(menu, active)" class="button is-info is-outlined nav__label" v-for="(active, menu) in menus">
                                 ${menu}
                             </a>
-                            <button class="button is-danger is-outlined nav__label nav__label--clear" @click.prevent="clearAllFilters">Clear all</button>
+                            <button @click.prevent="clearAllFilters" class="button is-danger is-outlined nav__label nav__label--clear">Clear all</button>
                         </menu>
                     </div>
                     <transition-group :style="dropdown" class="dropdown" name="dropdown" tag="section">
-                        <menu :key="filter" class="filters" ref="menu" v-for="(options, filter) in filters" v-show="menus[filter]">
+                        <menu
+                            :key="filter" class="filters" ref="menu" v-for="(options, filter) in filters" v-show="menus[filter]">
+                            {# potentially dump the options as a JSON.stringify since not possible to add a unique id to it in this configuration #}
                             <li :class="{ 'filters__item--active': active }" :key='option' @click="setFilter(filter, option)" class="filters__item" v-for="(active, option) in options">
                                 ${option}
                             </li>
@@ -53,7 +55,7 @@
                                     <p class="company__country">
                                         <span>From:
                                         </span>
-                                        <button class='button is-outlined is-info' @click.prevent='prodMod(product)'>More Info</button>
+                                        <button @click.prevent='prodMod(product)' class='button is-outlined is-info'>More Info</button>
                                     </p>
                                 </div>
                                 <div class="card-footer-item">
@@ -73,7 +75,7 @@
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
-                                    <div v-if='prodModal.logo_url' class="media-left">
+                                    <div class="media-left" v-if='prodModal.logo_url'>
                                         <figure class="image ">
                                             <img :src="prodModal.logo_url" alt="Image" class="prod-logo"></figure>
                                         </div>
@@ -107,7 +109,7 @@
                                         </p>
                                         <p v-if="prodModal.maintainers ">Product currently maintained by:
                                             <ul>
-                                                <li v-for='maintainer in prodModal.maintainers' :key='maintainer.id'>
+                                                <li :key='maintainer.id' v-for='maintainer in prodModal.maintainers'>
                                                     <span v-if="maintainer.maintainer_url !=='' ">
                                                         <a :href="maintainer.maintainer_url">
                                                             ${maintainer.maintainer_name}
