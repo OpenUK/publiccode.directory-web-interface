@@ -7,7 +7,8 @@ content:
         dir: asc
         custom:
             - _products
-visible: false
+visible: true
+debugger: true
 template: modular
 ---
 
