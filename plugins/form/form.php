@@ -4,6 +4,7 @@ namespace Grav\Plugin;
 use Composer\Autoload\ClassLoader;
 use Grav\Common\Data\ValidationException;
 use Grav\Common\Filesystem\Folder;
+use Grav\Common\Grav;
 use Grav\Common\Page\Page;
 use Grav\Common\Page\Pages;
 use Grav\Common\Page\Types;
@@ -12,7 +13,9 @@ use Grav\Common\Twig\Twig;
 use Grav\Common\Utils;
 use Grav\Common\Uri;
 use Grav\Common\Yaml;
+use Grav\Framework\Form\Interfaces\FormInterface;
 use Grav\Plugin\Form\Form;
+use Grav\Plugin\Form\Forms;
 use RocketTheme\Toolbox\File\JsonFile;
 use RocketTheme\Toolbox\File\YamlFile;
 use RocketTheme\Toolbox\File\File;
@@ -44,12 +47,23 @@ class FormPlugin extends Plugin
     /** @var bool */
     protected $recache_forms = false;
 
+    /**
+     * @return bool
+     */
+    public static function checkRequirements(): bool
+    {
+        return version_compare(GRAV_VERSION, '1.6', '>');
+    }
 
     /**
      * @return array
      */
     public static function getSubscribedEvents()
     {
+        if (!static::checkRequirements()) {
+            return [];
+        }
+
         return [
             'onPluginsInitialized' => [
                 ['autoload', 100000],
@@ -77,12 +91,28 @@ class FormPlugin extends Plugin
         // Backwards compatibility for plugins that use forms.
         class_alias(Form::class, 'Grav\Plugin\Form');
 
+        $this->grav['forms'] = function () {
+            $forms = new Forms();
+
+            $grav = Grav::instance();
+            $event = new Event(['forms' => $forms]);
+            $grav->fireEvent('onFormRegisterTypes', $event);
+
+            return $forms;
+        };
+
         if ($this->isAdmin()) {
             $this->enable([
                 'onPageInitialized' => ['onPageInitialized', 0],
                 'onGetPageTemplates' => ['onGetPageTemplates', 0],
             ]);
             return;
+        }
+
+        // Mini Keep-Alive Logic
+        $task = $this->grav['uri']->param('task');
+        if ($task && $task === 'keep-alive') {
+            exit;
         }
 
         $this->enable([
@@ -94,12 +124,6 @@ class FormPlugin extends Plugin
             'onTwigSiteVariables' => ['onTwigVariables', 0],
             'onFormValidationProcessed' => ['onFormValidationProcessed', 0],
         ]);
-
-        // Mini Keep-Alive Logic
-        $task = $this->grav['uri']->param('task');
-        if ($task && $task === 'keep-alive') {
-            exit;
-        }
     }
 
     public function onGetPageTemplates(Event $event)
@@ -118,38 +142,39 @@ class FormPlugin extends Plugin
     {
         /** @var Page $page */
         $page = $e['page'];
-        $page_route = $page->route();
 
-        if ($page->home()) {
-            $page_route = '/';
+        $pageForms = $page->forms();
+        if (!$pageForms) {
+            return;
         }
 
-        $header = $page->header();
+        // Force never_cache_twig if modular form (recursively up)
+        $current = $page;
+        while ($current && $current->modular()) {
+            $header = $current->header();
+            $header->never_cache_twig = true;
 
-        // Call event to allow filling the page header form dynamically (e.g. use case: Comments plugin)
-        $this->grav->fireEvent('onFormPageHeaderProcessed', new Event(['page' => $page, 'header' => $header]));
+            $current = $current->parent();
+        }
+        $parent = $current && $current !== $page ? $current : null;
 
-        if ((isset($header->forms) && \is_array($header->forms)) ||
-            (isset($header->form) && \is_array($header->form))) {
-            $page_forms = [];
+        $page_route = $page->home() ? '/' : $page->route();
 
-            // Force never_cache_twig if modular form
-            if ($page->modular()) {
-                $header->never_cache_twig = true;
+        // If the form was in the modular page, we need to add the form into the parent page as well.
+        if ($parent) {
+            $parent->addForms($pageForms);
+            $parent_route = $parent->home() ? '/' : $parent->route();
+        }
+
+        /** @var Forms $forms */
+        $forms = $this->grav['forms'];
+
+        // Store the page forms in the forms instance
+        foreach ($pageForms as $name => $form) {
+            if (isset($parent, $parent_route)) {
+                $this->addForm($parent_route, $forms->createPageForm($parent, $name, $form));
             }
-
-            // Get the forms from the page headers
-            if (isset($header->forms)) {
-                $page_forms = $header->forms;
-            } elseif (isset($header->form)) {
-                $page_forms[] = $header->form;
-            }
-
-            // Store the page forms in the forms instance
-            foreach ($page_forms as $name => $page_form) {
-                $form = new Form($page, $name, $page_form);
-                $this->addForm($page_route, $form);
-            }
+            $this->addForm($page_route, $forms->createPageForm($page, $name, $form));
         }
     }
 
@@ -174,6 +199,7 @@ class FormPlugin extends Plugin
             $this->saveCachedForms();
         }
 
+        /** @var Page $page */
         $page = $this->grav['page'];
 
         // Force rebuild form when form has not been built and form cache expired.
@@ -191,26 +217,45 @@ class FormPlugin extends Plugin
                 'onFormFieldTypes'      => ['onFormFieldTypes', 0],
             ]);
 
+            /** @var Uri $uri */
             $uri = $this->grav['uri'];
 
-            // Post the form
-            if ($this->form) {
+            /** @var Forms $forms */
+            $forms = $this->grav['forms'];
+
+            $form = $forms->getActiveForm();
+            if ($form instanceof Form) {
+                // Post the form
                 $isJson = $uri->extension() === 'json';
-                if ($isJson && $uri->post('__form-file-uploader__')) {
-                    $this->json_response = $this->form->uploadFiles();
-                } elseif ($isJson && $uri->post('__form-file-remover__')) {
-                    $this->json_response = $this->form->filesSessionRemove();
+                if ($isJson) {
+                    $task = $uri->post('task') ?? $uri->param('task');
+                    if ($task === 'store-state') {
+                        $this->json_response = $form->storeState();
+                    } elseif ($task === 'clear-state') {
+                        $this->json_response = $form->clearState();
+                    } elseif ($task === 'file-remove' || $uri->post('__form-file-remover__')) {
+                        $this->json_response = $form->filesSessionRemove();
+                    } elseif ($task === 'file-upload' || $uri->post('__form-file-uploader__')) {
+                        $this->json_response = $form->uploadFiles();
+                    }
                 } else {
-                    $this->form->post();
-                    $submitted = true;
+                    $task = $uri->post('task');
+                    if ($task === 'clear-state') {
+                        $form->getFlash()->delete();
+                        $redirect = $form->getBlueprint()->get('form/clear_redirect_url') ?? $page->route();
+                        $this->grav->redirect($redirect, 303);
+                    } else {
+                        $form->post();
+                        $submitted = true;
+                    }
                 }
 
                 // Return JSON if we're not in form template.
                 if ($this->json_response && $page->template() !== 'form') {
+                    $status = $this->json_response['status'] ?? null;
+
                     header('Content-Type: application/json');
-                    if (isset($this->json_response['status']) && $this->json_response['status'] === 'error') {
-                        http_response_code(400);
-                    }
+                    http_response_code($status === 'error' ? 400 : 200);
                     echo json_encode($this->json_response);
                     exit;
                 }
@@ -266,7 +311,7 @@ class FormPlugin extends Plugin
      */
     public function onTwigVariables(Event $event = null)
     {
-        if ($event !== null && isset($event['page'])) {
+        if ($event && isset($event['page'])) {
             $page = $event['page'];
         } else {
             $page = $this->grav['page'];
@@ -386,6 +431,11 @@ class FormPlugin extends Plugin
                 $twig = $this->grav['twig'];
                 $url = $twig->processString($url, $vars);
 
+                $message = $form->message;
+                if ($message) {
+                    $this->grav['messages']->add($form->message, 'success');
+                }
+
                 $event['redirect'] = $url;
                 $event->stopPropagation();
                 break;
@@ -424,18 +474,24 @@ class FormPlugin extends Plugin
                 }
                 break;
             case 'upload':
-                $form->copyFiles();
+                if ($params !== false) {
+                    $form->copyFiles();
+                }
                 break;
             case 'save':
-                $prefix = !empty($params['fileprefix']) ? $params['fileprefix'] : '';
-                $format = !empty($params['dateformat']) ? $params['dateformat'] : 'Ymd-His-u';
-                $raw_format = !empty($params['dateraw']) ? (bool) $params['dateraw'] : false;
-                $postfix = !empty($params['filepostfix']) ? $params['filepostfix'] : '';
+                $prefix = $params['fileprefix'] ?? '';
+                $format = $params['dateformat'] ?? 'Ymd-His-u';
+                $raw_format = (bool)($params['dateraw'] ?? false);
+                $postfix = $params['filepostfix'] ?? '';
                 $ext = !empty($params['extension']) ? '.' . trim($params['extension'], '.') : '.txt';
-                $filename = !empty($params['filename']) ? $params['filename'] : '';
-                $operation = !empty($params['operation']) ? $params['operation'] : 'create';
+                $filename = $params['filename'] ?? '';
+                $operation = $params['operation'] ?? 'create';
 
                 if (!$filename) {
+                    if ($operation === 'add') {
+                        throw new \RuntimeException('Form save: \'operation: add\' is only supported with a static filename');
+                    }
+
                     $filename = $prefix . $this->udate($format, $raw_format) . $postfix. $ext;
                 }
 
@@ -450,7 +506,7 @@ class FormPlugin extends Plugin
 
                 $locator = $this->grav['locator'];
                 $path = $locator->findResource('user://data', true);
-                $dir = $path . DS . $form->name();
+                $dir = $path . DS . $form->getName();
                 $fullFileName = $dir. DS . $filename;
 
                 if (!empty($params['raw']) || !empty($params['template'])) {
@@ -472,7 +528,7 @@ class FormPlugin extends Plugin
                     $data = [
                         '_data_type' => 'form',
                         'template' => !empty($params['template']) ? $params['template'] : null,
-                        'name' => $form->name(),
+                        'name' => $form->getName(),
                         'timestamp' => date('Y-m-d H:i:s'),
                         'content' => $form->getData()->toArray()
                     ];
@@ -488,8 +544,7 @@ class FormPlugin extends Plugin
                 $form->copyFiles();
 
                 if ($operation === 'create') {
-                    $body = $twig->processString(!empty($params['body']) ? $params['body'] : '{% include "forms/data.txt.twig" %}',
-                        $vars);
+                    $body = $twig->processString($params['body'] ?? '{% include "forms/data.txt.twig" %}', $vars);
                     $file->save($body);
                 } elseif ($operation === 'add') {
                     if (!empty($params['body'])) {
@@ -502,6 +557,7 @@ class FormPlugin extends Plugin
                         }
 
                         // append data to existing file
+                        $file->unlock();
                         file_put_contents($fullFileName, $body, FILE_APPEND | LOCK_EX);
                     } else {
                         // serialize YAML out to file for easier parsing as data sets
@@ -600,19 +656,14 @@ class FormPlugin extends Plugin
      */
     public function addForm($page_route, $form)
     {
+        $name = $form['name'] ?? '';
 
-        $form_array = [$form['name'] => $form];
-        if (array_key_exists($page_route, $this->forms)) {
-            if (!isset($this->form[$page_route][$form['name']])) {
-                $this->forms[$page_route] = array_merge($this->forms[$page_route], $form_array);
-            }
-        } else {
-            $this->forms[$page_route] = $form_array;
+        if (!isset($this->forms[$page_route][$name])) {
+            $this->forms[$page_route][$name] = $form;
 
+            $this->flattenForms();
+            $this->recache_forms = true;
         }
-
-        $this->flattenForms();
-        $this->recache_forms = true;
     }
 
     /**
@@ -620,44 +671,35 @@ class FormPlugin extends Plugin
      *
      * @param null|array|string $data optional form `name`
      *
-     * @return null|Form
+     * @return FormInterface|null
      */
     public function getForm($data = null)
     {
-        $page_route = null;
-        $form_name = null;
-
         if (\is_array($data)) {
-            if (isset($data['name'])) {
-                $form_name = $data['name'];
-            }
-            if (isset($data['route'])) {
-                $page_route = $data['route'];
-            }
+            $form_name = $data['name'] ?? null;
+            $page_route = $data['route'] ?? null;
         } elseif (\is_string($data)) {
             $form_name = $data;
+            $page_route = null;
         }
 
         // if no form name, use the first form found in the page
         if (!$form_name) {
             // If page route not provided, use the current page
             if (!$page_route) {
-                // Get page route
-                $page_route = $this->grav['page']->route();
-
-                // fallback using current URI if page not initialized yet
-                if (!$page_route) {
-                    $page_route = $this->getCurrentPageRoute();
-                }
+                // Get page route with a fallback using current URI if page not initialized yet
+                $page_route = $this->grav['page']->route() ?: $this->getCurrentPageRoute();
             }
 
-            if (isset($this->forms[$page_route])) {
+            if (!empty($this->forms[$page_route])) {
                 $forms = $this->forms[$page_route];
-                $first_form = array_shift($forms);
-                $form_name = $first_form['name'];
+                $first_form = reset($forms);
+                $form_name = $first_form['name'] ?? null;
             } else {
                 //No form on this route. Try looking up in the current page first
-                return new Form($this->grav['page']);
+                /** @var Forms $forms */
+                $forms = $this->grav['forms'];
+                return $forms->createPageForm($this->grav['page']);
             }
         }
 
@@ -673,25 +715,52 @@ class FormPlugin extends Plugin
     public function getFormFieldTypes()
     {
         return [
-            'column' => [
+            'avatar' => [
+                'input@' => false
+            ],
+            'captcha' => [
                 'input@' => false
             ],
             'columns' => [
                 'input@' => false
             ],
-            'fieldset' => [
+            'column' => [
                 'input@' => false
             ],
             'conditional' => [
                 'input@' => false
             ],
+            'fieldset' => [
+                'input@' => false
+            ],
+            'file' => [
+                'array' => true,
+                'validate' => [
+                    'type' => 'ignore'
+                ]
+            ],
             'display' => [
+                'input@' => false
+            ],
+            'ignore' => [
+                'input@' => false
+            ],
+            'key' => [
+                'input@' => false
+            ],
+            'section'  => [
                 'input@' => false
             ],
             'spacer' => [
                 'input@' => false
             ],
-            'captcha' => [
+            'tabs' => [
+                'input@' => false
+            ],
+            'tab' => [
+                'input@' => false
+            ],
+            'value' => [
                 'input@' => false
             ]
         ];
@@ -735,10 +804,7 @@ class FormPlugin extends Plugin
      */
     protected function getFormByName($form_name)
     {
-        if (array_key_exists($form_name, $this->flat_forms)) {
-            return $this->flat_forms[$form_name];
-        }
-        return null;
+        return $this->flat_forms[$form_name] ?? null;
     }
 
     /**
@@ -753,19 +819,24 @@ class FormPlugin extends Plugin
         $status = $nonce ? true : false; // php72 quirk?
         $refresh_prevention = null;
 
-        if ($status && $this->form()) {
-            // Set page template if passed by form
-            if (isset($this->form->template)) {
-                $this->grav['page']->template($this->form->template);
+        if ($status && $form = $this->form()) {
+            // Make sure form is something we recognize.
+            if (!$form instanceof Form) {
+                return false;
             }
 
-            if (isset($this->form->refresh_prevention)) {
-                $refresh_prevention = (bool) $this->form->refresh_prevention;
+            // Set page template if passed by form
+            if (isset($form->template)) {
+                $this->grav['page']->template($form->template);
+            }
+
+            if (isset($form->refresh_prevention)) {
+                $refresh_prevention = (bool) $form->refresh_prevention;
             } else {
                 $refresh_prevention = $this->config->get('plugins.form.refresh_prevention', false);
             }
 
-            $unique_form_id = $uri->post('__unique_form_id__', FILTER_SANITIZE_STRING);
+            $unique_form_id = $form->getUniqueId();
 
             if ($refresh_prevention && $unique_form_id) {
                 if ($this->grav['session']->unique_form_id !== $unique_form_id) {
@@ -776,8 +847,8 @@ class FormPlugin extends Plugin
                     }
                 } else {
                     $status = false;
-                    $this->form->message = $this->grav['language']->translate('PLUGIN_FORM.FORM_ALREADY_SUBMITTED');
-                    $this->form->status = 'error';
+                    $form->message = $this->grav['language']->translate('PLUGIN_FORM.FORM_ALREADY_SUBMITTED');
+                    $form->status = 'error';
                 }
             }
         }
@@ -797,7 +868,7 @@ class FormPlugin extends Plugin
      * Get the current form, should already be processed but can get it directly from the page if necessary
      *
      * @param Page|null $page
-     * @return Form|mixed
+     * @return Form|null
      */
     protected function form($page = null)
     {
@@ -806,31 +877,61 @@ class FormPlugin extends Plugin
             $this->flattenForms();
         }
 
-        if (null === $this->form) {
+        /** @var Forms $forms */
+        $forms = $this->grav['forms'];
+
+        $form = $forms->getActiveForm();
+        if (null === $form) {
             // try to get the page if possible
             if (null === $page) {
                 $page = $this->grav['page'];
             }
 
+            // Try to find the posted form if available.
             $form_name = $this->grav['uri']->post('__form-name__', FILTER_SANITIZE_STRING);
+            $unique_id = $this->grav['uri']->post('__unique_form_id__', FILTER_SANITIZE_STRING);
 
             if (!$form_name) {
                 $form_name = $page ? $page->slug() : null;
             }
 
-            $this->form = $this->getFormByName($form_name);
+            $form = $this->getFormByName($form_name);
 
             // last attempt using current page's form
-            if (null === $this->form && $page) {
-                $header = $page->header();
+            if (!$form && $page) {
+                $form = $forms->createPageForm($page);
+            }
 
-                if (isset($header->form) || isset($header->forms)) {
-                    $this->form = new Form($page);
+            if ($form) {
+                // Only set posted unique id if the form name matches to the one that was posted.
+                if ($unique_id && $form_name === $form->getFormName()) {
+                    $form->setUniqueId($unique_id);
+                    $form->initialize();
                 }
+
+                $forms->setActiveForm($form);
             }
         }
 
-        return $this->form;
+        return $form;
+    }
+
+    /**
+     * @param Page $page
+     * @param string|int|null $name
+     * @param array $form
+     * @return Form|null
+     * @deprecated
+     */
+    protected function createForm(Page $page, $name = null, $form = null)
+    {
+
+        $header = $page->header();
+        if (isset($header->form) || isset($header->forms)) {
+            return new Form($page, $name, $form);
+        }
+
+        return null;
     }
 
     /**
@@ -839,16 +940,21 @@ class FormPlugin extends Plugin
     protected function loadCachedForms()
     {
         // Get and set the cache of forms if it exists
-        list($forms, $flat_forms) = $this->grav['cache']->fetch($this->getFormCacheId());
-
-        // Only store the forms if they are an array
-        if (\is_array($forms)) {
-            $this->forms = array_merge($this->forms, $forms);
+        try {
+            [$forms] = $this->grav['cache']->fetch($this->getFormCacheId());
+        } catch (\Exception $e) {
+            // Couldn't fetch cached forms.
+            $forms = null;
         }
 
-        // Only store the flat_forms if they are an array
-        if (\is_array($flat_forms)) {
-            $this->flat_forms = array_merge($this->flat_forms, $flat_forms);
+        if (!\is_array($forms)) {
+            return;
+        }
+
+        // Only update the forms if it's not empty
+        if (!empty($forms)) {
+            $this->forms = array_merge($this->forms, $forms);
+            $this->flattenForms();
         }
     }
 
@@ -860,7 +966,7 @@ class FormPlugin extends Plugin
         // Save the current state of the forms to cache
         if ($this->recache_forms) {
             $this->recache_forms = false;
-            $this->grav['cache']->save($this->getFormCacheId(), [$this->forms, $this->flat_forms]);
+            $this->grav['cache']->save($this->getFormCacheId(), [$this->forms]);
         }
     }
 

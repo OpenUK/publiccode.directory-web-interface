@@ -1,12 +1,15 @@
 <?php
+
 /**
  * @package    Grav\Plugin\Login
  *
  * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
+
 namespace Grav\Plugin;
 
+use Composer\Autoload\ClassLoader;
 use Grav\Common\Data\Data;
 use Grav\Common\Debugger;
 use Grav\Common\Grav;
@@ -15,9 +18,12 @@ use Grav\Common\Page\Page;
 use Grav\Common\Page\Pages;
 use Grav\Common\Plugin;
 use Grav\Common\Twig\Twig;
-use Grav\Common\User\User;
+use Grav\Common\User\Interfaces\UserCollectionInterface;
+use Grav\Common\User\Interfaces\UserInterface;
 use Grav\Common\Utils;
 use Grav\Common\Uri;
+use Grav\Framework\Flex\Interfaces\FlexObjectInterface;
+use Grav\Plugin\Form\Form;
 use Grav\Plugin\Login\Events\UserLoginEvent;
 use Grav\Plugin\Login\Login;
 use Grav\Plugin\Login\Controller;
@@ -56,12 +62,13 @@ class LoginPlugin extends Plugin
     public static function getSubscribedEvents()
     {
         return [
-            'onPluginsInitialized'      => [['initializeSession', 10000], ['initializeLogin', 1000]],
+            'onPluginsInitialized'      => [['autoload', 100000], ['initializeSession', 10000], ['initializeLogin', 1000]],
             'onTask.login.login'        => ['loginController', 0],
             'onTask.login.twofa'        => ['loginController', 0],
             'onTask.login.forgot'       => ['loginController', 0],
             'onTask.login.logout'       => ['loginController', 0],
             'onTask.login.reset'        => ['loginController', 0],
+            'onTask.login.regenerate2FASecret' => ['loginController', 0],
             'onPagesInitialized'        => [['storeReferrerPage', 0], ['pageVisibility', 0]],
             'onPageInitialized'         => ['authorizePage', 0],
             'onPageFallBackUrl'         => ['authorizeFallBackUrl', 0],
@@ -77,6 +84,16 @@ class LoginPlugin extends Plugin
     }
 
     /**
+     * [onPluginsInitialized:100000] Composer autoload.
+     *
+     * @return ClassLoader
+     */
+    public function autoload() : ClassLoader
+    {
+        return require __DIR__ . '/vendor/autoload.php';
+    }
+
+    /**
      * [onPluginsInitialized] Initialize login plugin if path matches.
      * @throws \RuntimeException
      */
@@ -86,13 +103,6 @@ class LoginPlugin extends Plugin
         if (!$this->config->get('system.session.enabled')) {
             throw new \RuntimeException('The Login plugin requires "system.session" to be enabled');
         }
-
-        // Autoload classes
-        $autoload = __DIR__ . '/vendor/autoload.php';
-        if (!is_file($autoload)) {
-            throw new \RuntimeException('Login Plugin failed to load. Composer dependencies not met.');
-        }
-        require_once $autoload;
 
         // Define login service.
         $this->grav['login'] = function (Grav $c) {
@@ -350,10 +360,13 @@ class LoginPlugin extends Plugin
         /** @var Message $messages */
         $messages = $this->grav['messages'];
 
+        /** @var UserCollectionInterface $users */
+        $users = $this->grav['users'];
+
         $username = $uri->param('username');
 
         $token = $uri->param('token');
-        $user = User::load($username);
+        $user = $users->load($username);
 
         $redirect_route = $this->config->get('plugins.login.user_registration.redirect_after_activation');
         $redirect_code = null;
@@ -377,7 +390,7 @@ class LoginPlugin extends Plugin
                     }
 
                     $messages->add($message, 'info');
-                    unset($user['activation_token']);
+                    unset($user->activation_token);
                     $user->save();
 
                     if ($this->config->get('plugins.login.user_registration.options.send_welcome_email', false)) {
@@ -388,7 +401,7 @@ class LoginPlugin extends Plugin
                     }
 
                     if ($this->config->get('plugins.login.user_registration.options.login_after_registration', false)) {
-                        $loginEvent = $this->login->login(['username' => $username], ['after_registration' => true, 'return_event' => true]);
+                        $loginEvent = $this->login->login(['username' => $username], ['after_registration' => true], ['user' => $user, 'return_event' => true]);
 
                         // If there's no activation redirect, get one from login.
                         if (!$redirect_route) {
@@ -424,7 +437,7 @@ class LoginPlugin extends Plugin
         if (!$page) {
             // Only add forgot page if it hasn't already been defined.
             $page = new Page;
-            $page->init(new \SplFileInfo(__DIR__ . "/pages/profile.md"));
+            $page->init(new \SplFileInfo(__DIR__ . '/pages/profile.md'));
             $page->slug(basename($route));
 
             $pages->addPage($page, $route);
@@ -465,7 +478,7 @@ class LoginPlugin extends Plugin
         /** @var Uri $uri */
         $uri = $this->grav['uri'];
         $task = !empty($_POST['task']) ? $_POST['task'] : $uri->param('task');
-        $task = substr($task, strlen('login.'));
+        $task = substr($task, \strlen('login.'));
         $post = !empty($_POST) ? $_POST : [];
 
         switch ($task) {
@@ -499,7 +512,7 @@ class LoginPlugin extends Plugin
     public function authorizeFallBackUrl()
     {
         if ($this->config->get('plugins.login.protect_protected_page_media', false)) {
-            $page_url = dirname($this->grav['uri']->path());
+            $page_url = \dirname($this->grav['uri']->path());
             $page = $this->grav['pages']->find($page_url);
             unset($this->grav['page']);
             $this->grav['page'] = $page;
@@ -516,7 +529,7 @@ class LoginPlugin extends Plugin
             return;
         }
 
-        /** @var User $user */
+        /** @var UserInterface $user */
         $user = $this->grav['user'];
 
         /** @var Page $page */
@@ -614,8 +627,8 @@ class LoginPlugin extends Plugin
             $this->grav['assets']->add('plugin://login/css/login.css');
         }
 
-        $task = $this->grav['uri']->param('task') ?: (isset($_POST['task']) ? $_POST['task'] : '');
-        $task = substr($task, strlen('login.'));
+        $task = $this->grav['uri']->param('task') ?: ($_POST['task'] ?? '');
+        $task = substr($task, \strlen('login.'));
         if ($task === 'reset') {
             $username = $this->grav['uri']->param('user');
             $token = $this->grav['uri']->param('token');
@@ -625,7 +638,7 @@ class LoginPlugin extends Plugin
                 $twig->twig_vars['token'] = $token;
             }
         } elseif ($task === 'login') {
-            $twig->twig_vars['username'] = isset($_POST['username']) ? $_POST['username'] : '';
+            $twig->twig_vars['username'] = $_POST['username'] ?? '';
         }
 
         $flashData = $this->grav['session']->getFlashCookieObject(self::TMP_COOKIE_NAME);
@@ -660,9 +673,12 @@ class LoginPlugin extends Plugin
         /** @var Data $form_data */
         $form_data = $form->getData();
 
+        /** @var UserCollectionInterface $users */
+        $users = $this->grav['users'];
+
         // Check for existing username
         $username = $form_data->get('username');
-        $existing_username = User::find($username,['username']);
+        $existing_username = $users->find($username, ['username']);
         if ($existing_username->exists()) {
             $this->grav->fireEvent('onFormValidationError', new Event([
                 'form'    => $form,
@@ -677,7 +693,7 @@ class LoginPlugin extends Plugin
 
         // Check for existing email
         $email    = $form_data->get('email');
-        $existing_email = User::find($email,['email']);
+        $existing_email = $users->find($email, ['email']);
         if ($existing_email->exists()) {
             $this->grav->fireEvent('onFormValidationError', new Event([
                 'form'    => $form,
@@ -719,7 +735,7 @@ class LoginPlugin extends Plugin
                 foreach ($default_values as $key => $param) {
 
                     if ($key === $field) {
-                        if (is_array($param)) {
+                        if (\is_array($param)) {
                             $values = explode(',', $param);
                         } else {
                             $values = $param;
@@ -739,12 +755,19 @@ class LoginPlugin extends Plugin
         } else {
             $data['state'] = 'enabled';
         }
+        $data_object = (object) $data;
+        $this->grav->fireEvent('onUserLoginRegisterData', new Event(['data' => &$data_object]));
 
-        $this->grav->fireEvent('onUserLoginRegisterData', new Event(['data' => &$data]));
-        $user = $this->login->register($data);
+        $flash = $form->getFlash();
+        $user = $this->login->register((array)$data_object, $flash->getFilesByFields(true));
+        if ($user instanceof FlexObjectInterface) {
+            $flash->clearFiles();
+            $flash->save();
+        }
+
         $this->grav->fireEvent('onUserLoginRegisteredUser', new Event(['user' => &$user]));
 
-        $fullname = $user->fullname ?: $user->username;
+        $fullname = $user->fullname ?? $user->username;
 
         if ($this->config->get('plugins.login.user_registration.options.send_activation_email', false)) {
             $this->login->sendActivationEmail($user);
@@ -766,8 +789,8 @@ class LoginPlugin extends Plugin
         $redirect = $this->config->get('plugins.login.user_registration.redirect_after_registration');
         $redirect_code = null;
 
-        if (isset($data['state']) && $data['state'] === 'enabled' && $this->config->get('plugins.login.user_registration.options.login_after_registration', false)) {
-            $loginEvent = $this->login->login(['username' => $username], ['after_registration' => true], ['user' => $user, 'return_event' => true]);
+        if (isset($user['state']) && $user['state'] === 'enabled' && $this->config->get('plugins.login.user_registration.options.login_after_registration', false)) {
+            $loginEvent = $this->login->login(['username' => $user->username], ['after_registration' => true], ['user' => $user, 'return_event' => true]);
 
             // If there's no registration redirect, get one from login.
             if (!$redirect) {
@@ -782,7 +805,8 @@ class LoginPlugin extends Plugin
         }
 
         if ($redirect) {
-            $this->grav->redirectLangSafe($redirect, $redirect_code);
+            $event['redirect'] = $redirect;
+            $event['redirect_code'] = $redirect_code;
         }
     }
 
@@ -795,7 +819,7 @@ class LoginPlugin extends Plugin
      */
     private function processUserProfile($form, Event $event)
     {
-        /** @var User $user */
+        /** @var UserInterface $user */
         $user     = $this->grav['user'];
         $language = $this->grav['language'];
 
@@ -812,7 +836,7 @@ class LoginPlugin extends Plugin
                 'message' => $language->translate('PLUGIN_LOGIN.USER_IS_REMOTE_ONLY')
             ]));
             $event->stopPropagation();
-            return;
+            return false;
         }
 
         // Stop overloading of username
@@ -826,13 +850,16 @@ class LoginPlugin extends Plugin
                 ])
             ]));
             $event->stopPropagation();
-            return;
+            return false;
         }
 
+        /** @var UserCollectionInterface $users */
+        $users = $this->grav['users'];
+
         // Check for existing email
-        $email    = $form->data('email');
-        $existing_email = User::find($email,['email']);
-        if ($user->username != $existing_email->username && $existing_email->exists()) {
+        $email = $form->getData('email');
+        $existing_email = $users->find($email, ['email']);
+        if ($user->username !== $existing_email->username && $existing_email->exists()) {
             $this->grav->fireEvent('onFormValidationError', new Event([
                 'form'    => $form,
                 'message' => $language->translate([
@@ -841,21 +868,28 @@ class LoginPlugin extends Plugin
                 ])
             ]));
             $event->stopPropagation();
-            return;
+            return false;
         }
 
         $fields = (array)$this->config->get('plugins.login.user_registration.fields', []);
 
         $data = [];
         foreach ($fields as $field) {
-            if (!isset($data[$field]) && $form_data->get($field)) {
+            $data_field = $form_data->get($field);
+            if (!isset($data[$field]) && isset($data_field)) {
                 $data[$field] = $form_data->get($field);
             }
         }
-        $user->merge($data);
 
         try {
+            $flash = $form->getFlash();
+            $user->update($data, $flash->getFilesByFields(true));
             $user->save();
+
+            if ($user instanceof FlexObjectInterface) {
+                $flash->clearFiles();
+                $flash->save();
+            }
         } catch (\Exception $e) {
             $form->setMessage($e->getMessage(), 'error');
             return false;
@@ -940,8 +974,11 @@ class LoginPlugin extends Plugin
                 return;
             }
 
+            /** @var UserCollectionInterface $users */
+            $users = $this->grav['users'];
+
             // Allow remember me to work with different login methods.
-            $user = User::load($username, false);
+            $user = $users->load($username);
             $event->setCredential('username', $username);
             $event->setUser($user);
 
@@ -966,7 +1003,10 @@ class LoginPlugin extends Plugin
     public function userLoginAuthenticateByEmail(UserLoginEvent $event)
     {
         if (($username = $event->getCredential('username')) && !$event->getUser()->exists()) {
-            $event->setUser(User::find($username));
+            /** @var UserCollectionInterface $users */
+            $users = $this->grav['users'];
+
+            $event->setUser($users->find($username));
         }
     }
 
@@ -1024,7 +1064,10 @@ class LoginPlugin extends Plugin
 
     public function userLoginFailure(UserLoginEvent $event)
     {
-        $this->grav['session']->user = User::load('', false);
+        /** @var UserCollectionInterface $users */
+        $users = $this->grav['users'];
+
+        $this->grav['session']->user = $users->load('');
     }
 
     public function userLogin(UserLoginEvent $event)

@@ -24,10 +24,14 @@
     {% if tools|length > 1 %}
     <div class="form-tabs">
         <div class="tabs-nav">
-        {% for tool in tools %}
-            <a href="{{ base_url_relative }}/tools/{{tool|hyphenize}}" {% if tools_slug == tool|hyphenize %}class="active"{% endif %}>
-                {{ tool|tu|capitalize }}
+        {% for slug,tool in tools %}
+            {% set perms = tool|first %}
+            {% set name = tool|last %}
+            {% if authorize(perms) %}
+            <a href="{{ base_url_relative }}/tools/{{slug|hyphenize}}" {% if tools_slug == slug|hyphenize %}class="active"{% endif %}>
+                {{ name|tu|capitalize }}
             </a>
+            {% endif %}
         {% endfor %}
         </div>
     </div>
@@ -35,8 +39,12 @@
 {% endblock %}
 
 {% block content %}
-    {% if authorize(['admin.tools', 'admin.super']) %}
+    {% set perms = tools[tools_slug]|first %}
+
+    {% if authorize(perms) %}
         {% include 'partials/tools-' ~ tools_slug ~ '.html.twig' ignore missing %}
+    {% else %}
+        <h1>Unauthorized</h1>
     {% endif %}
 {% endblock %}
 

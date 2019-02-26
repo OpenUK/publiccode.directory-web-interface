@@ -1,3 +1,56 @@
+# v1.9.0-rc.3
+## 02/18/2019
+
+1. [](#improved)
+    * Refactored "NewsFeeds" and "Notifications" for better performance and to address CORS issues
+    * Flex user profile now uses Flex Form
+    * Moved dashboard `notifications` logic to server-side for increased performance (1 request instead of 3)
+    * Refactored feeds logic for better performance
+    * Updated languages
+1. [](#bugfix)
+    * Text in Tab Tools/Direct install disappears [#1613](https://github.com/getgrav/grav-plugin-admin/issues/1613)
+
+
+# v1.9.0-rc.2
+## 02/07/2019
+
+1. [](#new)
+    * Requires Grav 1.6.0-rc.2, Form 3.0.0-rc.2, Login 3.0.0-rc.2, Email 3.0.0-rc.2
+    * Added new `Logs` section to tools to allow quick view of Grav log files
+1. [](#improved)
+    * Better logic for delete action to support Ajax. Fixes Flex lists
+    * Cleanly handle session corruption due to changing Flex object types
+1. [](#bugfix)
+    * Fallback to page `slug` in Pages list if title is empty [grav#2267](https://github.com/getgrav/grav/issues/2267)
+    * Fixes backup button issues with `;` param separator [#1602](https://github.com/getgrav/grav-plugin-admin/issues/1602) [#1502](https://github.com/getgrav/grav-plugin-admin/issues/1502)
+    
+# v1.9.0-rc.1
+## 01/29/2019
+
+1. [](#bugfix)
+    * Set default state for `show_modular` to `true` [#1599](https://github.com/getgrav/grav-plugin-admin/issues/1599)
+
+# v1.9.0-beta.8
+## 01/25/2019
+
+1. [](#new)
+    * Requires Grav 1.6.0-beta.8, Form 3.0.0-beta.5, Login 3.0.0-beta.1
+    * Added support for the new `Flex User` object
+1. [](#improved)
+    * Implemented [ForkAwesome](https://forkawesome.github.io/Fork-Awesome/) and removed FontAwesome + LineAwesome
+    * Various default admin theme improvements and cleanup
+    * Make new System Config layout responsive [#1579](https://github.com/getgrav/grav-plugin-admin/issues/1579)
+    * Homepage link should be `https://` [#1564](https://github.com/getgrav/grav-plugin-admin/issues/1564)
+    * Improve lang string to describe XSS security settings [#1566](https://github.com/getgrav/grav-plugin-admin/issues/1566)
+    * Take admin setting for 2FA into account when showing user 2FA badge [#1568](https://github.com/getgrav/grav-plugin-admin/issues/1568)
+    * Moved `ignore` and `key` field into form plugin
+    * v.1.8.16 fixes merged in
+1. [](#bugfix)
+    * Removed `tabs`, `tab`, and `toggle` fields as they are now in Form plugin
+    * Fix issue with new page always showing modular page templates [#1573](https://github.com/getgrav/grav-plugin-admin/issues/1573)
+    * Fixed issue deleting files in plugins/themes/config 
+    * Fixed array support in admin languages, e.g. `DAYS_OF_THE_WEEK`
+
 # v1.9.0-beta.7
 ## 12/14/2018
 
@@ -57,6 +110,42 @@
     * New `Scheduler` configuration panel in tools
     * New `Backups` configuration panel in tools
     * New `Cache::purge()` option in cache drop-down to clear out old cache only
+    
+# v1.8.19
+## 02/13/2019
+
+1. [](#bugfix)
+    * Moved `show_modular` to proper place - Doh! [grav#2362](https://github.com/getgrav/grav/issues/2362)  
+
+# v1.8.18
+## 02/12/2019
+
+1. [](#bugfix)
+    * Set default value for `show_modular` [grav#2362](https://github.com/getgrav/grav/issues/2362)  
+
+# v1.8.17
+## 02/07/2019    
+
+# v1.8.17
+## 02/07/2019
+
+1. [](#improved)
+    * Improved Grav Core installer/updater to run installer script (if available)
+    * Added `unauthorized.html.twig` file that was missing [#1609](https://github.com/getgrav/grav-plugin-admin/pull/1609)
+1. [](#bugfix)
+    * Fixed direct install deleting backups and logs if used with full Grav package instead of with update package
+
+# v1.8.16
+## 01/25/2019
+
+1. [](#improved)
+    * IP pseudonymization for rate limiter [#1589](https://github.com/getgrav/grav-plugin-admin/pull/1589)
+    * Add option to hide modular pages in parent select [#1571](https://github.com/getgrav/grav-plugin-admin/pull/1571)
+    * Added `admin.tools` permission [#1550](https://github.com/getgrav/grav-plugin-admin/pull/1550)
+1. [](#bugfix)
+    * Fixed calendar js module not properly loading for datetime field [#1581](https://github.com/getgrav/grav-plugin-admin/issues/1581)
+    * Fixed deleting file when using file field type [#1558](https://github.com/getgrav/grav-plugin-admin/issues/1558)
+    * Unset state from user if not super or user admin   
 
 # v1.8.15
 ## 12/14/2018
@@ -97,7 +186,7 @@
 1. [](#improved)
     * Change usage of basename where possible [#1480](https://github.com/getgrav/grav-plugin-admin/pull/1480)
     * Improved filename validation (requires Grav 1.5.3)
-    * Updated various lang strings
+    * Updated various lang codes
 1. [](#bugfix)
     * File Uploads: Do not trust mimetype sent by the browser
     * Fixed file extension detection
