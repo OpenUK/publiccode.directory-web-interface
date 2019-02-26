@@ -1,3 +1,75 @@
+# v3.0.0-rc.3
+## 02/18/2019
+
+1. [](#improved)
+    * Improved the `hidden` field logic to support `value` or `default` set
+    * Set the message globally on `messages` object when using a redirect in form
+1. [](#bugfix)
+    * Fixed forms not being cached properly
+    * Fixed issue with `selectize`, automatically selecting an unintended value
+    * Throw exception if you try to `add` to a file and don't provide `filename` [#324](https://github.com/getgrav/grav-plugin-form/issues/324)
+
+# v3.0.0-rc.2
+## 02/07/2019
+
+1. [](#new)
+    * Allow streams in `file` field widget [#119](https://github.com/getgrav/grav-plugin-form/issues/119)
+    * Use new unified `|t` translate filter in all fields
+1. [](#bugfix)
+    * Fixed file field saving with nested name
+    * Fixed file saving if destination folder does not exist
+    * Fixed FormFlash object not getting deleted on form post
+
+# v3.0.0-rc.1
+## 01/30/2019
+
+1. [](#improved)
+    * Improved logic for finding the current form
+1. [](#bugfix)
+    * Regression: Fixed ignored form action [#318](https://github.com/getgrav/grav-plugin-form/issues/318)
+    * Regression: Fixed modular form submit not triggering the action sometimes
+    * Fixed modular form submits without defined `action: /path` inside the form
+    * Fixed form processing in nested modular pages
+
+# v3.0.0-beta.5
+## 01/25/2019
+
+1. [](#new)
+    * Requires Grav `1.6.0-beta.8` (and optionally Admin `1.9.0-beta.8`)
+    * Form no longer extends `Grav\Common\Iterator` (may have some backward compatibility issues with plugins, likely not)
+    * Form now uses `NestedArrayAccessWithGetters` (with '/' separator) and `FormTrait` traits
+    * Added `view`, `key`, `ignore`, `section`, `toggle`, `tabs` and `tab` form fields
+    * Added support for `toggleable` inputs, which can be disabled/enabled by user
+    * Added `$grav['forms']` to allow plugins to better use forms [#307](https://github.com/getgrav/grav-plugin-form/pull/307)
+    * Added support for custom form types
+    * Forms can now remember their state after page reload with YAML `datasets: store-state: true` set in the fields
+    * Added `clear-state` AJAX task
+    * Added task to clear form flash
+    * Added support for file-upload and file-remove tasks
+    * Added ability to set a custom `clear_redirect_url` on a form
+    * Added `Form::setMessage()` method
+    * Added new form field templates for edit list table
+1. [](#improved)
+    * Added support for data-sets in `textarea` and `select` fields
+    * Simplify `shouldProcessForm()` logic
+    * Do not cache flat forms list, regenerate it instead
+    * Fixed some inconsistencies on how blueprints are handled
+    * Improved uploads handling, added new `upload: true|false` process
+    * Make `Form` implement `FormInterface`
+    * Added `field.size` in `array`, `select`, and `textarea` 
+    * Enable forms in admin plugin
+    * Removed submit of unchecked fields in frontend
+    * Make sure that the images in the file field are not cached in browser
+1. [](#bugfix)
+    * Fixed container fields breaking values from the child fields
+    * Fixed form fields not accepting object values
+    * Fixed some form fields having no value for nested field sets
+    * Fixed double escaping of `file` type input JSON value
+    * Fixed double locking of file when calling processor save 
+    * Fixed some missing backwards compatibility   
+    * Fixed some issues with flashed form
+    * Fixed Twig 2 compatibility issue
+
 # v3.0.0-beta.4
 ## 12/14/2018
 
@@ -7,6 +79,8 @@
     * Backwards incompatibility: All form field twig files are required to extend `field.html.twig` to work properly
     * Allow using custom nonce field/action by setting `nonce.name` and `nonce.action` inside the form YAML
     * Added `html: true` support for form buttons (will not escape the button value)
+    * Added `toggle`, `tabs` and `tab` form fields
+    * Added support for toggleable inputs, which can be disabled/enabled by user
 1. [](#improved)
     * Updated code to use PHP 7.1 features    
 1. [](#bugfix)
@@ -45,7 +119,7 @@
     * Make all form fields to extend `field.html.twig`
 
 # v2.16.4
-## mm/dd/2018
+## 12/14/2018
 
 1. [](#improved)
     * Better handling of invalid file names during upload
@@ -54,7 +128,7 @@
 2. [](#bugfix)
     * Remove jQuery dependency in form.html.twig (#290)
 3. [](#new)
-    * Added Object.assing-polyfill (#291)
+    * Added Object.assign-polyfill (#291)
 
 # v2.16.3
 ## 09/21/2018

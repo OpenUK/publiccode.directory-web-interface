@@ -1,5 +1,5 @@
 name: Admin Panel
-version: 1.9.0-beta.7
+version: 1.9.0-rc.3
 testing: true
 description: Adds an advanced administration panel to manage your site
 icon: empire
@@ -14,10 +14,10 @@ docs: https://github.com/getgrav/grav-plugin-admin/blob/develop/README.md
 license: MIT
 
 dependencies:
-    - { name: grav, version: '>=1.6.0-beta.4' }
-    - { name: form, version: '>=3.0.0-beta.1' }
-    - { name: login, version: '>=2.7.0' }
-    - { name: email, version: '>=2.7.0' }
+    - { name: grav, version: '>=1.6.0-rc.3' }
+    - { name: form, version: '>=3.0.0-rc.3' }
+    - { name: login, version: '>=3.0.0-rc.3' }
+    - { name: email, version: '>=3.0.0-rc.3' }
 
 form:
   validation: loose
@@ -163,6 +163,18 @@ form:
       label: Parents Levels
       size: small
       help: The number of levels to show in parent select list
+    
+    pages.show_modular:
+      type: toggle
+      label: Modular parents
+      highlight: 1
+      default: 1
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+      help: Show modular pages in the parent select list
 
     google_fonts:
       type: toggle
@@ -175,15 +187,6 @@ form:
       validate:
         type: bool
       help: Use Google custom fonts.  Disable this to use Helvetica. Useful when using Cyrillic and other languages with unsupported characters.
-
-    admin_icons:
-        type: select
-        size: medium
-        label: Icon Style
-        default: line-awesome
-        options:
-            line-awesome: Lighter Line Icons (LineAwesome)
-            font-awesome: Darker Solid Icons (FontAwesome)
 
     show_beta_msg:
       type: hidden
@@ -249,6 +252,15 @@ form:
       type: array
       label: Hide modular page types in Admin
       value_only: true
+
+    log_viewer_files:
+        type: selectize
+        size: medium
+        label: PLUGIN_ADMIN.LOG_VIEWER_FILES
+        help: PLUGIN_ADMIN.LOG_VIEWER_FILES_HELP
+        classes: fancy
+        validate:
+            type: commalist
 
     MediaResize:
       type: section

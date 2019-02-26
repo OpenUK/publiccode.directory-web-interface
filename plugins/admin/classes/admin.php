@@ -19,9 +19,9 @@ use Grav\Common\Uri;
 use Grav\Common\User\User;
 use Grav\Common\Utils;
 use Grav\Framework\Collection\ArrayCollection;
-use Grav\Plugin\Admin\Twig\AdminTwigExtension;
 use Grav\Plugin\Login\Login;
 use Grav\Plugin\Login\TwoFactorAuth\TwoFactorAuth;
+use PicoFeed\Parser\MalformedXmlException;
 use RocketTheme\Toolbox\Event\Event;
 use RocketTheme\Toolbox\File\File;
 use RocketTheme\Toolbox\File\JsonFile;
@@ -226,6 +226,18 @@ class Admin
         return $tools;
     }
 
+    public static function toolsPermissions()
+    {
+        $tools = static::tools();
+        $perms = [];
+
+        foreach ($tools as $tool) {
+            $perms = array_merge($perms, $tool[0]);
+        }
+
+        return array_unique($perms);
+    }
+
     /**
      * Return the languages available in the site
      *
@@ -367,10 +379,13 @@ class Admin
         $twofa = $this->grav['config']->get('plugins.admin.twofa_enabled', false);
 
         $rateLimiter = $login->getRateLimiter('login_attempts');
-        
+
         $userKey = (string)($credentials['username'] ?? '');
         $ipKey = Uri::ip();
         $redirect = $post['redirect'] ?? $this->base . $this->route;
+
+        // Pseudonymization of the IP
+        $ipKey = sha1($ipKey . $this->grav['config']->get('security.salt'));
 
         // Check if the current IP has been used in failed login attempts.
         $attempts = count($rateLimiter->getAttempts($ipKey, 'ip'));
@@ -383,7 +398,7 @@ class Admin
 
             $this->grav->redirect('/');
         }
-        
+
         // Fire Login process.
         $event = $login->login(
             $credentials,
@@ -538,16 +553,16 @@ class Admin
         }
 
         foreach ((array)$languages as $lang) {
-            $translation = $grav['language']->getTranslation($lang, $lookup);
+            $translation = $grav['language']->getTranslation($lang, $lookup, true);
 
             if (!$translation) {
                 $language    = $grav['language']->getDefault() ?: 'en';
-                $translation = $grav['language']->getTranslation($language, $lookup);
+                $translation = $grav['language']->getTranslation($language, $lookup, true);
             }
 
             if (!$translation) {
                 $language    = 'en';
-                $translation = $grav['language']->getTranslation($language, $lookup);
+                $translation = $grav['language']->getTranslation($language, $lookup, true);
             }
 
             if ($translation) {
@@ -649,12 +664,12 @@ class Admin
             $data[$type] = $obj;
         } elseif (preg_match('|users/|', $type)) {
             $obj = User::load(preg_replace('|users/|', '', $type));
-            $obj->merge($this->cleanUserPost($post));
+            $obj->update($this->cleanUserPost($post));
 
             $data[$type] = $obj;
         } elseif (preg_match('|user/|', $type)) {
             $obj = User::load(preg_replace('|user/|', '', $type));
-            $obj->merge($this->cleanUserPost($post));
+            $obj->update($this->cleanUserPost($post));
 
             $data[$type] = $obj;
         } elseif (preg_match('|config/|', $type)) {
@@ -713,6 +728,7 @@ class Admin
         // Clean field for users who shouldn't be able to modify these fields
         if (!$this->authorize(['admin.user', 'admin.super'])) {
             unset($post['access']);
+            unset($post['state']);
         }
 
         return $post;
@@ -1317,72 +1333,203 @@ class Admin
         $this->permissions = array_merge($this->permissions, $permissions);
     }
 
-    public function processNotifications($notifications)
+    public function getNotifications($force = false)
     {
-        // Sort by date
-        usort($notifications, function ($a, $b) {
-            return strcmp($a->date, $b->date);
-        });
+        $last_checked = null;
+        $filename = $this->grav['locator']->findResource('user://data/notifications/' . md5($this->grav['user']->username) . YAML_EXT, true, true);
 
-        $notifications = array_reverse($notifications);
+        $notifications_file = CompiledYamlFile::instance($filename);
+        $notifications_content = (array)$notifications_file->content();
 
-        // Make adminNicetimeFilter available
-        require_once __DIR__ . '/../classes/Twig/AdminTwigExtension.php';
-        $adminTwigExtension = new AdminTwigExtension;
+        $last_checked = $notifications_content['last_checked'] ?? null;
+        $notifications = $notifications_content['data'] ?? array();
+        $timeout = $this->grav['config']->get('system.session.timeout', 1800);
 
-        $filename           = $this->grav['locator']->findResource('user://data/notifications/' . $this->grav['user']->username . YAML_EXT,
-            true, true);
-        $read_notifications = (array)CompiledYamlFile::instance($filename)->content();
+        if ($force || !$last_checked || empty($notifications) || (time() - $last_checked > $timeout)) {
+            $body = Response::get('https://getgrav.org/notifications.json?' . time());
+//            $body = Response::get('http://localhost/notifications.json?' . time());
+            $notifications = json_decode($body, true);
 
-        $notifications_processed = [];
-        foreach ($notifications as $key => $notification) {
-            $is_valid = true;
+            // Sort by date
+            usort($notifications, function ($a, $b) {
+                return strcmp($a['date'], $b['date']);
+            });
 
-            if (in_array($notification->id, $read_notifications, true)) {
-                $notification->read = true;
-            }
+            // Reverse order and create a new array
+            $notifications = array_reverse($notifications);
+            $cleaned_notifications = [];
 
-            if ($is_valid && isset($notification->permissions) && !$this->authorize($notification->permissions)) {
-                $is_valid = false;
-            }
+            foreach ($notifications as $key => $notification) {
 
-            if ($is_valid && isset($notification->dependencies)) {
-                foreach ($notification->dependencies as $dependency => $constraints) {
-                    if ($dependency === 'grav') {
-                        if (!Semver::satisfies(GRAV_VERSION, $constraints)) {
-                            $is_valid = false;
-                        }
-                    } else {
-                        $packages = array_merge($this->plugins()->toArray(), $this->themes()->toArray());
-                        if (!isset($packages[$dependency])) {
-                            $is_valid = false;
+                if (isset($notification['permissions']) && !$this->authorize($notification['permissions'])) {
+                    continue;
+                }
+
+                if (isset($notification['dependencies'])) {
+                    foreach ($notification['dependencies'] as $dependency => $constraints) {
+                        if ($dependency === 'grav') {
+                            if (!Semver::satisfies(GRAV_VERSION, $constraints)) {
+                                continue;
+                            }
                         } else {
-                            $version = $packages[$dependency]['version'];
-                            if (!Semver::satisfies($version, $constraints)) {
-                                $is_valid = false;
+                            $packages = array_merge($this->plugins()->toArray(), $this->themes()->toArray());
+                            if (!isset($packages[$dependency])) {
+                                continue;
+                            } else {
+                                $version = $packages[$dependency]['version'];
+                                if (!Semver::satisfies($version, $constraints)) {
+                                    continue;
+                                }
                             }
                         }
                     }
+                }
 
-                    if (!$is_valid) {
-                        break;
-                    }
+                $cleaned_notifications[] = $notification;
+
+            }
+
+            // reset notifications
+            $notifications = [];
+
+            foreach($cleaned_notifications as $notification) {
+                foreach ($notification['location'] as $location) {
+                    $notifications = array_merge_recursive($notifications, [$location => [$notification]]);
                 }
             }
 
-            if ($is_valid) {
-                $notifications_processed[] = $notification;
+
+            $notifications_file->content(['last_checked' => time(), 'data' => $notifications]);
+            $notifications_file->save();
+        }
+
+
+        return $notifications;
+    }
+
+    /**
+     * Get https://getgrav.org news feed
+     *
+     * @return mixed
+     * @throws MalformedXmlException
+     */
+    public function getFeed($force = false)
+    {
+        $last_checked = null;
+        $filename = $this->grav['locator']->findResource('user://data/feed/' . md5($this->grav['user']->username) . YAML_EXT, true, true);
+
+        $feed_file = CompiledYamlFile::instance($filename);
+        $feed_content = (array)$feed_file->content();
+
+        $last_checked = $feed_content['last_checked'] ?? null;
+        $feed = $feed_content['data'] ?? array();
+        $timeout = $this->grav['config']->get('system.session.timeout', 1800);
+
+        if ($force || !$last_checked || empty($feed) || ($last_checked && (time() - $last_checked > $timeout))) {
+            $feed_url = 'https://getgrav.org/blog.atom';
+            $body = Response::get($feed_url);
+
+            $reader = new Reader();
+            $parser = $reader->getParser($feed_url, $body, 'utf-8');
+            $data = $parser->execute()->getItems();
+
+            // Get top 10
+            $data = array_slice($data, 0, 10);
+
+            $feed = array_map(function ($entry) {
+                $simple_entry['title'] = $entry->getTitle();
+                $simple_entry['url'] = $entry->getUrl();
+                $simple_entry['date'] = $entry->getDate()->getTimestamp();
+                $simple_entry['nicetime'] = $this->adminNiceTime($simple_entry['date']);
+                return $simple_entry;
+            }, $data);
+
+            $feed_file->content(['last_checked' => time(), 'data' => $feed]);
+            $feed_file->save();
+        }
+
+        return $feed;
+
+    }
+
+    public function adminNiceTime($date, $long_strings = true)
+    {
+        if (empty($date)) {
+            return $this->translate('GRAV.NICETIME.NO_DATE_PROVIDED', null, true);
+        }
+
+        if ($long_strings) {
+            $periods = [
+                'NICETIME.SECOND',
+                'NICETIME.MINUTE',
+                'NICETIME.HOUR',
+                'NICETIME.DAY',
+                'NICETIME.WEEK',
+                'NICETIME.MONTH',
+                'NICETIME.YEAR',
+                'NICETIME.DECADE'
+            ];
+        } else {
+            $periods = [
+                'NICETIME.SEC',
+                'NICETIME.MIN',
+                'NICETIME.HR',
+                'NICETIME.DAY',
+                'NICETIME.WK',
+                'NICETIME.MO',
+                'NICETIME.YR',
+                'NICETIME.DEC'
+            ];
+        }
+
+        $lengths = ['60', '60', '24', '7', '4.35', '12', '10'];
+
+        $now = time();
+
+        // check if unix timestamp
+        if ((string)(int)$date === (string)$date) {
+            $unix_date = $date;
+        } else {
+            $unix_date = strtotime($date);
+        }
+
+        // check validity of date
+        if (empty($unix_date)) {
+            return $this->translate('GRAV.NICETIME.BAD_DATE', null, true);
+        }
+
+        // is it future date or past date
+        if ($now > $unix_date) {
+            $difference = $now - $unix_date;
+            $tense      = $this->translate('GRAV.NICETIME.AGO', null, true);
+
+        } else {
+            $difference = $unix_date - $now;
+            $tense      = $this->translate('GRAV.NICETIME.FROM_NOW', null, true);
+        }
+
+        $len = count($lengths) - 1;
+        for ($j = 0; $difference >= $lengths[$j] && $j < $len; $j++) {
+            $difference /= $lengths[$j];
+        }
+
+        $difference = round($difference);
+
+        if ($difference !== 1) {
+            $periods[$j] .= '_PLURAL';
+        }
+
+        if ($this->grav['language']->getTranslation($this->grav['user']->language,
+            $periods[$j] . '_MORE_THAN_TWO')
+        ) {
+            if ($difference > 2) {
+                $periods[$j] .= '_MORE_THAN_TWO';
             }
         }
 
-        // Process notifications
-        $notifications_processed = array_map(function ($notification) use ($adminTwigExtension) {
-            $notification->date = $adminTwigExtension->adminNicetimeFilter($notification->date);
+        $periods[$j] = $this->translate('GRAV.'.$periods[$j], null, true);
 
-            return $notification;
-        }, $notifications_processed);
-
-        return $notifications_processed;
+        return "{$difference} {$periods[$j]} {$tense}";
     }
 
     public function findFormFields($type, $fields, $found_fields = [])
@@ -1402,9 +1549,9 @@ class Admin
         return $found_fields;
     }
 
-    public function getPagePathFromToken($path)
+    public function getPagePathFromToken($path, $page = null)
     {
-        return Utils::getPagePathFromToken($path, $this->page(true));
+        return Utils::getPagePathFromToken($path, $page ?: $this->page(true));
     }
 
     /**
@@ -1475,7 +1622,7 @@ class Admin
             $pages->addPage($page, $path);
 
             // Set if Modular
-            $page->modularTwig($slug[0] ?? '' === '_');
+            $page->modularTwig($slug[0] === '_');
 
             // Determine page type.
             if (isset($this->session->{$page->route()})) {
@@ -1523,7 +1670,6 @@ class Admin
                 $page->name($type . CONTENT_EXT);
                 $page->header();
             }
-            $page->modularTwig($slug[0] ?? '' === '_');
         }
 
         return $page;
@@ -1544,24 +1690,6 @@ class Admin
         $this->grav->fireEvent('onAdminGenerateReports', new Event(['reports' => $reports]));
 
         return $reports;
-    }
-
-    /**
-     * Get https://getgrav.org news feed
-     *
-     * @return mixed
-     */
-    public function getFeed()
-    {
-        $feed_url = 'https://getgrav.org/blog.atom';
-
-        $body = Response::get($feed_url);
-
-        $reader = new Reader();
-        $parser = $reader->getParser($feed_url, $body, 'utf-8');
-
-        return $parser->execute();
-
     }
 
     public function getRouteDetails()
