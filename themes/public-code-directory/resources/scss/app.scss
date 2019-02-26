@@ -73,13 +73,13 @@ footer {
   display: none;
 }
 
-.beta-left {
-  left: 5px;
-}
+// .beta-left {
+//   left: 5px;
+// }
 
-.beta-right {
-  right: 5px;
-}
+// .beta-right {
+//   right: 5px;
+// }
 
 .beta-bottom-right {
   top: auto;
@@ -87,12 +87,12 @@ footer {
   right: 5px;
 }
 
-.beta-bottom-left {
-  top: auto;
-  bottom: 10px;
-  right: auto;
-  left: 5px;
-}
+// .beta-bottom-left {
+//   top: auto;
+//   bottom: 10px;
+//   right: auto;
+//   left: 5px;
+// }
 
 .beta-link,
 .beta-link:link,
@@ -120,20 +120,20 @@ footer {
     width: 150px;
     height: 150px;
   }
-  .beta-left {
-    left: 5px;
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-    -webkit-transform-origin: bottom right;
-    transform-origin: bottom right;
-  }
-  .beta-right {
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
-    top: -55px;
-    -webkit-transform-origin: top left;
-    transform-origin: top left;
-  }
+  // .beta-left {
+  //   left: 5px;
+  //   -webkit-transform: rotate(-45deg);
+  //   transform: rotate(-45deg);
+  //   -webkit-transform-origin: bottom right;
+  //   transform-origin: bottom right;
+  // }
+  // .beta-right {
+  //   -webkit-transform: rotate(45deg);
+  //   transform: rotate(45deg);
+  //   top: -55px;
+  //   -webkit-transform-origin: top left;
+  //   transform-origin: top left;
+  // }
   .beta-bottom-right {
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
@@ -142,14 +142,14 @@ footer {
     -webkit-transform-origin: bottom left;
     transform-origin: bottom left;
   }
-  .beta-bottom-left {
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
-    left: -150px;
-    bottom: -5px;
-    -webkit-transform-origin: bottom right;
-    transform-origin: bottom right;
-  }
+  // .beta-bottom-left {
+  //   -webkit-transform: rotate(45deg);
+  //   transform: rotate(45deg);
+  //   left: -150px;
+  //   bottom: -5px;
+  //   -webkit-transform-origin: bottom right;
+  //   transform-origin: bottom right;
+  // }
   .beta {
     top: 0;
     left: auto;
