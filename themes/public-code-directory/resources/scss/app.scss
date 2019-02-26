@@ -11,41 +11,39 @@
 
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 object {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 body {
-    display: flex;
-    flex-flow: column nowrap;
-
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 #app {
-    flex: 1 0 auto;
+  flex: 1 0 auto;
 }
 
 footer {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 .media {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .media-left {
-    padding-bottom: 1rem;
-    max-width: 100%;
+  padding-bottom: 1rem;
+  max-width: 100%;
 
-    figure.image {
-        margin-left: 0;
-        margin-right: 0;
-        // padding-right: 2rem;
-    }
-
+  figure.image {
+    margin-left: 0;
+    margin-right: 0;
+    // padding-right: 2rem;
+  }
 }
 .beta-wrapper {
   position: fixed;
@@ -53,7 +51,7 @@ footer {
   height: 50px;
   top: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .beta {
@@ -127,14 +125,14 @@ footer {
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     -webkit-transform-origin: bottom right;
-            transform-origin: bottom right;
+    transform-origin: bottom right;
   }
   .beta-right {
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
     top: -55px;
     -webkit-transform-origin: top left;
-            transform-origin: top left;
+    transform-origin: top left;
   }
   .beta-bottom-right {
     -webkit-transform: rotate(-45deg);
@@ -142,7 +140,7 @@ footer {
     bottom: -105px;
     right: -40px;
     -webkit-transform-origin: bottom left;
-            transform-origin: bottom left;
+    transform-origin: bottom left;
   }
   .beta-bottom-left {
     -webkit-transform: rotate(45deg);
@@ -150,7 +148,7 @@ footer {
     left: -150px;
     bottom: -5px;
     -webkit-transform-origin: bottom right;
-            transform-origin: bottom right;
+    transform-origin: bottom right;
   }
   .beta {
     top: 0;
@@ -160,7 +158,7 @@ footer {
     height: auto;
     padding: 2px 0;
     -webkit-box-shadow: 0 0 10px 0 #888888;
-            box-shadow: 0 0 10px 0 #888888;
+    box-shadow: 0 0 10px 0 #888888;
     background-color: #2b2b2b;
     background-image: none !important;
   }
