@@ -290,6 +290,7 @@ const schemaType = {
     }
   }
 };
+
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   reducer: state => ({
@@ -297,7 +298,9 @@ const vuexLocal = new VuexPersistence({
   })
 });
 Vue.use(Vuex);
+
 const allprods = [];
+
 const state = {
   links: [],
   products: [],
@@ -313,6 +316,7 @@ const state = {
   checked: false,
   errors: []
 };
+
 const mutations = {
   fetchLinks(state, all) {
     state.links = all.directory_index;
@@ -398,6 +402,7 @@ const mutations = {
     state.productLoaded = true;
   }
 };
+
 const actions = {
   fetchLinks({ commit }) {
     fetch(
@@ -451,6 +456,7 @@ const actions = {
     commit("getCountries");
   }
 };
+
 const getters = {
   allProducts: state => {
     state.filter = [...new Set(state.products)];
@@ -466,7 +472,9 @@ const getters = {
   companies: state => state.companies,
   languages: state => state.languages
 };
+
 const plugins = [vuexLocal.plugin];
+
 export default new Vuex.Store({
   state,
   actions,
