@@ -2,7 +2,7 @@
 <title>
     {% if header.menu %}
         {{ header.menu|e('html') }}
-        {% elseif header.title %}
+    {% elseif header.title %}
         {{ header.title|e('html') }}
     {% endif %}
     |
@@ -10,5 +10,6 @@
 {% include 'partials/metadata.html.twig' %}
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <link rel="icon" type="image/png" href="{{ url('theme://images/favicon/favicon.png') }}"/>
-<link rel="canonical" href="{{ page.url(true, true) }}"/>
-{{ assets.css() }}
+<link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+    <link rel="canonical" href="{{ page.url(true, true) }}"/>
+    {{ assets.css() }}
