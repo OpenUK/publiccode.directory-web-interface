@@ -1,3 +1,11 @@
+# v3.0.0-rc.4
+## 03/20/2019
+
+1. [](#new)
+    * Code cleanup, composer update
+1. [](#improved)
+    * Added backlink for scheduler task
+
 # v3.0.0-rc.3
 ## 02/18/2019
 

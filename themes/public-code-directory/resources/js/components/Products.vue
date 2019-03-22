@@ -1,5 +1,5 @@
 <script>
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "Products",
@@ -171,11 +171,12 @@ export default {
       this.cancel();
       Object.assign(this.prodModal, element);
       this.isProdModal = true;
-    }
+    },
+
   },
-  mounted() {},
   beforeCreate() {
-    this.$store.dispatch("fetchLinks");
-  }
+      this.$store.dispatch("fetchLinks")
+  }  ,
+  
 };
 </script>

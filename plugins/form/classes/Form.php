@@ -10,7 +10,7 @@ use Grav\Common\Form\FormFlash;
 use Grav\Common\Grav;
 use Grav\Common\Inflector;
 use Grav\Common\Language\Language;
-use Grav\Common\Page\Page;
+use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Uri;
 use Grav\Common\Utils;
 use Grav\Framework\Filesystem\Filesystem;
@@ -38,7 +38,7 @@ use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
  * @property-read array $errors
  * @property-read array $fields
  * @property-read Blueprint $blueprint
- * @property-read Page $page
+ * @property-read PageInterface $page
  */
 class Form implements FormInterface, \ArrayAccess
 {
@@ -103,11 +103,11 @@ class Form implements FormInterface, \ArrayAccess
     /**
      * Create form for the given page.
      *
-     * @param Page $page
+     * @param PageInterface $page
      * @param string|int|null $name
      * @param array|null $form
      */
-    public function __construct(Page $page, $name = null, $form = null)
+    public function __construct(PageInterface $page, $name = null, $form = null)
     {
         $this->nestedSeparator = '/';
 
@@ -357,9 +357,9 @@ class Form implements FormInterface, \ArrayAccess
     /**
      * Return page object for the form.
      *
-     * @return Page
+     * @return PageInterface
      */
-    public function getPage(): Page
+    public function getPage(): PageInterface
     {
         return Grav::instance()['pages']->dispatch($this->page);
     }
@@ -855,10 +855,10 @@ class Form implements FormInterface, \ArrayAccess
     }
 
     /**
-     * @return Page
+     * @return PageInterface
      * @deprecated 3.0 Use $this->getPage() instead
      */
-    public function page(): Page
+    public function page(): PageInterface
     {
         return $this->getPage();
     }
@@ -989,17 +989,18 @@ class Form implements FormInterface, \ArrayAccess
     {
         $config = Grav::instance()['config'];
 
-        $filesize_mb = (int)($config->get('plugins.form.files.filesize', 0) * static::BYTES_TO_MB);
-        $system_filesize = $config->get('system.media.upload_limit', 0);
-        if ($filesize_mb > $system_filesize || $filesize_mb === 0) {
-            $filesize_mb = $system_filesize;
+        $form_filesize = $config->get('plugins.form.files.filesize', 0);
+        $system_filesize = intval(Utils::getUploadLimit() / static::BYTES_TO_MB);
+
+        if ($form_filesize > $system_filesize || $form_filesize === 0) {
+            $form_filesize = $system_filesize;
         }
 
         if ($mbytes) {
-            return $filesize_mb;
+            return $form_filesize * static::BYTES_TO_MB;
         }
 
-        return $filesize_mb  / static::BYTES_TO_MB;
+        return $form_filesize;
     }
 
     protected function sendJsonResponse(callable $callable)

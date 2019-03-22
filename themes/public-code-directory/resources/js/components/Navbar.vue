@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: "NavBar",
   data() {
     return {
       navIsActive: false

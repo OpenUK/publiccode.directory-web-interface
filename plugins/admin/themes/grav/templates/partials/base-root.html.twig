@@ -35,6 +35,11 @@
     </head>
     {% block body %}
     <body class="ga-theme-17x {{ config.plugins.admin.sidebar.size == 'small' ? 'sidebar-closed' : '' }} {{ config.plugins.admin.body_classes }} {{ body_classes }}">
+
+    {% if not authorize(['admin.login']) %}
+        {% include 'partials/messages.html.twig' %}
+    {% else %}
+
         {% block page %}
         <div class="remodal-bg">
 
@@ -116,6 +121,9 @@
             <div id='overlay'></div>
         </div>
         {% endblock page %}
+
+    {% endif %}
+
     {% block bottom %}
         {{ assets.js('bottom')|raw }}
     {% endblock %}

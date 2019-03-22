@@ -3,7 +3,7 @@
     {{ page.content }}
 </div>
 {% verbatim %}
-    <products inline-template="inline-template">
+    <products inline-template>
         <div class="prod">
             <div class="product-wrapper" v-if="loading">
                 <main class="content products">
@@ -71,7 +71,7 @@
                             </footer>
                         </div>
                     </transition-group>
-                    <b-modal :active.sync="isProdModal" :width="640">
+                    <b-modal :active.sync="isProdModal" :width="640" scroll='keep'>
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
