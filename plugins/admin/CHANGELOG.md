@@ -1,3 +1,21 @@
+# v1.9.0-rc.4
+## 03/20/2019
+
+1. [](#new)
+    * Allow admin forms to use `Form` classes
+1. [](#improved)
+    * Improved image background overlay and tools
+    * Better unauthorized user rendering
+    * Update all Form classes to rely on `PageInterface` instead of `Page` class
+    * Removed `media.upload_limit` references
+    * Improve error when upload exceeds `upload_max_filesize`
+    * Delegate Dropzone for checking maximum file size and avoid uploading if not necessary
+    * Low level unauthorized user handling in `base-root.html.twig`
+1. [](#bugfix)
+    * Incorrect 2FA lang code [#1618](https://github.com/getgrav/grav-plugin-admin/issues/1618)
+    * Fixed potential undefined property in `onPageNotFound` event handling
+    * Proper fix for `vUndefined` when updating plugins/themes 
+
 # v1.9.0-rc.3
 ## 02/18/2019
 
@@ -9,7 +27,6 @@
     * Updated languages
 1. [](#bugfix)
     * Text in Tab Tools/Direct install disappears [#1613](https://github.com/getgrav/grav-plugin-admin/issues/1613)
-
 
 # v1.9.0-rc.2
 ## 02/07/2019

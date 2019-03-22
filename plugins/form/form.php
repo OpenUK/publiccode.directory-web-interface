@@ -5,7 +5,7 @@ use Composer\Autoload\ClassLoader;
 use Grav\Common\Data\ValidationException;
 use Grav\Common\Filesystem\Folder;
 use Grav\Common\Grav;
-use Grav\Common\Page\Page;
+use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Page\Pages;
 use Grav\Common\Page\Types;
 use Grav\Common\Plugin;
@@ -140,7 +140,7 @@ class FormPlugin extends Plugin
      */
     public function onPageProcessed(Event $e)
     {
-        /** @var Page $page */
+        /** @var PageInterface $page */
         $page = $e['page'];
 
         $pageForms = $page->forms();
@@ -199,7 +199,7 @@ class FormPlugin extends Plugin
             $this->saveCachedForms();
         }
 
-        /** @var Page $page */
+        /** @var PageInterface $page */
         $page = $this->grav['page'];
 
         // Force rebuild form when form has not been built and form cache expired.
@@ -396,7 +396,7 @@ class FormPlugin extends Plugin
                 $label = $params['label'] ?? 'Timestamp';
                 $format = $params['format'] ?? 'Y-m-d H:i:s';
                 $blueprint = $form->value()->blueprints();
-                $blueprint->set('form/fields/timestamp', ['name'=>'timestamp', 'label'=> $label]);
+                $blueprint->set('form/fields/timestamp', ['name'=>'timestamp', 'label'=> $label, 'type'=>'hidden']);
                 $now = new \DateTime('now');
                 $date_string = $now->format($format);
                 $form->setFields($blueprint->fields());
@@ -405,7 +405,7 @@ class FormPlugin extends Plugin
             case 'ip':
                 $label = $params['label'] ?? 'User IP';
                 $blueprint = $form->value()->blueprints();
-                $blueprint->set('form/fields/ip', ['name'=>'ip', 'label'=> $label]);
+                $blueprint->set('form/fields/ip', ['name'=>'ip', 'label'=> $label, 'type'=>'hidden']);
                 $form->setFields($blueprint->fields());
                 $form->setData('ip', Uri::ip());
                 break;
@@ -693,7 +693,7 @@ class FormPlugin extends Plugin
 
             if (!empty($this->forms[$page_route])) {
                 $forms = $this->forms[$page_route];
-                $first_form = reset($forms);
+                $first_form = reset($forms) ?? null;
                 $form_name = $first_form['name'] ?? null;
             } else {
                 //No form on this route. Try looking up in the current page first
@@ -730,6 +730,9 @@ class FormPlugin extends Plugin
             'conditional' => [
                 'input@' => false
             ],
+            'display' => [
+                'input@' => false
+            ],
             'fieldset' => [
                 'input@' => false
             ],
@@ -739,7 +742,10 @@ class FormPlugin extends Plugin
                     'type' => 'ignore'
                 ]
             ],
-            'display' => [
+            'formname' => [
+                'input@' => false
+            ],
+            'honeypot' => [
                 'input@' => false
             ],
             'ignore' => [
@@ -758,6 +764,9 @@ class FormPlugin extends Plugin
                 'input@' => false
             ],
             'tab' => [
+                'input@' => false
+            ],
+            'uniqueid' => [
                 'input@' => false
             ],
             'value' => [
@@ -867,10 +876,10 @@ class FormPlugin extends Plugin
     /**
      * Get the current form, should already be processed but can get it directly from the page if necessary
      *
-     * @param Page|null $page
+     * @param PageInterface|null $page
      * @return Form|null
      */
-    protected function form($page = null)
+    protected function form(PageInterface $page = null)
     {
         // Regenerate list of flat_forms if not already populated
         if (empty($this->flat_forms)) {
@@ -917,13 +926,13 @@ class FormPlugin extends Plugin
     }
 
     /**
-     * @param Page $page
+     * @param PageInterface $page
      * @param string|int|null $name
      * @param array $form
      * @return Form|null
      * @deprecated
      */
-    protected function createForm(Page $page, $name = null, $form = null)
+    protected function createForm(PageInterface $page, $name = null, $form = null)
     {
 
         $header = $page->header();
