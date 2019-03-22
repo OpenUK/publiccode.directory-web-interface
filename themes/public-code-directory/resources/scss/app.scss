@@ -2,12 +2,18 @@
 @import "variables";
 // Import Bulma
 @import "../../node_modules/bulma/bulma";
+
 // Partials
 @import "partials/navbar";
 @import "partials/products";
 @import "partials/homepage";
 @import "partials/features";
 @import "partials/footer";
+// @import "../../node_modules/buefy/src/scss/buefy.scss";
+
+* {
+  border-radius: 0 !important;
+}
 
 html,
 body {
@@ -169,4 +175,13 @@ footer {
     display: block;
     width: 100%;
   }
+}
+.table tr.is-selected {
+  background-color: #4573d6;
+  .table-link {
+    color: white;
+  }
+}
+.table-link {
+  color: #4573d6;
 }

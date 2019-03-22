@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
+import axios from "axios";
 const _ = require("lodash");
 const Ajv = require("ajv");
 
@@ -290,6 +291,7 @@ const schemaType = {
     }
   }
 };
+
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   reducer: state => ({
@@ -297,7 +299,9 @@ const vuexLocal = new VuexPersistence({
   })
 });
 Vue.use(Vuex);
+
 const allprods = [];
+
 const state = {
   links: [],
   products: [],
@@ -313,83 +317,83 @@ const state = {
   checked: false,
   errors: []
 };
+
 const mutations = {
   fetchLinks(state, all) {
     state.links = all.directory_index;
   },
   fetchProducts(state, data) {
-    allprods.push(data);
-    state.products = [...new Set(allprods)];
+    state.products.push( data)
   },
   getCategories(state) {
-    let categoriesSet = new Set();
+    let categoriesSet =[];
     state.products.filter(el => {
       el.category.forEach(element => {
-        categoriesSet.add(element);
+        categoriesSet.push(element);
       });
     });
-    state.categories = Array.from(categoriesSet);
+    state.categories = [... new Set(categoriesSet)]
   },
   getlicences(state) {
-    let categoriesSet = new Set();
+    let categoriesSet = [];
     state.products.filter(el => {
       el.licence.forEach(element => {
-        categoriesSet.add(element);
+        categoriesSet.push(element);
       });
     });
-    state.licences = Array.from(categoriesSet);
+    state.licences = [... new Set(categoriesSet)]
   },
-  getLanguage(state) {
-    let categoriesSet = new Set();
+   getLanguage(state) {
+    let categoriesSet = [];
     state.products.filter(el => {
       el.language.forEach(element => {
-        categoriesSet.add(element);
+        categoriesSet.push(element);
       });
     });
-    state.languages = Array.from(categoriesSet);
+    state.languages = [... new Set(categoriesSet)]
   },
   getSector(state) {
-    let categoriesSet = new Set();
+    let categoriesSet = [];
     state.products.filter(el => {
       el.sector.forEach(element => {
-        categoriesSet.add(element);
+        categoriesSet.push(element);
       });
     });
-    state.public_sector = Array.from(categoriesSet);
+    state.public_sector = [... new Set(categoriesSet)]
   },
   getCountries(state) {
-    let categoriesSet = new Set();
+    let categoriesSet = [];
     state.products.filter(el => {
-      categoriesSet.add(el.origin_country);
+      categoriesSet.push(el.origin_country);
     });
-    state.countries = Array.from(categoriesSet);
+    state.countries = [... new Set(categoriesSet)]
   },
   getDevelopers(state) {
-    let devSet = new Set();
+    let devSet = [];
     state.products.filter(el => {
       el.developers.forEach(developer => {
-        devSet.add(developer.developer_name);
+        devSet.push(developer.developer_name);
       });
     });
-    state.developers = Array.from(devSet);
+    state.developers = [... new Set(devSet)]
   },
   getUsers(state) {
-    let usersSet = new Set();
+    let usersSet = [];
     state.products.filter(el => {
       el.users.forEach(user => {
-        usersSet.add(user.user_name);
+        usersSet.push(user.user_name);
       });
     });
-    state.users = Array.from(usersSet);
+    state.users = [... new Set(usersSet)]
   },
   getMaintainers(state) {
-    let maintainerSet = new Set();
+    let maintainerSet = [];
     state.products.filter(el => {
       el.maintainers.forEach(maintainer => {
-        maintainerSet.add(maintainer.maintainer_name);
+        maintainerSet.push(maintainer.maintainer_name);
       });
     });
-    state.maintainers = Array.from(maintainerSet);
+    state.maintainers = [... new Set(maintainerSet)]
   },
   updateChecked(state, payload) {
     state.checked = payload;
@@ -398,75 +402,57 @@ const mutations = {
     state.productLoaded = true;
   }
 };
+
 const actions = {
-  fetchLinks({ commit }) {
-    fetch(
+  fetchLinks(context) {
+    axios.get(
       "https://raw.githubusercontent.com/OpenUK/publiccode.directory/master/database/database.index.json"
     )
-      .then(res => res.json())
       .then(data => {
-        commit("fetchLinks", data);
+        context.commit("fetchLinks", data.data)
       })
-      .then(function() {
-        state.links.forEach(item => {
-          fetch(item)
-            .then(res => res.json())
+      .then( ()=>{
+          context. state.links.forEach(item => {
+          axios.get(item)
             .then(data => {
               const avj = new Ajv();
               const valid = avj
                 .addSchema(schemaType, "projSchema")
-                .validate("projSchema", data);
-              if (!valid) {
-                return;
-              } else {
-                commit("fetchProducts", data);
-                commit("getCategories");
-                commit("getlicences");
-                commit("getSector");
-                commit("getCountries");
-                commit("getDevelopers");
-                commit("getMaintainers");
-                commit("getUsers");
-                commit("getLanguage");
-              }
+                .validate("projSchema", data.data);
+              if (valid) {
+              context.  commit("fetchProducts", data.data);
+              context.  commit("getCategories");
+              context.  commit("getCountries");
+              context.  commit("getDevelopers");
+              context.  commit("getlicences");
+              context.  commit("getMaintainers");
+              context.  commit("getUsers");
+              context.  commit("getSector");
+              context.  commit("getLanguage");
+              
+              } 
             })
             .catch(error => console.log(error));
-        });
       })
-
+      })
       .catch(error => {
         console.log(error);
       });
   },
-  getCategories({ commit }) {
-    commit("getCategories");
-  },
-  getlicences({ commit }) {
-    commit("getlicences");
-  },
-  getSector({ commit }) {
-    commit("getSector");
-  },
-  getCountries({ commit }) {
-    commit("getCountries");
-  }
 };
+
 const getters = {
-  allProducts: state => {
-    state.filter = [...new Set(state.products)];
-    return state.filter;
-  },
-  categories: state => {
-    return _.flatten(state.categories);
-  },
+  allProducts: state => state.products,
+  categories: state =>   state.categories  ,
   licences: state => state.licences,
   users: state => state.users,
   sectors: state => state.public_sector,
   countries: state => state.countries,
-  companies: state => state.companies,
   languages: state => state.languages
 };
+
 const plugins = [vuexLocal.plugin];
+
 export default new Vuex.Store({
   state,
   actions,

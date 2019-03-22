@@ -17,8 +17,8 @@ export default {
   name: "Worldmap",
   data() {
     return {
-      zoom: 3,
-      center: [52.371183, -1.263988],
+      zoom: 1,
+      center: [0, 0],
       url: "",
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -257,7 +257,7 @@ export default {
     }, 1000);
   },
   beforeCreate() {
-    this.$store.dispatch("fetchLinks");
+    this.$store.dispatch("fetchLinks")
   }
 };
 </script>

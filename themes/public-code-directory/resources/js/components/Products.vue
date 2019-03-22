@@ -8,6 +8,24 @@ export default {
   data() {
     return {
       loading: true,
+      gridView: true,
+      listView: false,
+      isEmpty: false,
+      isBordered: false,
+      isStriped: true,
+      isNarrowed: true,
+      isHoverable: true,
+      isFocusable: false,
+      isLoading: false,
+      hasMobileCards: true,
+      isPaginated: true,
+      isPaginationSimple: false,
+      showDetailIcon: true,
+      currentPage: 1,
+      perPage: 10,
+      sortField: "date",
+      sortOrder: "desc",
+      defaultSortDirection: "desc",
       dropdown: { height: 0 },
       filters: { countries: {}, sectors: {}, categories: {}, licences: {} },
       menus: {
@@ -17,7 +35,8 @@ export default {
         licences: false
       },
       isProdModal: false,
-      prodModal: {}
+      prodModal: {},
+      selected: {}
     };
   },
 
@@ -171,9 +190,11 @@ export default {
       this.cancel();
       Object.assign(this.prodModal, element);
       this.isProdModal = true;
+    },
+    toggle(row) {
+      this.$refs.table.toggleDetails(row);
     }
   },
-  mounted() {},
   beforeCreate() {
     this.$store.dispatch("fetchLinks");
   }
