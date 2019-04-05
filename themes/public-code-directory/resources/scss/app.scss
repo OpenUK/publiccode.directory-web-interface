@@ -2,7 +2,7 @@
 @import "variables";
 // Import Bulma
 @import "../../node_modules/bulma/bulma";
-
+@import "../../node_modules/buefy//src/scss/buefy-build.scss";
 // Partials
 @import "partials/navbar";
 @import "partials/products";

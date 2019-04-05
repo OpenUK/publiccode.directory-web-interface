@@ -1,12 +1,12 @@
 {% extends 'partials/base.html.twig' %}
 {% block content %}
-    <div class="container">
+
         <div class="columns is-centered is-multiline">
-            <div class="column is-8">
+            <div class="column is-10 is-8-desktop">
                 {{ page.content }}
             </div>
             {% for item in page.header.features %}
-                <div class="column is-8 features">
+                <div class="column is-10 is-8-desktop features">
                     <div class="image">
                         <object class='feature-image' data="{{ page.media[item.image].url }}" type="image/svg+xml">Your browser doesnt support SVG's => Download and use a proper OSS browser like
                             <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank" rel='noopener'>Firefox</a>
@@ -19,5 +19,5 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
+
 {% endblock %}

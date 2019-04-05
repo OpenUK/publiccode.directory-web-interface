@@ -29,23 +29,16 @@
   justify-content: space-between;
   margin-top: 2rem;
   padding-top: 0.75rem;
-  // border-radius: 6px;
   background-color: white;
   box-shadow: 0 0 0 1px #7d8181;
   backface-visibility: hidden;
   transform-origin: 10% 50%;
   z-index: 1;
-  min-width: 280px;
-
-  max-width: 30% !important;
+  width: 280px;
 
   h2 {
     width: 100%;
   }
-
-  // .tagg {
-  //     vertical-align: middle;
-  // }
 
   &-move {
     transition: all 600ms ease-in-out 50ms;
@@ -260,11 +253,10 @@
   list-style: none;
 
   &__item {
-    margin-top: 0.5rem !important;
+    margin-top: 0.5rem;
     margin-right: 0.5rem;
     padding: 0.25rem 0.5rem;
     border: 1px solid #c5d0d1;
-    // border-radius: 6px;
     font-size: 0.8rem;
     line-height: 1.35;
     cursor: pointer;
@@ -298,7 +290,6 @@
       width: 0.8rem;
       height: 0.8rem;
       margin-top: calc(-0.4rem + 2px);
-      // border-radius: 100%;
       background-color: currentColor;
     }
 
@@ -322,6 +313,10 @@
     width: auto;
     max-height: 80px;
   }
+}
+
+.is-large {
+  height: 250px;
 }
 
 [v-cloak] {
