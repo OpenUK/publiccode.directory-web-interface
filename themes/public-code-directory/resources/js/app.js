@@ -4,7 +4,7 @@ import Buefy from "buefy";
 import NavBar from "./components/NavBar.vue";
 import Products from "./components/Products.vue";
 import Worldmap from "./components/Worldmap.vue";
-import "buefy/dist/buefy.css";
+
 window.Vue = require("vue");
 
 Vue.filter("capitalize", function(value) {
