@@ -1,7 +1,7 @@
 // Custom variables
 @import "variables";
 // Import Bulma
-@import "../../node_modules/bulma/bulma";
+// @import "../../node_modules/bulma/bulma";
 @import "../../node_modules/buefy//src/scss/buefy-build.scss";
 // Partials
 @import "partials/navbar";
@@ -9,7 +9,6 @@
 @import "partials/homepage";
 @import "partials/features";
 @import "partials/footer";
-// @import "../../node_modules/buefy/src/scss/buefy.scss";
 
 * {
   border-radius: 0 !important;
@@ -48,7 +47,16 @@ footer {
   figure.image {
     margin-left: 0;
     margin-right: 0;
-    // padding-right: 2rem;
+  }
+}
+
+.field {
+  .input {
+    max-width: 350px;
+  }
+  .textarea {
+    min-width: auto;
+    max-width: 700px;
   }
 }
 .beta-wrapper {
@@ -79,26 +87,11 @@ footer {
   display: none;
 }
 
-// .beta-left {
-//   left: 5px;
-// }
-
-// .beta-right {
-//   right: 5px;
-// }
-
 .beta-bottom-right {
   top: auto;
   bottom: 10px;
   right: 5px;
 }
-
-// .beta-bottom-left {
-//   top: auto;
-//   bottom: 10px;
-//   right: auto;
-//   left: 5px;
-// }
 
 .beta-link,
 .beta-link:link,
@@ -109,7 +102,6 @@ footer {
   display: block;
   height: 100%;
   text-decoration: none;
-  border: none;
   text-align: center;
   color: white;
   padding: 10px 50px;
@@ -126,36 +118,14 @@ footer {
     width: 150px;
     height: 150px;
   }
-  // .beta-left {
-  //   left: 5px;
-  //   -webkit-transform: rotate(-45deg);
-  //   transform: rotate(-45deg);
-  //   -webkit-transform-origin: bottom right;
-  //   transform-origin: bottom right;
-  // }
-  // .beta-right {
-  //   -webkit-transform: rotate(45deg);
-  //   transform: rotate(45deg);
-  //   top: -55px;
-  //   -webkit-transform-origin: top left;
-  //   transform-origin: top left;
-  // }
+
   .beta-bottom-right {
-    -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     bottom: -105px;
     right: -40px;
-    -webkit-transform-origin: bottom left;
     transform-origin: bottom left;
   }
-  // .beta-bottom-left {
-  //   -webkit-transform: rotate(45deg);
-  //   transform: rotate(45deg);
-  //   left: -150px;
-  //   bottom: -5px;
-  //   -webkit-transform-origin: bottom right;
-  //   transform-origin: bottom right;
-  // }
+
   .beta {
     top: 0;
     left: auto;
@@ -163,7 +133,6 @@ footer {
     width: auto;
     height: auto;
     padding: 2px 0;
-    -webkit-box-shadow: 0 0 10px 0 #888888;
     box-shadow: 0 0 10px 0 #888888;
     background-color: #2b2b2b;
     background-image: none !important;
