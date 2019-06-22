@@ -55,24 +55,24 @@ form:
             display: thankyou
 ---
 
-## There are few ways to join us {.is-size-3}
+## There are few ways to get involved: {.is-size-3}
 
-#### Getting involved {.is-size-4}
+#### Technical Git users: {.is-size-4}
 
-##### Technical Git users: {.is-size-5}
+- Fork the [database project](https://github.com/OpenUK/publiccode.directory) on Github
+- Create a database metadata [entry file])(https://github.com/OpenUK/publiccode.directory/tree/master/entry-files) - we call these *entry.json*, you may choose your own name
+- Add your entry json file to our repo (via PR), your own repository or anywhere that can be accessed via the net
+- Add a link to the [database.index.json](https://github.com/OpenUK/publiccode.directory/blob/master/database/database.index.json) file pointing to your entry
 
-- Fork this [project](https://github.com/OpenUK/publiccode.directory)
-- Add your entry to the Database.Index file
-- Add your metadata file to your repository (entry.json)
-- Make a pull request with the updated Databas.Index file
+- Make a pull request with the updated database.index.json file
 - When accepted, you should see your entry in the directory
 
-##### Non-technical git users {.is-size-5}
+#### Non-technical git users {.is-size-4}
 
-Please raise an issue on the main [repository](https://github.com/OpenUK/publiccode.directory/issues) with your comments or inclusions and we will check and update the files.
+Please raise an issue on the database [repository](https://github.com/OpenUK/publiccode.directory/issues) with your comments or inclusions and we will check and update the files.
 
-##### Non-technical users {.is-size-5}
+#### Non-technical users {.is-size-4}
 
 Get in touch with [OpenUK](https://openuk.uk) and share your thoughts
 
-or upload your entry file here
+or upload your entry file below and we will review and add for you.
