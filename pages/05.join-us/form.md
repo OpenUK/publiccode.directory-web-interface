@@ -60,7 +60,7 @@ form:
 #### Technical Git users: {.is-size-4}
 
 - Fork the [database project](https://github.com/OpenUK/publiccode.directory) on Github
-- Create a database metadata [entry file])(https://github.com/OpenUK/publiccode.directory/tree/master/entry-files) - we call these *entry.json*, you may choose your own name
+- Create a database metadata [entry file](https://github.com/OpenUK/publiccode.directory/tree/master/entry-files) - we call these *entry.json*, you may choose your own name
 - Add your entry json file to our repo (via PR), your own repository or anywhere that can be accessed via the net
 - Add a link to the [database.index.json](https://github.com/OpenUK/publiccode.directory/blob/master/database/database.index.json) file pointing to your entry
 
